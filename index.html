@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="description" content="Download PDF notes easily and securely from our responsive portal." />
+  <meta name="keywords" content="PDF, notes, download, study, education" />
+  <meta name="author" content="Your Name or Organization" />
+  <meta property="og:title" content="PDF Notes Portal" />
+  <meta property="og:description" content="Access and download PDF notes with ease." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://yourusername.github.io/" />
+  <meta property="og:image" content="https://yourusername.github.io/thumbnail.png" />
+
+  <title>PDF Notes Portal</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>PDF Notes Portal</h1>
+    <input type="text" id="searchBox" placeholder="Search notes..." />
+  </header>
+  <main>
+    <div id="pdfList" class="grid-container"></div>
+    <div id="loading">Loading PDFs...</div>
+    <div id="error" class="hidden">Failed to load PDFs. Please try again later.</div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 PDF Notes Portal. All rights reserved.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
+/* styles.css */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #f5f5f5;
+  color: #333;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  background: #007acc;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+
+#searchBox {
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  width: 80%;
+  max-width: 400px;
+  border: none;
+  border-radius: 5px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.pdf-card {
+  background: white;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.pdf-card:hover {
+  transform: translateY(-5px);
+}
+
+.pdf-card a {
+  text-decoration: none;
+  color: #007acc;
+  font-weight: bold;
+}
+
+#loading,
+#error {
+  text-align: center;
+  padding: 2rem;
+}
+
+.hidden {
+  display: none;
+}
+
+footer {
+  background: #333;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: auto;
+}
+
+@media (max-width: 600px) {
+  #searchBox {
+    width: 95%;
+  }
+}
+
+// app.js
+const pdfDirectory = "pdfs"; // PDFs folder in repo root
+const pdfList = document.getElementById("pdfList");
+const searchBox = document.getElementById("searchBox");
+const loading = document.getElementById("loading");
+const error = document.getElementById("error");
+
+async function fetchPDFList() {
+  try {
+    const res = await fetch(`${pdfDirectory}/list.json`);
+    const files = await res.json();
+    loading.classList.add("hidden");
+    displayPDFs(files);
+  } catch (err) {
+    loading.classList.add("hidden");
+    error.classList.remove("hidden");
+    console.error("Failed to load PDF list:", err);
+  }
+}
+
+function displayPDFs(files) {
+  pdfList.innerHTML = "";
+  files.forEach((file) => {
+    const card = document.createElement("div");
+    card.className = "pdf-card";
+    card.innerHTML = `<h3>${file.title}</h3><p>${file.description}</p><a href="${pdfDirectory}/${file.filename}" target="_blank" rel="noopener">Download</a>`;
+    pdfList.appendChild(card);
+  });
+}
+
+searchBox.addEventListener("input", (e) => {
+  const term = e.target.value.toLowerCase();
+  const cards = document.querySelectorAll(".pdf-card");
+  cards.forEach((card) => {
+    card.style.display = card.textContent.toLowerCase().includes(term)
+      ? "block"
+      : "none";
+  });
+});
+
+fetchPDFList();
+
+/* list.json (example content in pdfs/list.json)
+[
+  {
+    "title": "Introduction to Algorithms",
+    "description": "Notes on sorting and searching algorithms.",
+    "filename": "algorithms_intro.pdf"
+  },
+  {
+    "title": "Operating Systems",
+    "description": "Key concepts and architecture.",
+    "filename": "operating_systems.pdf"
+  }
+]
+*/
