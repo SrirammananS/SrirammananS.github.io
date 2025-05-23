@@ -5,8 +5,23 @@
     "filename": "PCI1B Network and Communication Protocols.pdf"
   },
   {
-    "title": "Operating Systems",
-    "description": "Key concepts and architecture.",
-    "filename": "operating_systems.pdf"
+    "title": "Forms of Cyber Crimes",
+    "description": "Important Questions",
+    "filename": "PCI1E Cyber Crimes.pdf"
+    },
+  {
+    "title": "Introduction to Cyber Criminology",
+    "description": "Important Questions",
+    "filename": "PCI1A Cyber Criminology.pdf"
+    },
+  {
+    "title": "IT Infrastructure and Cloud Computing",
+    "description": "Important Questions",
+    "filename": "PCI1D IT infra and Cloud Computing.pdf"
+    },
+  {
+    "title": "Introduction to Information Security",
+    "description": "Important Questions",
+    "filename": "PCI1C Information Security.pdf"
   }
 ]
