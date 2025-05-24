@@ -40,17 +40,4 @@ searchBox.addEventListener("input", (e) => {
 
 fetchPDFList();
 
-/* list.json (example content in pdfs/list.json)
-[
-  {
-    "title": "Introduction to Algorithms",
-    "description": "Notes on sorting and searching algorithms.",
-    "filename": "algorithms_intro.pdf"
-  },
-  {
-    "title": "Operating Systems",
-    "description": "Key concepts and architecture.",
-    "filename": "operating_systems.pdf"
-  }
-]
-*/
+
