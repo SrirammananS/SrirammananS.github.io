@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCI1A Exam Questions Summary (2019-2023)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid;
+        }
+        
+        .section-a { border-left-color: #e74c3c; }
+        .section-b { border-left-color: #f39c12; }
+        .section-c { border-left-color: #27ae60; }
+        .analysis { border-left-color: #9b59b6; }
+        
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .badge-a { background: #e74c3c; }
+        .badge-b { background: #f39c12; }
+        .badge-c { background: #27ae60; }
+        .badge-analysis { background: #9b59b6; }
+        
+        .category {
+            margin-bottom: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+        
+        .category:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cat-concepts { border-left-color: #3498db; }
+        .cat-cyber { border-left-color: #e74c3c; }
+        .cat-crime { border-left-color: #f39c12; }
+        .cat-economic { border-left-color: #27ae60; }
+        .cat-methods { border-left-color: #9b59b6; }
+        .cat-theories { border-left-color: #e67e22; }
+        .cat-media { border-left-color: #1abc9c; }
+        .cat-legal { border-left-color: #34495e; }
+        .cat-prevention { border-left-color: #8e44ad; }
+        .cat-enforcement { border-left-color: #c0392b; }
+        
+        .category h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .icon-concepts { background: #3498db; }
+        .icon-cyber { background: #e74c3c; }
+        .icon-crime { background: #f39c12; }
+        .icon-economic { background: #27ae60; }
+        .icon-methods { background: #9b59b6; }
+        .icon-theories { background: #e67e22; }
+        .icon-media { background: #1abc9c; }
+        .icon-legal { background: #34495e; }
+        .icon-prevention { background: #8e44ad; }
+        .icon-enforcement { background: #c0392b; }
+        
+        .question-list {
+            list-style: none;
+        }
+        
+        .question-item {
+            background: white;
+            margin: 8px 0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border-left: 3px solid #3498db;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .question-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .question-text {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .year-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        
+        .year-tag {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 500;
+        }
+        
+        .frequency-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+        
+        .frequency-section h3 {
+            color: white;
+        }
+        
+        .freq-item {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid white;
+            backdrop-filter: blur(5px);
+        }
+        
+        .freq-high { border-left-color: #e74c3c; }
+        .freq-medium { border-left-color: #f39c12; }
+        .freq-theory { border-left-color: #27ae60; }
+        .freq-practical { border-left-color: #9b59b6; }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+            
+            .category {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 PCI1A Exam Questions Summary (2019-2023)</h1>
+        
+        <!-- SECTION A -->
+        <div class="section section-a">
+            <h2>
+                📝 SECTION A Questions
+                <span class="badge badge-a">2 Marks | 50 Words</span>
+            </h2>
+            
+            <div class="category cat-concepts">
+                <h3><span class="icon icon-concepts"></span>Basic Concepts & Definitions</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Crime</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2021</span>
+                            <span class="year-tag">May 2023</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Tort</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                            <span class="year-tag">May 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Misdemeanour</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2019</span>
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Law</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2022</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-cyber">
+                <h3><span class="icon icon-cyber"></span>Cyber Crime Fundamentals</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Cyber Crime</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Cyber Criminology</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2020</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Cyber Space</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2020</span>
+                            <span class="year-tag">May 2023</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Cyber Criminals</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Cyber Appellate Court</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                            <span class="year-tag">Dec 2019</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-crime">
+                <h3><span class="icon icon-crime"></span>Contemporary Crime Forms</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Enumerate Contemporary forms of cybercrimes (at least 4) against property</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                            <span class="year-tag">Dec 2019</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Forms of Organised Crimes</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2021</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">List types of Cyber Crimes (at least 4)</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2019</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Organized crime</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Terrorism</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2022</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-economic">
+                <h3><span class="icon icon-economic"></span>White Collar & Economic Crimes</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">GRC - Expand and Explain</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                            <span class="year-tag">Dec 2019</span>
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Expand and explain WCC</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">White Collar Crime</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Tax Evasion</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Money laundering</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Fraudulent Cheque</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2023</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-methods">
+                <h3><span class="icon icon-methods"></span>Criminal Techniques & Methods</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Modus Operandi</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                            <span class="year-tag">Dec 2019</span>
+                            <span class="year-tag">May 2022</span>
+                            <span class="year-tag">Dec 2021</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">DDOS attack</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">MIM attack</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2021</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Hackers</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Tools adopted by Cyber Criminals</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2020</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Penetration of Networks</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2021</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-theories">
+                <h3><span class="icon icon-theories"></span>Criminological Theories & Theorists</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Enumerate 4 theories of criminology related to Cybercrime</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Sutherland's contribution to Criminology</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2023</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Marcus Felson</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Richard Cloward</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2021</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Cloward and Ohlin</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2023</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Capable Guardian</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Suitable target</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-media">
+                <h3><span class="icon icon-media"></span>Media & Behavioral Aspects</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Will Media influence Human Behaviour?</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                            <span class="year-tag">Dec 2019</span>
+                            <span class="year-tag">Dec 2021</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Can Media influence Criminal behaviour?</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Social Media</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2023</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Media</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Psychology</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2020</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-legal">
+                <h3><span class="icon icon-legal"></span>Legal & Procedural Terms</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">FIR / F.I.R. / Expand FIR</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                            <span class="year-tag">Dec 2020</span>
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Charge Sheet / Charge sheet</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2022</span>
+                            <span class="year-tag">Dec 2019</span>
+                            <span class="year-tag">May 2023</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Trial</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2023</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Arrest</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2023</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Seizure</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2021</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Court</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2021</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Bail</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Cognizable offence</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SECTION B -->
+        <div class="section section-b">
+            <h2>
+                📋 SECTION B Questions
+                <span class="badge badge-b">6 Marks | 250 Words</span>
+            </h2>
+            
+            <div class="category cat-cyber">
+                <h3><span class="icon icon-cyber"></span>Cyber Crime Analysis</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Explain Cyber Criminology</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2023</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Explain the need for Information Security</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2021</span>
+                            <span class="year-tag">Dec 2019</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Explain the need for Penetration Testing / Explain Penetrating testing</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-crime">
+                <h3><span class="icon icon-crime"></span>Crime Types & Analysis</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Conventional Crimes vs Cybercrimes detection comparison</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                            <span class="year-tag">Dec 2021</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Enumerate the organised crimes in cyber space</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                            <span class="year-tag">Dec 2019</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Elucidate types of cybercrimes against person</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                            <span class="year-tag">Dec 2020</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Elucidate of types of cybercrimes against state</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2021</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-theories">
+                <h3><span class="icon icon-theories"></span>Criminological Theories</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Explain Differential Association Theory</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                            <span class="year-tag">Dec 2019</span>
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Routine Activities Theory with reference to cybercrimes</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                            <span class="year-tag">May 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Write a note on Differential Opportunity Theory</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2021</span>
+                            <span class="year-tag">Dec 2019</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Write a note on Social Learning Theory</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2020</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-legal">
+                <h3><span class="icon icon-legal"></span>Legal Procedures & Law Enforcement</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Differentiate cognizable and non-cognizable offences</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2023</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Compare bailable and non-bailable offences</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Interrogation of Witness in cyber crime cases / Explain the interrogation of suspects</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2023</span>
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Explain the organizational structure of police in India</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SECTION C -->
+        <div class="section section-c">
+            <h2>
+                📖 SECTION C Questions
+                <span class="badge badge-c">10 Marks | 500 Words</span>
+            </h2>
+            
+            <div class="category cat-cyber">
+                <h3><span class="icon icon-cyber"></span>Cyber Criminology & Space</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Cyber Criminology is an emerging area- Do you agree</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Impact of cyber crimes are felt in physical space- Do you agree?</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2023</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Explain Cyber Space and give its jurisdiction</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2022</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-crime">
+                <h3><span class="icon icon-crime"></span>Crime Analysis & Comparison</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Compare/Differentiate Conventional crimes Vs. Cyber crimes</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2022</span>
+                            <span class="year-tag">Dec 2020</span>
+                            <span class="year-tag">Dec 2019</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Enumerate the various forms contemporary crimes</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2023</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-economic">
+                <h3><span class="icon icon-economic"></span>Economic & Contemporary Crimes</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Enumerate and explain the economic crimes in cyber space</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                            <span class="year-tag">Dec 2019</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Describe economic offence in cyber space</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-methods">
+                <h3><span class="icon icon-methods"></span>Criminal Methods & Tools</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Enumerate and explain the Tools used by Cyber criminals</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Enumerate and explain the Techniques used by Cyber criminals</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2021</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">List and explain the Tools and Techniques used by Cyber criminals</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2019</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Illustrate with an example the modus operandi of cyber-criminals</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2020</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-crime">
+                <h3><span class="icon icon-crime"></span>Organized Crime</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Can crime be organised in Cyberspace-Illustrate with a case</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2021</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Explain the Characteristics of Organised Cyber Criminals</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2020</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-theories">
+                <h3><span class="icon icon-theories"></span>Criminological Theories (Detailed)</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Write a note on Differential Opportunity Theory</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Elucidate Differential Opportunity Theory</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2023</span>
+                            <span class="year-tag">May 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Discuss Social Learning Theory</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Describe the Psychological theories relating to cyber criminals</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Write a detail note on the Routine Activities Theory with reference to cybercrimes</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2021</span>
+                            <span class="year-tag">Dec 2019</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Explain Routine Activities Theory and its application to understanding cyber crimes</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2020</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-prevention">
+                <h3><span class="icon icon-prevention"></span>Crime Prevention & Mitigation</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Suggest ways to mitigate/mitigiate cyber crimes (at least 10)</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2021</span>
+                            <span class="year-tag">Dec 2019</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Elucidate the causes of cybercrimes (at least 20)</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Explain the role of NGO's in prevention of cybercrimes</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2022</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-media">
+                <h3><span class="icon icon-media"></span>Social Media & Crime</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Social Media is the most used platform to commit cybercrime- Comment</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2022</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-enforcement">
+                <h3><span class="icon icon-enforcement"></span>Investigation & Legal Process</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Investigation of Cyber crimes is a challenge to police. Do you agree?</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2023</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Explain the procedures involved in the investigation of a crime by police</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2020</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Explain the organizational structure of police in India</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2021</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Explain Incident Response. Give its importance</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2021</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="category cat-legal">
+                <h3><span class="icon icon-legal"></span>Victims & Courts</h3>
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-text">Explain the role of victims of Cybercrime in Criminal justice administration</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Explain the different types of courts. Give its power</div>
+                        <div class="year-tags">
+                            <span class="year-tag">Dec 2022</span>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-text">Write notes on: (a) Arrest (b) Search (c) Seizure (d) Investigation of cyber crimes</div>
+                        <div class="year-tags">
+                            <span class="year-tag">May 2023</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FREQUENCY ANALYSIS -->
+        <div class="section frequency-section">
+            <h2>
+                📊 Question Frequency Analysis
+                <span class="badge badge-analysis">Pattern Recognition</span>
+            </h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">150+</div>
+                    <div class="stat-label">Total Questions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Years Covered</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10</div>
+                    <div class="stat-label">Major Categories</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Sections (A,B,C)</div>
+                </div>
+            </div>
+            
+            <div class="freq-item freq-high">
+                <h3>🔥 Most Frequently Asked (5+ times)</h3>
+                <ul>
+                    <li><strong>Modus Operandi</strong> - Asked in multiple forms across all years</li>
+                    <li><strong>Media influence on crime/behavior</strong> - Consistent across all examination years</li>
+                    <li><strong>GRC (Governance, Risk & Compliance)</strong> - Regular appearance in Part A</li>
+                    <li><strong>Criminological theories</strong> - Differential Association, Routine Activities, Differential Opportunity</li>
+                    <li><strong>Cyber crime types and classifications</strong> - Various forms and categories</li>
+                    <li><strong>Conventional vs Cyber crimes comparison</strong> - Major analytical question</li>
+                </ul>
+            </div>
+            
+            <div class="freq-item freq-medium">
+                <h3>⚡ Moderately Frequent (3-4 times)</h3>
+                <ul>
+                    <li><strong>Economic crimes in cyberspace</strong> - Financial fraud, money laundering</li>
+                    <li><strong>Tools and techniques of cyber criminals</strong> - Methods and approaches</li>
+                    <li><strong>FIR and legal procedures</strong> - Criminal justice process</li>
+                    <li><strong>Crime prevention strategies</strong> - Mitigation and control measures</li>
+                    <li><strong>NGO roles in crime prevention</strong> - Community involvement</li>
+                    <li><strong>Cyber crime investigation challenges</strong> - Law enforcement issues</li>
+                </ul>
+            </div>
+            
+            <div class="freq-item freq-theory">
+                <h3>🎓 Theory-Heavy Questions</h3>
+                <ul>
+                    <li><strong>Differential Association Theory</strong> - Sutherland's contribution to criminology</li>
+                    <li><strong>Routine Activities Theory</strong> - Marcus Felson's crime triangle concept</li>
+                    <li><strong>Differential Opportunity Theory</strong> - Cloward and Ohlin's strain theory</li>
+                    <li><strong>Social Learning Theory</strong> - Behavioral learning in criminal context</li>
+                    <li><strong>Psychological theories</strong> - Individual criminal behavior analysis</li>
+                </ul>
+            </div>
+            
+            <div class="freq-item freq-practical">
+                <h3>⚖️ Practical Application Questions</h3>
+                <ul>
+                    <li><strong>Investigation procedures</strong> - Police methods and techniques</li>
+                    <li><strong>Court systems and legal framework</strong> - Judicial process</li>
+                    <li><strong>Police organizational structure</strong> - Law enforcement hierarchy</li>
+                    <li><strong>Incident response procedures</strong> - Emergency handling protocols</li>
+                    <li><strong>Cybercrime cell operations</strong> - Specialized units</li>
+                    <li><strong>Victim roles in criminal justice</strong> - Rights and procedures</li>
+                </ul>
+            </div>
+            
+            <div style="margin-top: 30px; text-align: center; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                <h3 style="color: white; margin-bottom: 15px;"></h3>
+                <p style="color: rgba(255,255,255,0.9); line-height: 1.8;">
+                    <strong>All the best</strong> by Ram
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
