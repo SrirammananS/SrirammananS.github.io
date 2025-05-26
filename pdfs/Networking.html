@@ -1,506 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Networking Notes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background: #f9f9f9;
+      color: #333;
+    }
+
+    h3 {
+      background: #003366;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 40px;
+    }
+
+    h4 {
+      color: #003366;
+      margin-top: 25px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      margin-bottom: 30px;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      border-radius: 6px;
+      overflow: hidden;
+      width: auto;           /* Don't fill full width */
+        max-width: 900px;      /* Max width to keep readable */
+        min-width: 600px;      /* Minimum width for clarity */
+        table-layout: auto;    /* Columns size based on content */
+    }
+
+    th {
+      background: #005580;
+      color: white;
+      text-align: left;
+      padding: 12px;
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+
+
+
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #e6f7ff;
+    }
+
+    ul, ol {
+      margin-top: 10px;
+      margin-bottom: 30px;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 5px;
+    }
+
+    hr {
+      margin-top: 40px;
+      margin-bottom: 40px;
+      border: 0;
+      border-top: 2px solid #ccc;
+    }
+
+    strong {
+      color: #005580;
+    }
+
+    .note {
+      font-style: italic;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+<!-- Paste your raw HTML content here starting from <h3 id="unit-1-networking-models-basics">... -->
+<!-- The HTML you already have from your message is perfect content-wise -->
+<!-- No content changes required - just styling -->
+
+<!-- START OF CONTENT -->
+
 <h3 id="unit-1-networking-models-basics">UNIT 1: Networking Models &amp;
-Basics</h3>
-<h4 id="osi-model-open-systems-interconnection">OSI Model (Open Systems
-Interconnection)</h4>
-<table>
-<thead>
-<tr class="header">
-<th>Layer</th>
-<th>Name</th>
-<th>Function</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>7</td>
-<td>Application</td>
-<td>User interface, network services</td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td>Presentation</td>
-<td>Data translation, encryption</td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td>Session</td>
-<td>Session management</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td>Transport</td>
-<td>End-to-end connections (TCP/UDP)</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td>Network</td>
-<td>Routing, IP addressing</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td>Data Link</td>
-<td>MAC, switching, framing</td>
-</tr>
-<tr class="odd">
-<td>1</td>
-<td>Physical</td>
-<td>Cables, signals, bits</td>
-</tr>
-</tbody>
-</table>
-<h4 id="tcpip-model">TCP/IP Model</h4>
-<table>
-<colgroup>
-<col style="width: 21%" />
-<col style="width: 32%" />
-<col style="width: 46%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Layer</th>
-<th>Protocols</th>
-<th>Functions</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Application</td>
-<td>HTTP, FTP, DNS, SMTP</td>
-<td>Application services</td>
-</tr>
-<tr class="even">
-<td>Transport</td>
-<td>TCP, UDP</td>
-<td>Communication between hosts</td>
-</tr>
-<tr class="odd">
-<td>Internet</td>
-<td>IP, ICMP, ARP</td>
-<td>Logical addressing, routing</td>
-</tr>
-<tr class="even">
-<td>Network Access</td>
-<td>Ethernet, Frame Relay</td>
-<td>Physical addressing and access</td>
-</tr>
-</tbody>
-</table>
-<h4 id="mac-address">MAC Address</h4>
-<ul>
-<li>Format: 00:1A:2B:3C:4D:5E (48-bit)</li>
-<li>OUI: First 24 bits (Organisational Unique Identifier)</li>
-</ul>
-<h4 id="ip-versions">IP Versions</h4>
-<table>
-<thead>
-<tr class="header">
-<th>Version</th>
-<th>Length</th>
-<th>Format Example</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>IPv4</td>
-<td>32-bit</td>
-<td>192.168.1.1</td>
-</tr>
-<tr class="even">
-<td>IPv6</td>
-<td>128-bit</td>
-<td>2001:0db8:85a3::8a2e:0370:7334</td>
-</tr>
-</tbody>
-</table>
-<h4 id="ip-header-flags">IP Header Flags</h4>
-<table>
-<thead>
-<tr class="header">
-<th>Flag</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>DF</td>
-<td>Don’t Fragment</td>
-</tr>
-<tr class="even">
-<td>MF</td>
-<td>More Fragments</td>
-</tr>
-</tbody>
-</table>
-<h4 id="tcp-header-flags">TCP Header Flags</h4>
-<table>
-<thead>
-<tr class="header">
-<th>Flag</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>SYN</td>
-<td>Synchronize</td>
-</tr>
-<tr class="even">
-<td>ACK</td>
-<td>Acknowledgment</td>
-</tr>
-<tr class="odd">
-<td>FIN</td>
-<td>Finish</td>
-</tr>
-<tr class="even">
-<td>RST</td>
-<td>Reset</td>
-</tr>
-<tr class="odd">
-<td>PSH</td>
-<td>Push</td>
-</tr>
-<tr class="even">
-<td>URG</td>
-<td>Urgent</td>
-</tr>
-</tbody>
-</table>
-<h4 id="tcp-3-way-handshake">TCP 3-Way Handshake</h4>
-<ol type="1">
-<li>SYN → (Client to Server)</li>
-<li>SYN-ACK ← (Server to Client)</li>
-<li>ACK → (Client to Server)</li>
-</ol>
-<h4 id="encapsulation-vs-de-encapsulation">Encapsulation vs
-De-encapsulation</h4>
-<ul>
-<li><strong>Encapsulation</strong>: App → Trans → Net → Link →
-Physical</li>
-<li><strong>De-encapsulation</strong>: Physical → Link → Net → Trans →
-App</li>
-</ul>
-<hr />
-<h3 id="unit-2-routing-ip-management">UNIT 2: Routing &amp; IP
-Management</h3>
-<h4 id="ip-address-classes">IP Address Classes</h4>
-<table>
-<thead>
-<tr class="header">
-<th>Class</th>
-<th>Range</th>
-<th>Default Subnet Mask</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>A</td>
-<td>1.0.0.0 - 126.255.255.255</td>
-<td>255.0.0.0</td>
-</tr>
-<tr class="even">
-<td>B</td>
-<td>128.0.0.0 - 191.255.255.255</td>
-<td>255.255.0.0</td>
-</tr>
-<tr class="odd">
-<td>C</td>
-<td>192.0.0.0 - 223.255.255.255</td>
-<td>255.255.255.0</td>
-</tr>
-<tr class="even">
-<td>D</td>
-<td>224.0.0.0 - 239.255.255.255</td>
-<td>Multicast</td>
-</tr>
-<tr class="odd">
-<td>E</td>
-<td>240.0.0.0 - 255.255.255.255</td>
-<td>Experimental</td>
-</tr>
-</tbody>
-</table>
-<h4 id="nat-types">NAT Types</h4>
-<table>
-<thead>
-<tr class="header">
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Static NAT</td>
-<td>One-to-one private-public map</td>
-</tr>
-<tr class="even">
-<td>Dynamic NAT</td>
-<td>Pool-based IP assignment</td>
-</tr>
-<tr class="odd">
-<td>PAT</td>
-<td>Port-based many-to-one mapping</td>
-</tr>
-</tbody>
-</table>
-<h4 id="addressing">Addressing</h4>
-<ul>
-<li><strong>APIPA</strong>: 169.254.x.x (self-assigned IP when DHCP
-fails)</li>
-</ul>
-<hr />
-<h3 id="unit-3-subnetting-wan-technologies">UNIT 3: Subnetting &amp; WAN
-Technologies</h3>
-<h4 id="subnetting-table-class-c-example">Subnetting Table (Class C
-Example)</h4>
-<table>
-<thead>
-<tr class="header">
-<th>Subnets</th>
-<th>Subnet Mask</th>
-<th>Hosts/Subnet</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>2</td>
-<td>255.255.255.128</td>
-<td>126</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td>255.255.255.192</td>
-<td>62</td>
-</tr>
-<tr class="odd">
-<td>8</td>
-<td>255.255.255.224</td>
-<td>30</td>
-</tr>
-<tr class="even">
-<td>16</td>
-<td>255.255.255.240</td>
-<td>14</td>
-</tr>
-</tbody>
-</table>
-<h4 id="cidr-notation-examples">CIDR Notation Examples</h4>
-<table>
-<thead>
-<tr class="header">
-<th>CIDR</th>
-<th>Subnet Mask</th>
-<th>Hosts</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>/24</td>
-<td>255.255.255.0</td>
-<td>254</td>
-</tr>
-<tr class="even">
-<td>/26</td>
-<td>255.255.255.192</td>
-<td>62</td>
-</tr>
-</tbody>
-</table>
-<h4 id="wan-technologies">WAN Technologies</h4>
-<table>
-<thead>
-<tr class="header">
-<th>Tech</th>
-<th>Key Component</th>
-<th>Use Case</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Frame Relay</td>
-<td>DLCI</td>
-<td>Virtual circuits</td>
-</tr>
-<tr class="even">
-<td>MPLS</td>
-<td>Labels, Edge Routers</td>
-<td>High-speed routing</td>
-</tr>
-<tr class="odd">
-<td>PVC</td>
-<td>Permanent Virtual Circuit</td>
-<td>Constant path</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h3 id="unit-4-vlans-layer-2-concepts">UNIT 4: VLANs &amp; Layer 2
-Concepts</h3>
-<h4 id="vlan-types">VLAN Types</h4>
-<table>
-<thead>
-<tr class="header">
-<th>VLAN Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Access</td>
-<td>Assigned to single VLAN</td>
-</tr>
-<tr class="even">
-<td>Trunk</td>
-<td>Carries multiple VLANs</td>
-</tr>
-<tr class="odd">
-<td>Dynamic</td>
-<td>Uses VTP to propagate VLAN info</td>
-</tr>
-</tbody>
-</table>
-<h4 id="switchport-modes">Switchport Modes</h4>
-<table>
-<thead>
-<tr class="header">
-<th>Mode</th>
-<th>Function</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Access</td>
-<td>Single VLAN</td>
-</tr>
-<tr class="even">
-<td>Trunk</td>
-<td>Multiple VLANs</td>
-</tr>
-<tr class="odd">
-<td>Dynamic Desirable</td>
-<td>Actively tries to form trunk</td>
-</tr>
-<tr class="even">
-<td>Dynamic Auto</td>
-<td>Passively waits to form trunk</td>
-</tr>
-</tbody>
-</table>
-<h4 id="vtp-modes">VTP Modes</h4>
-<table>
-<thead>
-<tr class="header">
-<th>Mode</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Server</td>
-<td>Create/Modify VLANs</td>
-</tr>
-<tr class="even">
-<td>Client</td>
-<td>Receives VLAN info only</td>
-</tr>
-<tr class="odd">
-<td>Transparent</td>
-<td>Doesn’t participate, forwards only</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h3 id="unit-5-communication-protocols">UNIT 5: Communication
-Protocols</h3>
-<h4 id="protocols-summary-table">Protocols Summary Table</h4>
-<table>
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 48%" />
-<col style="width: 41%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Protocol</th>
-<th>Full Form</th>
-<th>Usage</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>FTP</td>
-<td>File Transfer Protocol</td>
-<td>File sharing</td>
-</tr>
-<tr class="even">
-<td>TFTP</td>
-<td>Trivial File Transfer Protocol</td>
-<td>Simple file transfer, no auth</td>
-</tr>
-<tr class="odd">
-<td>SMTP</td>
-<td>Simple Mail Transfer Protocol</td>
-<td>Send emails</td>
-</tr>
-<tr class="even">
-<td>DNS</td>
-<td>Domain Name System</td>
-<td>Resolve domain to IP</td>
-</tr>
-<tr class="odd">
-<td>RIP</td>
-<td>Routing Information Protocol</td>
-<td>Distance-vector routing</td>
-</tr>
-<tr class="even">
-<td>SNMP</td>
-<td>Simple Network Management Protocol</td>
-<td>Network device monitoring</td>
-</tr>
-<tr class="odd">
-<td>POP3</td>
-<td>Post Office Protocol v3</td>
-<td>Retrieve and delete emails</td>
-</tr>
-<tr class="even">
-<td>IMAP</td>
-<td>Internet Message Access Protocol</td>
-<td>Access emails on server</td>
-</tr>
-<tr class="odd">
-<td>ARP</td>
-<td>Address Resolution Protocol</td>
-<td>IP to MAC mapping</td>
-</tr>
-<tr class="even">
-<td>TCP/IP</td>
-<td>Transmission Control Protocol/Internet</td>
-<td>Core suite of protocols</td>
-</tr>
-<tr class="odd">
-<td>UDP</td>
-<td>User Datagram Protocol</td>
-<td>Unreliable but fast transmission</td>
-</tr>
-<tr class="even">
-<td>IGMP</td>
-<td>Internet Group Management Protocol</td>
-<td>Manages multicast groups</td>
-</tr>
-<tr class="odd">
-<td>ICMP</td>
-<td>Internet Control Message Protocol</td>
-<td>Error and control messages</td>
-</tr>
-<tr class="even">
-<td>DHCP</td>
-<td>Dynamic Host Configuration Protocol</td>
-<td>Assign IP addresses automatically</td>
-</tr>
-<tr class="odd">
-<td>HTTP</td>
-<td>Hypertext Transfer Protocol</td>
-<td>Web browsing</td>
-</tr>
-</tbody>
-</table>
+  Basics</h3>
+  <h4 id="osi-model-open-systems-interconnection">OSI Model (Open Systems
+  Interconnection)</h4>
+  <table>
+  <thead>
+  <tr class="header">
+  <th>Layer</th>
+  <th>Name</th>
+  <th>Function</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+  <td>7</td>
+  <td>Application</td>
+  <td>User interface, network services</td>
+  </tr>
+  <tr class="even">
+  <td>6</td>
+  <td>Presentation</td>
+  <td>Data translation, encryption</td>
+  </tr>
+  <tr class="odd">
+  <td>5</td>
+  <td>Session</td>
+  <td>Session management</td>
+  </tr>
+  <tr class="even">
+  <td>4</td>
+  <td>Transport</td>
+  <td>End-to-end connections (TCP/UDP)</td>
+  </tr>
+  <tr class="odd">
+  <td>3</td>
+  <td>Network</td>
+  <td>Routing, IP addressing</td>
+  </tr>
+  <tr class="even">
+  <td>2</td>
+  <td>Data Link</td>
+  <td>MAC, switching, framing</td>
+  </tr>
+  <tr class="odd">
+  <td>1</td>
+  <td>Physical</td>
+  <td>Cables, signals, bits</td>
+  </tr>
+  </tbody>
+  </table>
+  <h4 id="tcpip-model">TCP/IP Model</h4>
+  <table>
+  <colgroup>
+  <col style="width: 21%" />
+  <col style="width: 32%" />
+  <col style="width: 46%" />
+  </colgroup>
+  <thead>
+  <tr class="header">
+  <th>Layer</th>
+  <th>Protocols</th>
+  <th>Functions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+  <td>Application</td>
+  <td>HTTP, FTP, DNS, SMTP</td>
+  <td>Application services</td>
+  </tr>
+  <tr class="even">
+  <td>Transport</td>
+  <td>TCP, UDP</td>
+  <td>Communication between hosts</td>
+  </tr>
+  <tr class="odd">
+  <td>Internet</td>
+  <td>IP, ICMP, ARP</td>
+  <td>Logical addressing, routing</td>
+  </tr>
+  <tr class="even">
+  <td>Network Access</td>
+  <td>Ethernet, Frame Relay</td>
+  <td>Physical addressing and access</td>
+  </tr>
+  </tbody>
+  </table>
+  <h4 id="mac-address">MAC Address</h4>
+  <ul>
+  <li>Format: 00:1A:2B:3C:4D:5E (48-bit)</li>
+  <li>OUI: First 24 bits (Organisational Unique Identifier)</li>
+  </ul>
+  <h4 id="ip-versions">IP Versions</h4>
+  <table>
+  <thead>
+  <tr class="header">
+  <th>Version</th>
+  <th>Length</th>
+  <th>Format Example</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+  <td>IPv4</td>
+  <td>32-bit</td>
+  <td>192.168.1.1</td>
+  </tr>
+  <tr class="even">
+  <td>IPv6</td>
+  <td>128-bit</td>
+  <td>2001:0db8:85a3::8a2e:0370:7334</td>
+  </tr>
+  </tbody>
+  </table>
+  <h4 id="ip-header-flags">IP Header Flags</h4>
+  <table>
+  <thead>
+  <tr class="header">
+  <th>Flag</th>
+  <th>Meaning</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+  <td>DF</td>
+  <td>Don’t Fragment</td>
+  </tr>
+  <tr class="even">
+  <td>MF</td>
+  <td>More Fragments</td>
+  </tr>
+  </tbody>
+  </table>
+  <h4 id="tcp-header-flags">TCP Header Flags</h4>
+  <table>
+  <thead>
+  <tr class="header">
+  <th>Flag</th>
+  <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+  <td>SYN</td>
+  <td>Synchronize</td>
+  </tr>
+  <tr class="even">
+  <td>ACK</td>
+  <td>Acknowledgment</td>
+  </tr>
+  <tr class="odd">
+  <td>FIN</td>
+  <td>Finish</td>
+  </tr>
+  <tr class="even">
+  <td>RST</td>
+  <td>Reset</td>
+  </tr>
+  <tr class="odd">
+  <td>PSH</td>
+  <td>Push</td>
+  </tr>
+  <tr class="even">
+  <td>URG</td>
+  <td>Urgent</td>
+  </tr>
+  </tbody>
+  </table>
+  <h4 id="tcp-3-way-handshake">TCP 3-Way Handshake</h4>
+  <ol type="1">
+  <li>SYN → (Client to Server)</li>
+  <li>SYN-ACK ← (Server to Client)</li>
+  <li>ACK → (Client to Server)</li>
+  </ol>
+  <h4 id="encapsulation-vs-de-encapsulation">Encapsulation vs
+  De-encapsulation</h4>
+  <ul>
+  <li><strong>Encapsulation</strong>: App → Trans → Net → Link →
+  Physical</li>
+  <li><strong>De-encapsulation</strong>: Physical → Link → Net → Trans →
+  App</li>
+  </ul>
+  <hr />
+  <h3 id="unit-2-routing-ip-management">UNIT 2: Routing &amp; IP
+  Management</h3>
+  <h4 id="ip-address-classes">IP Address Classes</h4>
+  <table>
+  <thead>
+  <tr class="header">
+  <th>Class</th>
+  <th>Range</th>
+  <th>Default Subnet Mask</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+  <td>A</td>
+  <td>1.0.0.0 - 126.255.255.255</td>
+  <td>255.0.0.0</td>
+  </tr>
+  <tr class="even">
+  <td>B</td>
+  <td>128.0.0.0 - 191.255.255.255</td>
+  <td>255.255.0.0</td>
+  </tr>
+  <tr class="odd">
+  <td>C</td>
+  <td>192.0.0.0 - 223.255.255.255</td>
+  <td>255.255.255.0</td>
+  </tr>
+  <tr class="even">
+  <td>D</td>
+  <td>224.0.0.0 - 239.255.255.255</td>
+  <td>Multicast</td>
+  </tr>
+  <tr class="odd">
+  <td>E</td>
+  <td>240.0.0.0 - 255.255.255.255</td>
+  <td>Experimental</td>
+  </tr>
+  </tbody>
+  </table>
+  <h4 id="nat-types">NAT Types</h4>
+  <table>
+  <thead>
+  <tr class="header">
+  <th>Type</th>
+  <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+  <td>Static NAT</td>
+  <td>One-to-one private-public map</td>
+  </tr>
+  <tr class="even">
+  <td>Dynamic NAT</td>
+  <td>Pool-based IP assignment</td>
+  </tr>
+  <tr class="odd">
+  <td>PAT</td>
+  <td>Port-based many-to-one mapping</td>
+  </tr>
+  </tbody>
+  </table>
+  <h4 id="addressing">Addressing</h4>
+  <ul>
+  <li><strong>APIPA</strong>: 169.254.x.x (self-assigned IP when DHCP
+  fails)</li>
+  </ul>
+  <hr />
+  <h3 id="unit-3-subnetting-wan-technologies">UNIT 3: Subnetting &amp; WAN
+  Technologies</h3>
+  <h4 id="subnetting-table-class-c-example">Subnetting Table (Class C
+  Example)</h4>
+  <table>
+  <thead>
+  <tr class="header">
+  <th>Subnets</th>
+  <th>Subnet Mask</th>
+  <th>Hosts/Subnet</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+  <td>2</td>
+  <td>255.255.255.128</td>
+  <td>126</td>
+  </tr>
+  <tr class="even">
+  <td>4</td>
+  <td>255.255.255.192</td>
+  <td>62</td>
+  </tr>
+  <tr class="odd">
+  <td>8</td>
+  <td>255.255.255.224</td>
+  <td>30</td>
+  </tr>
+  <tr class="even">
+  <td>16</td>
+  <td>255.255.255.240</td>
+  <td>14</td>
+  </tr>
+  </tbody>
+  </table>
+  <h4 id="cidr-notation-examples">CIDR Notation Examples</h4>
+  <table>
+  <thead>
+  <tr class="header">
+  <th>CIDR</th>
+  <th>Subnet Mask</th>
+  <th>Hosts</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+  <td>/24</td>
+  <td>255.255.255.0</td>
+  <td>254</td>
+  </tr>
+  <tr class="even">
+  <td>/26</td>
+  <td>255.255.255.192</td>
+  <td>62</td>
+  </tr>
+  </tbody>
+  </table>
+  <h4 id="wan-technologies">WAN Technologies</h4>
+  <table>
+  <thead>
+  <tr class="header">
+  <th>Tech</th>
+  <th>Key Component</th>
+  <th>Use Case</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+  <td>Frame Relay</td>
+  <td>DLCI</td>
+  <td>Virtual circuits</td>
+  </tr>
+  <tr class="even">
+  <td>MPLS</td>
+  <td>Labels, Edge Routers</td>
+  <td>High-speed routing</td>
+  </tr>
+  <tr class="odd">
+  <td>PVC</td>
+  <td>Permanent Virtual Circuit</td>
+  <td>Constant path</td>
+  </tr>
+  </tbody>
+  </table>
+  <hr />
+  <h3 id="unit-4-vlans-layer-2-concepts">UNIT 4: VLANs &amp; Layer 2
+  Concepts</h3>
+  <h4 id="vlan-types">VLAN Types</h4>
+  <table>
+  <thead>
+  <tr class="header">
+  <th>VLAN Type</th>
+  <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+  <td>Access</td>
+  <td>Assigned to single VLAN</td>
+  </tr>
+  <tr class="even">
+  <td>Trunk</td>
+  <td>Carries multiple VLANs</td>
+  </tr>
+  <tr class="odd">
+  <td>Dynamic</td>
+  <td>Uses VTP to propagate VLAN info</td>
+  </tr>
+  </tbody>
+  </table>
+  <h4 id="switchport-modes">Switchport Modes</h4>
+  <table>
+  <thead>
+  <tr class="header">
+  <th>Mode</th>
+  <th>Function</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+  <td>Access</td>
+  <td>Single VLAN</td>
+  </tr>
+  <tr class="even">
+  <td>Trunk</td>
+  <td>Multiple VLANs</td>
+  </tr>
+  <tr class="odd">
+  <td>Dynamic Desirable</td>
+  <td>Actively tries to form trunk</td>
+  </tr>
+  <tr class="even">
+  <td>Dynamic Auto</td>
+  <td>Passively waits to form trunk</td>
+  </tr>
+  </tbody>
+  </table>
+  <h4 id="vtp-modes">VTP Modes</h4>
+  <table>
+  <thead>
+  <tr class="header">
+  <th>Mode</th>
+  <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+  <td>Server</td>
+  <td>Create/Modify VLANs</td>
+  </tr>
+  <tr class="even">
+  <td>Client</td>
+  <td>Receives VLAN info only</td>
+  </tr>
+  <tr class="odd">
+  <td>Transparent</td>
+  <td>Doesn’t participate, forwards only</td>
+  </tr>
+  </tbody>
+  </table>
+  <hr />
+  <h3 id="unit-5-communication-protocols">UNIT 5: Communication
+  Protocols</h3>
+  <h4 id="protocols-summary-table">Protocols Summary Table</h4>
+  <table>
+  <colgroup>
+  <col style="width: 10%" />
+  <col style="width: 48%" />
+  <col style="width: 41%" />
+  </colgroup>
+  <thead>
+  <tr class="header">
+  <th>Protocol</th>
+  <th>Full Form</th>
+  <th>Usage</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+  <td>FTP</td>
+  <td>File Transfer Protocol</td>
+  <td>File sharing</td>
+  </tr>
+  <tr class="even">
+  <td>TFTP</td>
+  <td>Trivial File Transfer Protocol</td>
+  <td>Simple file transfer, no auth</td>
+  </tr>
+  <tr class="odd">
+  <td>SMTP</td>
+  <td>Simple Mail Transfer Protocol</td>
+  <td>Send emails</td>
+  </tr>
+  <tr class="even">
+  <td>DNS</td>
+  <td>Domain Name System</td>
+  <td>Resolve domain to IP</td>
+  </tr>
+  <tr class="odd">
+  <td>RIP</td>
+  <td>Routing Information Protocol</td>
+  <td>Distance-vector routing</td>
+  </tr>
+  <tr class="even">
+  <td>SNMP</td>
+  <td>Simple Network Management Protocol</td>
+  <td>Network device monitoring</td>
+  </tr>
+  <tr class="odd">
+  <td>POP3</td>
+  <td>Post Office Protocol v3</td>
+  <td>Retrieve and delete emails</td>
+  </tr>
+  <tr class="even">
+  <td>IMAP</td>
+  <td>Internet Message Access Protocol</td>
+  <td>Access emails on server</td>
+  </tr>
+  <tr class="odd">
+  <td>ARP</td>
+  <td>Address Resolution Protocol</td>
+  <td>IP to MAC mapping</td>
+  </tr>
+  <tr class="even">
+  <td>TCP/IP</td>
+  <td>Transmission Control Protocol/Internet</td>
+  <td>Core suite of protocols</td>
+  </tr>
+  <tr class="odd">
+  <td>UDP</td>
+  <td>User Datagram Protocol</td>
+  <td>Unreliable but fast transmission</td>
+  </tr>
+  <tr class="even">
+  <td>IGMP</td>
+  <td>Internet Group Management Protocol</td>
+  <td>Manages multicast groups</td>
+  </tr>
+  <tr class="odd">
+  <td>ICMP</td>
+  <td>Internet Control Message Protocol</td>
+  <td>Error and control messages</td>
+  </tr>
+  <tr class="even">
+  <td>DHCP</td>
+  <td>Dynamic Host Configuration Protocol</td>
+  <td>Assign IP addresses automatically</td>
+  </tr>
+  <tr class="odd">
+  <td>HTTP</td>
+  <td>Hypertext Transfer Protocol</td>
+  <td>Web browsing</td>
+  </tr>
+  </tbody>
+  </table>
+  
+<!-- Continue pasting rest of units (Unit 2, 3, etc.) exactly as-is below... -->
+
+<!-- END OF CONTENT -->
+</body>
+</html>
