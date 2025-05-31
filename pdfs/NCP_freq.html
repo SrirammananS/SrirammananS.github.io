@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCI1B Exam Topics Frequency Analysis</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
+        }
+        
+        .card .number {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        .frequency-section {
+            margin: 40px 0;
+        }
+        
+        .frequency-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: linear-gradient(90deg, #f8f9fa, #e9ecef);
+            border-left: 5px solid #667eea;
+            border-radius: 5px;
+        }
+        
+        .frequency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .frequency-box {
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .frequency-header {
+            padding: 15px;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+        }
+        
+        .high-freq { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .medium-freq { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .low-freq { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+        
+        .frequency-content {
+            padding: 20px;
+            background: white;
+        }
+        
+        .topic-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .topic-item:last-child {
+            border-bottom: none;
+        }
+        
+        .topic-name {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .topic-count {
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+        
+        .marks-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .marks-box {
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .marks-header {
+            padding: 15px;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+        }
+        
+        .marks-2 { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .marks-6 { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .marks-10 { background: linear-gradient(135deg, #e67e22, #d35400); }
+        
+color: #667eea;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .unit-analysis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .unit-box {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .unit-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .highlight {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            background-size: 200% 200%;
+            animation: gradient 3s ease infinite;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1> PCI1B Networking & Communication Protocols<br>Exam Topics Frequency Analysis</h1>
+        
+
+
+        <div class="frequency-section">
+            <h2 class="frequency-title">📊 Topic Frequency Analysis</h2>
+            <div class="frequency-grid">
+                <div class="frequency-box">
+                    <div class="frequency-header high-freq">
+                        HIGH FREQUENCY (5-6 times)
+                    </div>
+                    <div class="frequency-content">
+                        <div class="topic-item">
+                            <span class="topic-name"><span class="highlight">TCP (Transmission Control Protocol)</span></span>
+                            <span class="topic-count">6</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name"><span class="highlight">Private IP</span></span>
+                            <span class="topic-count">6</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name"><span class="highlight">IP Flags</span></span>
+                            <span class="topic-count">5</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name"><span class="highlight">ARP (Address Resolution Protocol)</span></span>
+                            <span class="topic-count">5</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name"><span class="highlight">VTP Domain</span></span>
+                            <span class="topic-count">5</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name"><span class="highlight">SMTP</span></span>
+                            <span class="topic-count">5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="frequency-box">
+                    <div class="frequency-header medium-freq">
+                        MEDIUM FREQUENCY (3-4 times)
+                    </div>
+                    <div class="frequency-content">
+                        <div class="topic-item">
+                            <span class="topic-name">IP Identification</span>
+                            <span class="topic-count">4</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">Reserved IP</span>
+                            <span class="topic-count">4</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">Collision Domain</span>
+                            <span class="topic-count">4</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">CIR (Committed Information Rate)</span>
+                            <span class="topic-count">4</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">POP3</span>
+                            <span class="topic-count">4</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">ASCII</span>
+                            <span class="topic-count">4</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">Subnetting</span>
+                            <span class="topic-count">4</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">OSPF</span>
+                            <span class="topic-count">3</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">RIPv2</span>
+                            <span class="topic-count">3</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">UDP (User Datagram Protocol)</span>
+                            <span class="topic-count">3</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="frequency-box">
+                    <div class="frequency-header low-freq">
+                     LOW FREQUENCY (1-2 times)
+                    </div>
+                    <div class="frequency-content">
+                        <div class="topic-item">
+                            <span class="topic-name">EIGRP</span>
+                            <span class="topic-count">2</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">WAN</span>
+                            <span class="topic-count">2</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">DCE</span>
+                            <span class="topic-count">2</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">RARP</span>
+                            <span class="topic-count">2</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">DNS</span>
+                            <span class="topic-count">2</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">FTP</span>
+                            <span class="topic-count">2</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">HTTP</span>
+                            <span class="topic-count">2</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">NAT</span>
+                            <span class="topic-count">2</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">PVC</span>
+                            <span class="topic-count">2</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">IMAP</span>
+                            <span class="topic-count">2</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="frequency-section">
+            <h2 class="frequency-title"> Very Important Questions</h2>
+            <div class="marks-section">
+                <div class="marks-box">
+                    <div class="marks-header marks-2">
+                        2 MARKS QUESTIONS (50 words)
+                    </div>
+                    <div class="frequency-content">
+                     
+                        <div class="topic-item">
+                            <span class="topic-name">• TCP (6 times)</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">• Private IP (6 times)</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">• IP Flags (5 times)</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">• IP Identification (4 times)</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">• Reserved IP (4 times)</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">• Collision Domain (4 times)</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">• CIR (4 times)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="marks-box">
+                    <div class="marks-header marks-6">
+                        6 MARKS QUESTIONS (250 words)
+                    </div>
+                    <div class="frequency-content">
+    
+                        <div class="topic-item">
+                            <span class="topic-name">• ARP (5 times)</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">• Dynamic Routing (3 times)</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">• NAT (2 times)</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">• UDP (2 times)</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">• PVC (2 times)</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">• Switch Port Modes (2 times)</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">• Internet Protocol (2 times)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="marks-box">
+                    <div class="marks-header marks-10">
+                        10 MARKS QUESTIONS (500 words)
+                    </div>
+                    <div class="frequency-content">
+  
+                        <div class="topic-item">
+                            <span class="topic-name">• Subnetting (4 times)</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">• VTP Domain (3 times)</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">• TCP/IP Model (2 times)</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">• Private IP (2 times)</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">• SMTP (2 times)</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">• ASCII (2 times)</span>
+                        </div>
+                        <div class="topic-item">
+                            <span class="topic-name">• Virtual Space (2 times)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="frequency-section">
+            <h2 class="frequency-title"> Unit-wise Topic Analysis with Years & Marks</h2>
+            <div class="unit-detailed-analysis">
+                
+                <div class="unit-detailed-box">
+                    <div class="unit-detailed-header unit1-bg">
+                        <h3>UNIT 1 - Networking Models & Protocols</h3>
+                    </div>
+                    <div class="unit-detailed-content">
+                        <div class="marks-category">
+                            <h4 class="marks-title marks-2-bg">2 MARKS Questions</h4>
+                            <div class="topic-years">
+                                <div class="topic-year-item">
+                                    <span class="topic-name">TCP</span>
+                                    <span class="years">(Dec 2019, Dec 2020, May 2022, Dec 2022, May 2023, Dec 2021)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">IP Flags</span>
+                                    <span class="years">(Dec 2020, Dec 2021, Dec 2022, May 2023, May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">IP Identification</span>
+                                    <span class="years">(Dec 2021, May 2022, May 2023, Dec 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Payload</span>
+                                    <span class="years">(Dec 2021, May 2023, Dec 2020)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Header Length</span>
+                                    <span class="years">(Dec 2021)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">TCP 3-way Handshake</span>
+                                    <span class="years">(Dec 2019)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">TCP Flags</span>
+                                    <span class="years">(Dec 2019)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">MAC Address</span>
+                                    <span class="years">(Dec 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">OSI</span>
+                                    <span class="years">(May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Internet Protocol</span>
+                                    <span class="years">(May 2022)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="marks-category">
+                            <h4 class="marks-title marks-6-bg">6 MARKS Questions</h4>
+                            <div class="topic-years">
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Segmentation</span>
+                                    <span class="years">(Dec 2021)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Header & Header Lengths</span>
+                                    <span class="years">(May 2023)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">IP Identification</span>
+                                    <span class="years">(May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Port Numbers</span>
+                                    <span class="years">(May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Internet Protocol</span>
+                                    <span class="years">(May 2023)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Encapsulation & De-encapsulation</span>
+                                    <span class="years">(Dec 2022)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="marks-category">
+                            <h4 class="marks-title marks-10-bg">10 MARKS Questions</h4>
+                            <div class="topic-years">
+                                <div class="topic-year-item">
+                                    <span class="topic-name">TCP/IP Model</span>
+                                    <span class="years">(Dec 2019, Dec 2021)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">IP Model</span>
+                                    <span class="years">(Dec 2020)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Networking Models</span>
+                                    <span class="years">(May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">IP Fragmentation & Reassembly</span>
+                                    <span class="years">(May 2023)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Transport Layer Protocol</span>
+                                    <span class="years">(Dec 2022)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="unit-detailed-box">
+                    <div class="unit-detailed-header unit2-bg">
+                        <h3>UNIT 2 - Routing & IP Classes</h3>
+                    </div>
+                    <div class="unit-detailed-content">
+                        <div class="marks-category">
+                            <h4 class="marks-title marks-2-bg">2 MARKS Questions</h4>
+                            <div class="topic-years">
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Private IP</span>
+                                    <span class="years">(Dec 2019, Dec 2021, May 2023, Dec 2020, May 2022, Dec 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Reserved IP</span>
+                                    <span class="years">(Dec 2020, Dec 2021, May 2022, Dec 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">OSPF</span>
+                                    <span class="years">(Dec 2021, May 2022, Dec 2020)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">RIPv2</span>
+                                    <span class="years">(Dec 2019, Dec 2022, Dec 2020)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">RIPv1</span>
+                                    <span class="years">(Dec 2021)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Dynamic Routing</span>
+                                    <span class="years">(May 2023)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Public IP</span>
+                                    <span class="years">(Dec 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">APIPA</span>
+                                    <span class="years">(May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Multicast Domain</span>
+                                    <span class="years">(May 2023)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="marks-category">
+                            <h4 class="marks-title marks-6-bg">6 MARKS Questions</h4>
+                            <div class="topic-years">
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Dynamic Routing</span>
+                                    <span class="years">(Dec 2021, May 2023, Dec 2020)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Static Routing</span>
+                                    <span class="years">(Dec 2019)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">RIPv1</span>
+                                    <span class="years">(May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">EIGRP</span>
+                                    <span class="years">(May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Classful & Classless Routing</span>
+                                    <span class="years">(Dec 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">IP Routing Protocols</span>
+                                    <span class="years">(May 2023)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="marks-category">
+                            <h4 class="marks-title marks-10-bg">10 MARKS Questions</h4>
+                            <div class="topic-years">
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Private & Public IP</span>
+                                    <span class="years">(Dec 2020, Dec 2021)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Static & Dynamic Routing</span>
+                                    <span class="years">(Dec 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">IP Classes</span>
+                                    <span class="years">(May 2023)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Network Address Translation</span>
+                                    <span class="years">(May 2022)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="unit-detailed-box">
+                    <div class="unit-detailed-header unit3-bg">
+                        <h3>UNIT 3 - Subnetting & WAN Technologies</h3>
+                    </div>
+                    <div class="unit-detailed-content">
+                        <div class="marks-category">
+                            <h4 class="marks-title marks-2-bg">2 MARKS Questions</h4>
+                            <div class="topic-years">
+                                <div class="topic-year-item">
+                                    <span class="topic-name">CIR</span>
+                                    <span class="years">(Dec 2019, Dec 2020, Dec 2022, May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Wild card Mask</span>
+                                    <span class="years">(Dec 2019, May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Frame Relay</span>
+                                    <span class="years">(Dec 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Clock Speed</span>
+                                    <span class="years">(Dec 2019, Dec 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Label Switching</span>
+                                    <span class="years">(Dec 2021)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Permanent Virtual Circuit</span>
+                                    <span class="years">(May 2023)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">PE Routers</span>
+                                    <span class="years">(May 2023)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="marks-category">
+                            <h4 class="marks-title marks-6-bg">6 MARKS Questions</h4>
+                            <div class="topic-years">
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Permanent Virtual Circuits</span>
+                                    <span class="years">(Dec 2022, May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Data Terminal Equipment</span>
+                                    <span class="years">(Dec 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">DLCI</span>
+                                    <span class="years">(Dec 2019, May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Multiprotocol Label Switching</span>
+                                    <span class="years">(May 2023)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="marks-category">
+                            <h4 class="marks-title marks-10-bg">10 MARKS Questions</h4>
+                            <div class="topic-years">
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Subnetting (Class A, B, C)</span>
+                                    <span class="years">(Dec 2019, Dec 2020, Dec 2021, Dec 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Classless Inter-Domain Routing</span>
+                                    <span class="years">(May 2023)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Data Communication Equipment</span>
+                                    <span class="years">(Dec 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Permanent Virtual Circuit</span>
+                                    <span class="years">(May 2022)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="unit-detailed-box">
+                    <div class="unit-detailed-header unit4-bg">
+                        <h3>UNIT 4 - Virtual LANs</h3>
+                    </div>
+                    <div class="unit-detailed-content">
+                        <div class="marks-category">
+                            <h4 class="marks-title marks-2-bg">2 MARKS Questions</h4>
+                            <div class="topic-years">
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Collision Domain</span>
+                                    <span class="years">(Dec 2019, Dec 2020, May 2023, Dec 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">VTP Domain</span>
+                                    <span class="years">(Dec 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">VLAN Trunking</span>
+                                    <span class="years">(Dec 2019)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Virtual LAN</span>
+                                    <span class="years">(Dec 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Switch Port</span>
+                                    <span class="years">(Dec 2020)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Switch Port Mode</span>
+                                    <span class="years">(Dec 2021)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Access Links</span>
+                                    <span class="years">(Dec 2021)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Configuration</span>
+                                    <span class="years">(Dec 2021)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="marks-category">
+                            <h4 class="marks-title marks-6-bg">6 MARKS Questions</h4>
+                            <div class="topic-years">
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Broadcast Domain</span>
+                                    <span class="years">(Dec 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Trunk Link</span>
+                                    <span class="years">(Dec 2021)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Access Link</span>
+                                    <span class="years">(Dec 2019)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Inter VLAN Communications</span>
+                                    <span class="years">(May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Switch Port Modes</span>
+                                    <span class="years">(May 2023)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="marks-category">
+                            <h4 class="marks-title marks-10-bg">10 MARKS Questions</h4>
+                            <div class="topic-years">
+                                <div class="topic-year-item">
+                                    <span class="topic-name">VTP Domain</span>
+                                    <span class="years">(Dec 2020, Dec 2021, May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Virtual Space</span>
+                                    <span class="years">(Dec 2019, Dec 2021)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Client & Transparent Modes</span>
+                                    <span class="years">(Dec 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Configuration Revision Numbers</span>
+                                    <span class="years">(May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Access Links & Trunk Links</span>
+                                    <span class="years">(May 2023)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="unit-detailed-box">
+                    <div class="unit-detailed-header unit5-bg">
+                        <h3>UNIT 5 - Communication Protocols</h3>
+                    </div>
+                    <div class="unit-detailed-content">
+                        <div class="marks-category">
+                            <h4 class="marks-title marks-2-bg">2 MARKS Questions</h4>
+                            <div class="topic-years">
+                                <div class="topic-year-item">
+                                    <span class="topic-name">POP3</span>
+                                    <span class="years">(Dec 2020, Dec 2019, Dec 2021, May 2023)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">SMTP</span>
+                                    <span class="years">(Dec 2022, Dec 2019, Dec 2020, May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">ASCII</span>
+                                    <span class="years">(Dec 2022, Dec 2019, Dec 2020, May 2023)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">User Datagram Protocol</span>
+                                    <span class="years">(Dec 2019, Dec 2022, May 2023)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">DNS</span>
+                                    <span class="years">(Dec 2021, May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">FTP</span>
+                                    <span class="years">(Dec 2019, Dec 2021)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Address Resolution Protocol</span>
+                                    <span class="years">(May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">DNS Flags</span>
+                                    <span class="years">(May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">ICMP</span>
+                                    <span class="years">(May 2023)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Telnet</span>
+                                    <span class="years">(May 2023)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">SNMP</span>
+                                    <span class="years">(Dec 2019)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">HTTP</span>
+                                    <span class="years">(May 2023)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="marks-category">
+                            <h4 class="marks-title marks-6-bg">6 MARKS Questions</h4>
+                            <div class="topic-years">
+                                <div class="topic-year-item">
+                                    <span class="topic-name">ARP</span>
+                                    <span class="years">(Dec 2019, Dec 2021, May 2022, May 2023, Dec 2020)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">User Datagram Protocol</span>
+                                    <span class="years">(May 2022, Dec 2021)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">RARP</span>
+                                    <span class="years">(Dec 2022, Dec 2020)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">POP3</span>
+                                    <span class="years">(Dec 2021)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">HTTP</span>
+                                    <span class="years">(Dec 2021)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">IMAP</span>
+                                    <span class="years">(Dec 2019, May 2023)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">ASCII</span>
+                                    <span class="years">(Dec 2019)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">DNS</span>
+                                    <span class="years">(Dec 2022)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="marks-category">
+                            <h4 class="marks-title marks-10-bg">10 MARKS Questions</h4>
+                            <div class="topic-years">
+                                <div class="topic-year-item">
+                                    <span class="topic-name">SMTP</span>
+                                    <span class="years">(Dec 2020, May 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">ASCII</span>
+                                    <span class="years">(Dec 2021, Dec 2019)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">IMAP</span>
+                                    <span class="years">(Dec 2020)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Communication Protocols</span>
+                                    <span class="years">(Dec 2019)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">Networking & Communication Protocols</span>
+                                    <span class="years">(Dec 2019)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">HTTP</span>
+                                    <span class="years">(Dec 2022)</span>
+                                </div>
+                                <div class="topic-year-item">
+                                    <span class="topic-name">POP3</span>
+                                    <span class="years">(May 2023)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div>
+        <h1> All the best by RAM</h1>
+    </div>
+
+
+    </div>
+</body>
+</html>
