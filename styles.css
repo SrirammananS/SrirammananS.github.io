@@ -103,7 +103,13 @@ ul li a:hover {
   gap: 1rem;
   padding: 1rem 0;
 }
-
+.notice-highlight {
+  color: red;
+  background-color: #fff3cd;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 4px;
+}
 .pdf-card {
   background: white;
   padding: 1rem;
