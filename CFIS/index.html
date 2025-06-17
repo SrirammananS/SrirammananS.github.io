@@ -25,6 +25,7 @@
 <body>
   <header>
     <h1>MSc. CF-IS Notes Portal</h1>
+  <button onclick="document.body.classList.toggle('dark-mode')">🌓 Toggle Dark Mode</button>
 
   </header>
 
@@ -32,15 +33,12 @@
   <main>
 
     
-      <section id="updates">
-      <h2>📢 Notices</h2>
-      <ul>
-          <li class="notice-highlight"> 📣 M.Sc Elective - I: Forms of Cyber Crimes (15.06.2025) was postponed to 19.07.2025 (FN)  </li>
-<!--         <li>🗓️ SEM - 1 exams begin on May 31.</li> -->
-      </ul>
-    </section>
+<section id="updates" class="sticky-banner">
+  <p>📢 M.Sc Elective - I postponed to <strong>19.07.2025 (FN)</strong></p>
+</section>
+
     
-    <section id="cyber-criminology" >
+<!--     <section id="cyber-criminology" >
   <h2>🕵🏿Forms for Cyber Crimes <span class="blink-red" >Exclusive</span></h2>
   <ul>
     <li><a href="pdfs/cybercrime_frequency_analysis.html" target="_blank">Frequency Analysis</a></li>
@@ -51,8 +49,18 @@
 <!--      <li><a href="pdfs/PCI1C Information Security - Complete Study Notes (3).pdf" target="_blank"> Complete Key Notes -Updated </a></li> -->
     
     
+<!--  </ul>
+    </section> -->
+
+
+ <details>
+  <summary>📘 PCI1E - Cyber Crimes</summary>
+  <ul>
+    <li><a href="pdfs/cybercrime_frequency_analysis.html" target="_blank">Frequency Analysis</a></li>
+    <li><a href="pdfs/PCI1E Cyber Crimes.pdf" target="_blank">VP mam Notes</a></li>
   </ul>
-    </section>
+</details>
+
     
     <section id="pdf-downloads">
       <h2>📄 Download Notes</h2>
