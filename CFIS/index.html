@@ -71,6 +71,19 @@
         <li><a href="http://ideunom.ac.in/Book/book_view.php" target="_blank">Online Study Materials</a></li>
       </ul>
     </section>
+
+    <!-- Display count -->
+<p>Visitors: <span id="visits"></span></p>
+
+<!-- Script -->
+<script>
+  fetch('https://api.countapi.xyz/hit/SrirammaananS.github.io/CFIS')
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('visits').innerText = data.value;
+    });
+</script>
+    
   </main>
 
   <footer>
