@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forms of Cyber Crime</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #eaa866 0%, #a27c4b 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #eaa866 0%, #a27c4b 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-20px, -20px) rotate(360deg);
+            }
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: #2c3e50;
+            margin: 30px 0 20px 0;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            border-bottom: 3px solid #bb5298;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #ea66d0;
+            margin-top: 40px;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: #a24b98;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: #7d5a7b;
+        }
+
+        p {
+            margin-bottom: 16px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            padding-left: 5px;
+        }
+
+        li strong {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        blockquote {
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 0 10px 10px 0;
+            font-style: italic;
+        }
+
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+
+        pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 24px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .highlight-section {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .toc {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .toc h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc li {
+            padding: 5px 0;
+        }
+
+        .toc a {
+            color: #495057;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .toc a:hover {
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scroll animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content>* {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Forms of Cyber Crime</h1>
+            <p class="subtitle">This is a question paper frequency analysis, analogy by me. Please use it
+                wisely for academic guidance. If you notice any mistakes, feel free to let me know!</p>
+        </div>
+
+        <div class="content">
+            <h1 id="cybercrime-question-papers-frequency-analysis-by-units">Old Question Papers by Units</h1>
+            <h2 id="unit-1-cyber-crime-introduction-history-classification-trends">UNIT 1: Cyber Crime Introduction,
+                History, Classification &amp; Trends</h2>
+            <h3 id="2-mark-questions-50-words-each">2 Mark Questions (50 words each)</h3>
+            <ul>
+                <li><strong>Cyber space</strong> (Dec 2020)</li>
+                <li><strong>Cyber Crime</strong> (Dec 2022, Dec 2023, May 2023, June 2023, May 2024)</li>
+                <li><strong>Cyberspace and Crime</strong> (July 2019)</li>
+                <li><strong>Cyber space is bound by laws</strong> (May 2021)</li>
+                <li><strong>Cyber space are not safe- Opine</strong> (Dec 2021)</li>
+                <li><strong>Cybercrimes Vs. Conventional Crimes</strong> (Dec 2021)</li>
+                <li><strong>Conventional Crime</strong> (May 2024)</li>
+                <li><strong>Nature of Cybercrimes</strong> (Dec 2020, July 2019)</li>
+                <li><strong>Extent of Cybercrimes</strong> (May 2021, Dec 2019)</li>
+                <li><strong>Limitations of Cyber space</strong> (Dec 2019)</li>
+                <li><strong>Define Crime</strong> (May 2022)</li>
+                <li><strong>Security of Cyber Space</strong> (Dec 2021)</li>
+                <li><strong>Crime is inevitable in cyber space – Argue</strong> (Dec 2022)</li>
+            </ul>
+            <h3 id="6-mark-questions-250-words-each">6 Mark Questions (250 words each)</h3>
+            <ul>
+                <li><strong>Explain the origin of cybercrimes</strong> (Dec 2019)</li>
+                <li><strong>Explain the history of Cyber Crimes</strong> (July 2019)</li>
+                <li><strong>How do you classify Cyber Crimes? Explain</strong> (Dec 2020)</li>
+                <li><strong>Write a detail note on classification of cybercrimes with relevant examples</strong> (Dec
+                    2021)</li>
+                <li><strong>Explain the Classification of Cybercrime</strong> (Dec 2022)</li>
+                <li><strong>Define Cybercrime and give its impact in Contemporary Society</strong> (May 2022)</li>
+                <li><strong>Explain the trends in Cybercrimes across the world</strong> (May 2023, June 2023)</li>
+                <li><strong>Write a note on extent of Cybercrime in India</strong> (May 2023, June 2023)</li>
+                <li><strong>Compare conventional crimes with cyber crimes</strong> (Dec 2023)</li>
+                <li><strong>Classify the crimes in cyber space</strong> (May 2024)</li>
+                <li><strong>Conventional crimes are easy to investigate compared to cyber crimes – Argue</strong> (May
+                    2024)</li>
+                <li><strong>Cyberspace is not limited to jurisdiction- Opine</strong> (Dec 2020)</li>
+                <li><strong>Cyber crimes are increasing- Opine</strong> (May 2021)</li>
+            </ul>
+            <h3 id="10-mark-questions-500-words-each">10 Mark Questions (500 words each)</h3>
+            <ul>
+                <li><strong>Write a detail note on classification of cyber crimes with relevant examples</strong> (May
+                    2021)</li>
+                <li><strong>Write a detail note on trends in cybercrimes with examples</strong> (Dec 2019)</li>
+                <li><strong>Write a detail note on emerging trends in cybercrimes with examples</strong> (Dec 2020)</li>
+                <li><strong>Write in detail the History and Development of Cybercrime in India</strong> (May 2022, May
+                    2023, June 2023)</li>
+                <li><strong>Explain briefly about the development of Cyber Crimes in India</strong> (July 2019)</li>
+                <li><strong>Write a detail note on classification of cybercrimes with examples</strong> (July 2019)</li>
+                <li><strong>Explain in detail the trend in the Cybercrime across the world</strong> (Dec 2022)</li>
+                <li><strong>Cyber investigation is needed for all cyber crimes now-argue</strong> (Dec 2023)</li>
+            </ul>
+            <hr />
+            <h2 id="unit-2-forms-of-cyber-crimes-frauds">UNIT 2: Forms of Cyber Crimes &amp; Frauds</h2>
+            <h3 id="2-mark-questions-50-words-each_1">2 Mark Questions (50 words each)</h3>
+            <ul>
+                <li><strong>Hacking</strong> (Dec 2023, May 2022)</li>
+                <li><strong>Cracking</strong> (Dec 2022)</li>
+                <li><strong>Computer Vandalism</strong> (May 2021, Dec 2019)</li>
+                <li><strong>Ransom ware</strong> (May 2021, Dec 2019, Dec 2021)</li>
+                <li><strong>Ransomware</strong> (May 2024)</li>
+                <li><strong>Logical bomb</strong> (May 2021)</li>
+                <li><strong>Logical bombs</strong> (May 2022)</li>
+                <li><strong>Time Bomb</strong> (Dec 2020)</li>
+                <li><strong>Salami attack</strong> (May 2021)</li>
+                <li><strong>Email Bombing</strong> (May 2023, June 2023, May 2024)</li>
+                <li><strong>Phishing</strong> (Dec 2021, Dec 2022)</li>
+                <li><strong>Spoofing</strong> (Dec 2019, May 2023, June 2023, May 2024)</li>
+                <li><strong>Cyber Stalking</strong> (Dec 2023)</li>
+                <li><strong>Defamation</strong> (Dec 2020)</li>
+                <li><strong>Computer Virus</strong> (Dec 2021)</li>
+                <li><strong>Malware</strong> (Dec 2023)</li>
+                <li><strong>Malwares</strong> (July 2019)</li>
+                <li><strong>Adware</strong> (Dec 2020)</li>
+                <li><strong>Scare ware</strong> (May 2023, June 2023)</li>
+                <li><strong>Scareware</strong> (Dec 2021)</li>
+                <li><strong>DoS Attack</strong> (May 2024)</li>
+                <li><strong>DDOS Attack</strong> (Dec 2023)</li>
+                <li><strong>MIM attack</strong> (Dec 2022)</li>
+                <li><strong>Cloud cyber attack</strong> (Dec 2023)</li>
+                <li><strong>Cloud based attacks</strong> (May 2024)</li>
+                <li><strong>Cyber warfare</strong> (Dec 2023, May 2023, June 2023)</li>
+                <li><strong>Cyber Stalking</strong> (Dec 2023)</li>
+                <li><strong>Cyber terrorism</strong> (May 2024)</li>
+                <li><strong>Credit Card Frauds</strong> (Dec 2020)</li>
+                <li><strong>IPR violations</strong> (May 2021, Dec 2019, Dec 2020)</li>
+                <li><strong>IPR</strong> (July 2019, May 2023, June 2023, May 2024)</li>
+                <li><strong>E-commerce frauds</strong> (May 2021, Dec 2019, Dec 2021)</li>
+                <li><strong>E–Commerce</strong> (May 2023, June 2023)</li>
+                <li><strong>E commerce Frauds</strong> (Dec 2023)</li>
+                <li><strong>Types of cyber frauds in e-commerce platforms</strong> (May 2024)</li>
+                <li><strong>Telecom fraud</strong> (May 2023, June 2023)</li>
+                <li><strong>Financial fraud</strong> (Dec 2022)</li>
+                <li><strong>Cyber fraud</strong> (Dec 2022, May 2022)</li>
+                <li><strong>Social media crimes</strong> (Dec 2023)</li>
+                <li><strong>Crime in Social Media</strong> (Dec 2021)</li>
+                <li><strong>Forms of cybercrime against children</strong> (May 2022)</li>
+                <li><strong>Data Diddling</strong> (Dec 2021)</li>
+                <li><strong>Data Theft</strong> (Dec 2020, July 2019)</li>
+                <li><strong>Data Mining</strong> (Dec 2023, May 2023, June 2023)</li>
+                <li><strong>Steganography</strong> (Dec 2020, Dec 2023)</li>
+                <li><strong>Stegnography</strong> (July 2019)</li>
+                <li><strong>Enumerate Cloud based crimes (Give at least 4)</strong> (Dec 2020, July 2019)</li>
+                <li><strong>Cloud based crimes (Give at least 4)</strong> (Dec 2019)</li>
+            </ul>
+            <h3 id="6-mark-questions-250-words-each_1">6 Mark Questions (250 words each)</h3>
+            <ul>
+                <li><strong>Enumerate the forms of cybercrimes (at least 10)</strong> (Dec 2019)</li>
+                <li><strong>Enumerate the forms of cybercrimes against person (at least 6)</strong> (Dec 2020)</li>
+                <li><strong>Enumerate the forms of Cyber Crimes (at least 6)</strong> (July 2019)</li>
+                <li><strong>Explain the forms of cybercrimes</strong> (May 2022)</li>
+                <li><strong>Elucidate on Cyber Defamation</strong> (Dec 2019)</li>
+                <li><strong>Cyber Defamation- Elaborate</strong> (May 2021)</li>
+                <li><strong>Explain the process of steganography</strong> (May 2021)</li>
+                <li><strong>What is steganography and which image format is best suited for it?</strong> (May 2024)</li>
+                <li><strong>Write a note on Salami Attack</strong> (Dec 2021)</li>
+                <li><strong>Explain the types of cyber Frauds</strong> (Dec 2019)</li>
+                <li><strong>Explain various types of Cyber Frauds</strong> (May 2023, June 2023)</li>
+                <li><strong>Enumerate the Type of Cyber Frauds</strong> (May 2022)</li>
+                <li><strong>Explain the types of Cyber frauds</strong> (July 2019)</li>
+                <li><strong>Write a note on Computer Vandalism</strong> (Dec 2022)</li>
+                <li><strong>Enumerate the Cloud Based Crimes</strong> (Dec 2022)</li>
+                <li><strong>Write in detail about cloud based crimes</strong> (Dec 2023)</li>
+                <li><strong>Write a detailed note on IPR violations</strong> (Dec 2023)</li>
+                <li><strong>Explain the Modus Operand of various Credit card frauds</strong> (Dec 2020)</li>
+                <li><strong>Explain the Credit Card Fraud in India</strong> (May 2022)</li>
+                <li><strong>Explain the Credit Card Frauds in India</strong> (Dec 2022)</li>
+                <li><strong>Write a note on Cyber Terrorism in India</strong> (May 2022)</li>
+                <li><strong>Cyber terrorism is increasing- Comment on the Statement</strong> (Dec 2020)</li>
+                <li><strong>Write a note on Cyber Stalking</strong> (May 2023, June 2023)</li>
+                <li><strong>Explain Cyber Warfare</strong> (May 2022)</li>
+                <li><strong>Explain the process of cyber warfare</strong> (Dec 2021)</li>
+                <li><strong>E-commerce is challenging the security professions- Comment of the statement</strong> (Dec
+                    2021)</li>
+                <li><strong>Write a note on: (a) Malware (b) Telecom frauds</strong> (May 2024)</li>
+                <li><strong>Enumerate in detail the Crimes in Social Media</strong> (May 2023, June 2023)</li>
+            </ul>
+            <h3 id="10-mark-questions-500-words-each_1">10 Mark Questions (500 words each)</h3>
+            <ul>
+                <li><strong>What is DoS attack? Explain its forms</strong> (May 2021)</li>
+                <li><strong>Enumerate and explain the forms of cybercrimes (at least 10)</strong> (Dec 2019)</li>
+                <li><strong>IPR are individual property- Elaborate</strong> (Dec 2021)</li>
+                <li><strong>Enumerate and explain the telecom and credit card frauds</strong> (Dec 2023)</li>
+                <li><strong>Write a detailed note on (a) Steganography (b) Computer vandalism</strong> (Dec 2023)</li>
+                <li><strong>Discuss the techniques used by cyber criminals for E-commerce frauds</strong> (May 2024)
+                </li>
+                <li><strong>Write a detailed note on the hacking techniques used by cyber criminals</strong> (May 2024)
+                </li>
+                <li><strong>Enumerate and explain the economic crimes in cyber space</strong> (May 2024)</li>
+                <li><strong>Cyber terrorism is a real threat to the nation – Argue</strong> (May 2024)</li>
+            </ul>
+            <hr />
+            <h2 id="unit-3-modus-operandi-fraud-detection">UNIT 3: Modus Operandi &amp; Fraud Detection</h2>
+            <h3 id="2-mark-questions-50-words-each_2">2 Mark Questions (50 words each)</h3>
+            <ul>
+                <li><strong>Modus Operandi</strong> (May 2021, Dec 2019, Dec 2020, May 2024)</li>
+                <li><strong>Fraud triangle</strong> (Dec 2022, May 2024)</li>
+                <li><strong>Fraud detection</strong> (Dec 2022, May 2023, June 2023)</li>
+                <li><strong>Counter measures in cyber crime</strong> (Dec 2022)</li>
+                <li><strong>Counter measure</strong> (May 2022)</li>
+                <li><strong>Counter measure are temporary in cyber-crime — Do you agree</strong> (May 2023, June 2023)
+                </li>
+            </ul>
+            <h3 id="6-mark-questions-250-words-each_2">6 Mark Questions (250 words each)</h3>
+            <ul>
+                <li><strong>How can statistics be used in understanding the cybercrimes?</strong> (May 2021, Dec 2019)
+                </li>
+                <li><strong>Write a note on Fraud detection techniques</strong> (Dec 2019)</li>
+                <li><strong>Write a note on Fraud Detection Techniques</strong> (Dec 2022, May 2022)</li>
+                <li><strong>Enumerate the Fraud Detection Techniques used by police in India</strong> (May 2023, June
+                    2023)</li>
+                <li><strong>Discuss the fraud detection techniques</strong> (May 2024)</li>
+                <li><strong>What is Modus Operandi? Explain</strong> (May 2023, June 2023)</li>
+                <li><strong>Explain the Modus Operandi</strong> (May 2022)</li>
+                <li><strong>Discuss Data Mining</strong> (Dec 2020, July 2019)</li>
+                <li><strong>Suggest counter measures to mitigate financial frauds in cyber space</strong> (Dec 2023)
+                </li>
+            </ul>
+            <h3 id="10-mark-questions-500-words-each_2">10 Mark Questions (500 words each)</h3>
+            <ul>
+                <li><strong>Elucidate the Fraud Detection Techniques</strong> (May 2021)</li>
+                <li><strong>Discuss the fraud triangle</strong> (Dec 2020)</li>
+                <li><strong>Fraud Detection Techniques are failing in cybercrimes- Do you agree</strong> (Dec 2021)</li>
+                <li><strong>Write a detail note on fraud detection techniques</strong> (Dec 2022)</li>
+                <li><strong>Suggest ways to reduce the Financial Fraud (at least 10 points)</strong> (Dec 2022)</li>
+                <li><strong>Explain the Fraud Detection Techniques</strong> (July 2019)</li>
+                <li><strong>Enumerate counter measures to mitigate cybercrimes (at least 10)</strong> (July 2019)</li>
+                <li><strong>Enumerate ways to mitigate cybercrimes (at least 10)</strong> (Dec 2020)</li>
+                <li><strong>Cybercrimes cannot be mitigated- Opine</strong> (Dec 2021)</li>
+                <li><strong>Suggests ways to mitigate cybercrimes against person (at least 10)</strong> (Dec 2019)</li>
+                <li><strong>Suggest ways fight telecom frauds (at least 6)</strong> (Dec 2021)</li>
+                <li><strong>How can statistics be used in understanding the cybercrimes?</strong> (May 2021)</li>
+                <li><strong>Suggest ways to fight Cyber Stalking (at least 6)</strong> (May 2021)</li>
+                <li><strong>Discuss in detail the cyber attacks against individual and suggest counter measures</strong>
+                    (Dec 2023)</li>
+                <li><strong>Suggest ways to mitigate cyber crimes</strong> (May 2024)</li>
+                <li><strong>Explain the modus operandi of a cyber criminal</strong> (Dec 2023)</li>
+            </ul>
+            <hr />
+            <h2 id="unit-4-profile-of-cyber-criminals-psychology">UNIT 4: Profile of Cyber Criminals &amp; Psychology
+            </h2>
+            <h3 id="2-mark-questions-50-words-each_3">2 Mark Questions (50 words each)</h3>
+            <ul>
+                <li><strong>Psychology of cyber criminals</strong> (May 2021)</li>
+                <li><strong>Psychology</strong> (Dec 2019, Dec 2020, July 2019)</li>
+                <li><strong>Psychology of cyber crime</strong> (Dec 2022)</li>
+                <li><strong>Cyber Criminals</strong> (May 2021, Dec 2019, July 2019)</li>
+                <li><strong>Cyber criminal</strong> (May 2022, May 2023, June 2023)</li>
+                <li><strong>Cyber psychology</strong> (May 2022)</li>
+                <li><strong>Introverts are dangerous in cyber space- Argue</strong> (Dec 2021)</li>
+                <li><strong>Characteristics of fraudsters in cyber space</strong> (Dec 2023)</li>
+            </ul>
+            <h3 id="6-mark-questions-250-words-each_3">6 Mark Questions (250 words each)</h3>
+            <ul>
+                <li><strong>How will you profile cyber criminals?</strong> (Dec 2019)</li>
+                <li><strong>How will you profile cyber criminals committing crimes against person?</strong> (May 2021)
+                </li>
+                <li><strong>How will you profile cyber criminals committing crimes against property?</strong> (Dec 2021)
+                </li>
+                <li><strong>Explain a psychological theories of your choice relating to cyber criminals</strong> (Dec
+                    2020, July 2019)</li>
+                <li><strong>Write a detailed note on the psychological theories of cyber crime</strong> (Dec 2023)</li>
+                <li><strong>Enumerate the psychological theories related to cyber criminals</strong> (May 2024)</li>
+                <li><strong>Explain the Psychology of cyber criminals</strong> (Dec 2022)</li>
+                <li><strong>Write a note on Psychology of Cyber Criminals</strong> (May 2023, June 2023)</li>
+                <li><strong>Discuss the traits of cyber criminals</strong> (Dec 2023)</li>
+            </ul>
+            <h3 id="10-mark-questions-500-words-each_3">10 Mark Questions (500 words each)</h3>
+            <ul>
+                <li><strong>Individual psychology is the key factor in committing a cybercrimes - Substantiate the
+                        Arguments</strong> (Dec 2019)</li>
+                <li><strong>Profiling cyber crimes based on nature of crime- Elaborate</strong> (May 2021)</li>
+                <li><strong>Profiling cybercrimes based on nature of criminals- Elaborate</strong> (Dec 2021)</li>
+                <li><strong>Profiling cyber crimes based on nature of crime- Elaborate</strong> (Dec 2022)</li>
+                <li><strong>How will you profile cyber criminals?</strong> (July 2019)</li>
+                <li><strong>Write a detail note on Profile of Cyber Criminals</strong> (May 2022)</li>
+                <li><strong>List and explain detail the Psychological Theories Dealing with Cyber criminals (at least
+                        2)</strong> (May 2023, June 2023)</li>
+                <li><strong>List in detail the Psychological Theories dealing with Cyber Criminals</strong> (Dec 2022)
+                </li>
+            </ul>
+            <hr />
+            <h2 id="unit-5-impact-of-cybercrimes">UNIT 5: Impact of Cybercrimes</h2>
+            <h3 id="2-mark-questions-50-words-each_4">2 Mark Questions (50 words each)</h3>
+            <ul>
+                <li><strong>Property loss in cyber space (at least 4)</strong> (May 2021)</li>
+                <li><strong>Property loss in cyber space</strong> (Dec 2019)</li>
+                <li><strong>Personal financial loss in cyber space</strong> (July 2019)</li>
+                <li><strong>Social impact of cybercrimes</strong> (Dec 2021)</li>
+            </ul>
+            <h3 id="6-mark-questions-250-words-each_4">6 Mark Questions (250 words each)</h3>
+            <ul>
+                <li><strong>Impact of cyber crimes on a victim. Illustrate with a case</strong> (May 2021)</li>
+                <li><strong>Victims of cybercrimes are under represented – Do you agree?</strong> (Dec 2019)</li>
+                <li><strong>Psychological impact of cybercrime victim, Illustrate with a case</strong> (Dec 2021)</li>
+                <li><strong>Explain the impact of Cyber crime on an Individual</strong> (May 2023, June 2023)</li>
+                <li><strong>Explain the Impact of Cybercrime on Individual</strong> (May 2022)</li>
+                <li><strong>Explain the impact of cyber crime on individuals</strong> (May 2024)</li>
+                <li><strong>Explain the impact of Cybercrime on Corporate</strong> (Dec 2022)</li>
+                <li><strong>Explain in detail the Impact of Cybercrime on Corporate</strong> (May 2023, June 2023)</li>
+                <li><strong>Highlight the impact of cyber crimes on corporate companies</strong> (Dec 2023)</li>
+                <li><strong>Write a note on impact of Cyber Terrorism on a nation</strong> (July 2019)</li>
+            </ul>
+            <h3 id="10-mark-questions-500-words-each_4">10 Mark Questions (500 words each)</h3>
+            <ul>
+                <li><strong>Impact of cyber crimes on a victim. Illustrate with a case</strong> (May 2021)</li>
+                <li><strong>Discuss in detail the Impact of Cyber crimes on a nation</strong> (May 2021)</li>
+                <li><strong>Discuss in detail the Impact of Cybercrimes on Government</strong> (Dec 2019)</li>
+                <li><strong>Discuss in detail the Impact of Cybercrimes on Corporate</strong> (Dec 2020)</li>
+                <li><strong>Impact of Cybercrimes on a nation is long lasting- Argue</strong> (Dec 2021)</li>
+                <li><strong>Write in detail the Impact of Cybercrime on a Nation</strong> (May 2022)</li>
+                <li><strong>Discuss in detail the Impact of Cybercrimes on corporates</strong> (July 2019)</li>
+                <li><strong>Write in detail the Impact of Cybercrime on Government</strong> (Dec 2022)</li>
+                <li><strong>Technology dependence is serious problem- Substantiate the Arguments</strong> (Dec 2020)
+                </li>
+            </ul>
+            <hr />
+            <h2 id="summary-by-year-and-unit-distribution">Summary by Year and Unit Distribution</h2>
+            <h3 id="most-frequently-asked-topics">Most Frequently Asked Topics:</h3>
+            <ol>
+                <li><strong>Cyber Crime Definition</strong> - Asked in almost every paper</li>
+                <li><strong>Modus Operandi</strong> - Consistently appears across years</li>
+                <li><strong>Fraud Detection Techniques</strong> - High frequency in 6 &amp; 10 mark questions</li>
+                <li><strong>Classification of Cyber Crimes</strong> - Regular appearance</li>
+                <li><strong>Impact on Individual/Corporate/Nation</strong> - Consistently asked in 10 mark questions
+                </li>
+                <li><strong>Psychology of Cyber Criminals</strong> - Regular in 6 &amp; 10 mark questions</li>
+                <li><strong>History and Development of Cybercrime in India</strong> - Frequent 10 mark question</li>
+            </ol>
+            <h3 id="question-pattern-analysis">Question Pattern Analysis:</h3>
+            <ul>
+                <li><strong>Unit 1</strong>: Heavy emphasis on definitions, classifications, and trends</li>
+                <li><strong>Unit 2</strong>: Most diverse unit with various forms of cybercrimes</li>
+                <li><strong>Unit 3</strong>: Focus on practical aspects - modus operandi and detection</li>
+                <li><strong>Unit 4</strong>: Psychology and profiling consistently asked</li>
+                <li><strong>Unit 5</strong>: Impact assessment questions are standard across all years</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            <p>Generated by <a href="#">Ram</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+
+        // Add smooth scrolling and interactive elements
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Add copy to clipboard functionality for code blocks
+            document.querySelectorAll('pre code').forEach(block => {
+                const button = document.createElement('button');
+                button.className = 'copy-button';
+                button.textContent = 'Copy';
+                button.style.cssText = `
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    background: #667eea;
+                    color: white;
+                    border: none;
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-size: 12px;
+                    opacity: 0.7;
+                    transition: opacity 0.3s;
+                `;
+
+                const pre = block.parentElement;
+                pre.style.position = 'relative';
+                pre.appendChild(button);
+
+                button.addEventListener('click', function () {
+                    navigator.clipboard.writeText(block.textContent);
+                    button.textContent = 'Copied!';
+                    setTimeout(() => {
+                        button.textContent = 'Copy';
+                    }, 2000);
+                });
+
+                pre.addEventListener('mouseenter', () => {
+                    button.style.opacity = '1';
+                });
+
+                pre.addEventListener('mouseleave', () => {
+                    button.style.opacity = '0.7';
+                });
+            });
+
+            // Add progress bar for reading
+            const progressBar = document.createElement('div');
+            progressBar.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 0%;
+                height: 3px;
+                background: linear-gradient(90deg, #667eea, #764ba2);
+                z-index: 1000;
+                transition: width 0.1s;
+            `;
+            document.body.appendChild(progressBar);
+
+            window.addEventListener('scroll', () => {
+                const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (window.scrollY / windowHeight) * 100;
+                progressBar.style.width = scrolled + '%';
+            });
+        });
+
+    </script>
+</body>
+
+</html>
