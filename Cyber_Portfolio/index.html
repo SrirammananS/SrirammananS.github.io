@@ -192,7 +192,7 @@
             padding: 20px;
             font-family: 'Courier New', monospace;
             width: 100%;
-            max-width: 500px;
+            max-width: 950px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             border: 1px solid #333;
         }
@@ -228,12 +228,19 @@
         }
 
         .typing-animation {
+            font-family: 'Courier New', monospace;
+            white-space: pre-line;
+            color: #00ff00;
+            background-color: #000;
+            padding: 20px;
+            border-radius: 8px;
+            width: fit-content;
+            animation: typing 4s steps(80, end), blink 0.75s step-end infinite;
             overflow: hidden;
-            border-right: 2px solid #00ff88;
-            animation: typing 4s steps(40, end), blink-caret 0.75s step-end infinite;
+            border-right: 2px solid;
         }
 
-        @keyframes typing {
+        /* @keyframes typing {
             from {
                 width: 0;
             }
@@ -252,6 +259,28 @@
 
             50% {
                 border-color: #00ff88;
+            }
+        } */
+
+        @keyframes typing {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 100%
+            }
+        }
+
+        @keyframes blink-caret {
+
+            from,
+            to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: white
             }
         }
 
@@ -619,19 +648,74 @@
                             <div class="terminal-dot dot-yellow"></div>
                             <div class="terminal-dot dot-green"></div>
                         </div>
-                        <div class="terminal-content">
-                            <div class="typing-animation">
-                                $ nmap -sV -sC target.com<br>
-                                Starting Nmap scan...<br>
-                                [+] Critical SQLi found!<br>
-                                [+] IDOR vulnerability detected<br>
-                                [+] XSS payload successful<br>
-                                >> Generating report...
-                            </div>
+                        <div id="terminal"
+                            style="font-family:'Courier New', monospace; color: #00ff00; background: black; padding: 20px; width: fit-content; border-radius: 8px; ">
                         </div>
+
+                        <script>
+                            const lines = [
+                                "$ nmap -sV -sC srirammanan.com",
+                                "Starting Nmap scan...",
+                                "PORT     STATE SERVICE    VERSION",
+                                "443/tcp  open  https      Portfolio Server",
+                                "1337/tcp open  custom     Professional Pentester",
+                                "",
+                                "Scanning srirammanan.com...",
+                                "[+] Skillset: Web, API, and Network Pentesting",
+                                "[+] Tools:" ,
+                                ">> Burp Suite Pro",
+                                ">> Nmap",
+                                ">> Python",
+                                ">> MobSF",
+                                ">> Android AVD",
+                                ">> Frida",
+                                "[+] Mindset: Offensive Security | Ethical Hacker",
+                                "",
+                                ">> Identity Verified: Srirammanan",
+                                ">> Status: Cybersecurity Professional", 
+                                ">> Always Exploiting Ethically "
+                            ];
+
+                            const terminal = document.getElementById("terminal");
+
+                            let currentLine = 0;
+
+                            function typeLine(line, i = 0) {
+                                if (i < line.length) {
+                                    terminal.innerHTML += line.charAt(i);
+                                    setTimeout(() => typeLine(line, i + 1), 20);
+                                } else {
+                                    terminal.innerHTML += "<br>";
+                                    currentLine++;
+                                    if (currentLine < lines.length) {
+                                        setTimeout(() => typeLine(lines[currentLine]), 400);
+                                    }
+                                }
+                            }
+
+                            typeLine(lines[currentLine]);
+                        </script>
+                        <!-- <div class="terminal-content">
+                            <div class="typing-animation">
+                                $ nmap -sV -sC srirammanan.com<br>
+                                Starting Nmap scan...<br>
+                                PORT STATE SERVICE VERSION<br>
+                                443/tcp open https Portfolio Server<br>
+                                1337/tcp open custom 🔥 Pentester-like G.O.A.T. detected<br>
+                                <br>
+                                Scanning srirammanan.com...<br>
+                                [+] Skillset: Web, API, and Network Pentesting<br>
+                                [+] Tools: Burp Suite, Nmap, Python, FFUF, Gobuster<br>
+                                [+] Mindset: Offensive Security | Ethical Hacker<br>
+                                [+] Report Generator: Yes ✅<br>
+                                <br>
+                                >> Identity Verified: Sriram Manan<br>
+                                >> Status: 🔓 Cybersecurity Professional, Always Exploiting — Ethically 😎
+                            </div> -->
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </section>
 
