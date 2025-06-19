@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Srirammanan S - Cybersecurity Specialist</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00ff88;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #00ff88;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #00ff88;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="g" cx="50%" cy="50%"><stop offset="0%" style="stop-color:%2300ff88;stop-opacity:0.1"/><stop offset="100%" style="stop-color:%2300ff88;stop-opacity:0"/></radialGradient></defs><circle cx="200" cy="200" r="3" fill="%2300ff88" opacity="0.5"><animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/></circle><circle cx="800" cy="300" r="2" fill="%2300ff88" opacity="0.3"><animate attributeName="opacity" values="0.3;0.8;0.3" dur="3s" repeatCount="indefinite"/></circle><circle cx="400" cy="700" r="4" fill="%2300ff88" opacity="0.4"><animate attributeName="opacity" values="0.4;0.9;0.4" dur="2.5s" repeatCount="indefinite"/></circle></svg>') no-repeat center center;
+            background-size: cover;
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-text .subtitle {
+            font-size: 1.3rem;
+            color: #b0b0b0;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .hero-text .description {
+            font-size: 1.1rem;
+            color: #d0d0d0;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #00ff88;
+            border: 2px solid #00ff88;
+        }
+
+        .btn-secondary:hover {
+            background: #00ff88;
+            color: #000;
+            transform: translateY(-2px);
+        }
+
+        .hero-visual {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .terminal {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
+        }
+
+        .terminal-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red {
+            background: #ff5f57;
+        }
+
+        .dot-yellow {
+            background: #ffbd2e;
+        }
+
+        .dot-green {
+            background: #28ca42;
+        }
+
+        .terminal-content {
+            color: #00ff88;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .typing-animation {
+            overflow: hidden;
+            border-right: 2px solid #00ff88;
+            animation: typing 4s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes blink-caret {
+
+            from,
+            to {
+                border-color: transparent;
+            }
+
+            50% {
+                border-color: #00ff88;
+            }
+        }
+
+        /* Sections */
+        section {
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: #00ff88;
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .skill-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .skill-card:hover::before {
+            left: 100%;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.1);
+        }
+
+        .skill-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #00ff88;
+        }
+
+        .skill-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .skill-tag {
+            background: rgba(0, 255, 136, 0.1);
+            color: #00ff88;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        /* Experience Section */
+        .experience-timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 15px 30px rgba(0, 255, 136, 0.1);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -5px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            border-radius: 2px;
+        }
+
+        .timeline-date {
+            color: #00ff88;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-company {
+            color: #b0b0b0;
+            margin-bottom: 1rem;
+        }
+
+        /* Certifications */
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .cert-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .cert-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 255, 136, 0.1);
+        }
+
+        .cert-badge {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: #000;
+            font-weight: bold;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            background: rgba(0, 255, 136, 0.1);
+            transform: translateX(5px);
+        }
+
+        .contact-icon {
+            font-size: 1.5rem;
+            color: #00ff88;
+            min-width: 30px;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #00ff88;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .contact-content {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00ff88;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="particles"></div>
+
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">SRIRAMMANAN</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#certifications">Certifications</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Cybersecurity Specialist</h1>
+                    <p class="subtitle">Penetration Tester | VAPT | OWASP Top 10 Expert</p>
+                    <p class="description">
+                        Passionate penetration tester with 3+ years of experience securing digital assets.
+                        I specialize in identifying critical vulnerabilities through comprehensive VAPT assessments,
+                        helping businesses stay ahead of cyber threats.
+                    </p>
+                    <div class="cta-buttons">
+                        <!-- <a href="#contact" class="btn btn-primary">Get In Touch</a> -->
+                        <a href="https://linkedin.com/in/srirammanan" class="btn btn-secondary" target="_blank">LinkedIn
+                            Profile</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="terminal">
+                        <div class="terminal-header">
+                            <div class="terminal-dot dot-red"></div>
+                            <div class="terminal-dot dot-yellow"></div>
+                            <div class="terminal-dot dot-green"></div>
+                        </div>
+                        <div class="terminal-content">
+                            <div class="typing-animation">
+                                $ nmap -sV -sC target.com<br>
+                                Starting Nmap scan...<br>
+                                [+] Critical SQLi found!<br>
+                                [+] IDOR vulnerability detected<br>
+                                [+] XSS payload successful<br>
+                                >> Generating report...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <div class="container">
+            <h2 class="section-title">Expertise & Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-card fade-in">
+                    <div class="skill-icon">🔍</div>
+                    <h3>Penetration Testing</h3>
+                    <p>Comprehensive security assessments using manual and automated testing methodologies</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">🛡️ VAPT</span>
+                        <span class="skill-tag">🔝 OWASP Top 10</span>
+                        <span class="skill-tag">🐛 Mobile Security</span>
+                        <span class="skill-tag">🕵️ Manual Testing</span>
+                    </div>
+                </div>
+                <div class="skill-card fade-in">
+                    <div class="skill-icon">🛡️</div>
+                    <h3>Web Application Security</h3>
+                    <p>Expert in identifying and exploiting web vulnerabilities including SQLi, XSS, IDOR</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">💉 SQLi</span>
+                        <span class="skill-tag">⚡ XSS</span>
+                        <span class="skill-tag">📁 LFI</span>
+                        <span class="skill-tag">🔗 SSRF</span>
+                        <span class="skill-tag">🔐 IDOR</span>
+                    </div>
+                </div>
+                <div class="skill-card fade-in">
+                    <div class="skill-icon">📱</div>
+                    <h3>Mobile Security</h3>
+                    <p>Android security assessments and mobile application penetration testing</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">🤖 Android Security</span>
+                        <span class="skill-tag">📱 Mobile Pentest</span>
+                        <span class="skill-tag">📦 APK Analysis</span>
+                        <span class="skill-tag">🔒 App Security</span>
+                    </div>
+                </div>
+                <div class="skill-card fade-in">
+                    <div class="skill-icon">🔧</div>
+                    <h3>Security Tools</h3>
+                    <p>Proficient with industry-standard security testing tools and frameworks</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">🔥 Burp Suite Pro</span>
+                        <span class="skill-tag">🗺️ Nmap</span>
+                        <span class="skill-tag">⚡ Metasploit</span>
+                        <span class="skill-tag">📊 Wireshark</span>
+                        <span class="skill-tag">🎯 Nikto</span>
+                        <span class="skill-tag">🔍 Gobuster</span>
+                        <span class="skill-tag">⚔️ FFUF</span>
+                        <span class="skill-tag">📮 Postman</span>
+                        <span class="skill-tag">🐧 Kali Linux</span>
+                    </div>
+                </div>
+                <div class="skill-card fade-in">
+                    <div class="skill-icon">🐍</div>
+                    <h3>Automation & Scripting</h3>
+                    <p>Custom exploit development and security automation using Python</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">🐍 Python</span>
+                        <!-- <span class="skill-tag">⚡ Custom Exploits</span> -->
+                        <span class="skill-tag">🤖 Automation</span>
+                        <span class="skill-tag">🔧 Scripting</span>
+                    </div>
+                </div>
+                <div class="skill-card fade-in">
+                    <div class="skill-icon">🌐</div>
+                    <h3>Network Security</h3>
+                    <p>Network reconnaissance, vulnerability assessment, and traffic analysis</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">🗺️ Nmap</span>
+                        <span class="skill-tag">🎯 Nikto</span>
+                        <span class="skill-tag">🔍 Gobuster</span>
+                        <span class="skill-tag">⚔️ FFUF</span>
+                        <span class="skill-tag">📊 Wireshark</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience">
+        <div class="container">
+            <h2 class="section-title">Professional Experience</h2>
+            <div class="experience-timeline">
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">May 2024 - Present </div>
+                    <h3 class="timeline-title">Professional Security Consultant</h3>
+                    <div class="timeline-company">BlackDuck (formerly Synopsys SIG), Bengaluru</div>
+                    <p>
+                        Performing as a dedicated security resource for the firm, focused on conducting security
+                        assessments and vulnerability research.
+                        Specializing in web and API testing, with a proven track record of identifying critical security
+                        flaws in enterprise applications.
+                    </p>
+                    <div class="skill-tags" style="margin-top: 1rem;">
+                        <span class="skill-tag">🔍 SAST/DAST</span>
+                        <span class="skill-tag">🌐 Web Application Testing</span>
+                        <span class="skill-tag">📱 Mobile Security</span>
+                        <span class="skill-tag">🔌 API Security</span>
+                        <span class="skill-tag">🕵️ Manual Testing</span>
+                        <!-- <span class="skill-tag">📊 Code Analysis</span> -->
+                        <!-- <span class="skill-tag">🔗 Dependency Scanning</span>
+                        <span class="skill-tag">🚀 DevSecOps</span>
+                        <span class="skill-tag">🛡️ Enterprise Security</span> -->
+                    </div>
+                </div>
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">December 2021 - May 2024 (2 years 6 months)</div>
+                    <h3 class="timeline-title">Digital Security Testing Specialist</h3>
+                    <div class="timeline-company">Eviden (Paladion Networks), Bengaluru</div>
+                    <p>
+                        Performed comprehensive Web, Mobile, Network, and API security assessments identifying 25+
+                        critical
+                        vulnerabilities including advanced SQLi, IDOR, XSS, and business logic flaws, successfully
+                        reducing
+                        client risk exposure by 45%. Led security testing initiatives across diverse technology stacks
+                        including cloud-native applications, legacy systems, and mobile platforms using both automated
+                        tools and manual penetration testing methodologies.
+                    </p>
+                    <div class="skill-tags" style="margin-top: 1rem;">
+                        <span class="skill-tag">🌐 Web Application Testing</span>
+                        <span class="skill-tag">📱 Mobile Security</span>
+                        <span class="skill-tag">🔌 API Security</span>
+                        <span class="skill-tag">🌐 Network Penetration Testing</span>
+                        <!-- <span class="skill-tag">☁️ Cloud Security</span> -->
+                        <span class="skill-tag">🕵️ Manual Testing</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="certifications">
+        <div class="container">
+            <h2 class="section-title">Certifications & Achievements</h2>
+            <div class="cert-grid">
+                <div class="cert-card fade-in">
+                    <div class="cert-badge">🎯</div>
+                    <h3>Certified AppSec Practitioner (CAP)</h3>
+                    <p>Advanced application security certification</p>
+                </div>
+                <div class="cert-card fade-in">
+                    <div class="cert-badge">☁️</div>
+                    <h3>Multi-Cloud Red Teaming Analyst</h3>
+                    <p>Cloud security and red team operations</p>
+                </div>
+                <div class="cert-card fade-in">
+                    <div class="cert-badge">🔢</div>
+                    <h3>FIRST CVSS v4.0 Certificate</h3>
+                    <p>Vulnerability scoring system expertise</p>
+                </div>
+                <div class="cert-card fade-in">
+                    <div class="cert-badge">🗄️</div>
+                    <h3>SQL and Relational Databases 101</h3>
+                    <p>Database security fundamentals</p>
+                </div>
+                <div class="cert-card fade-in">
+                    <div class="cert-badge">🏆</div>
+                    <h3>Pentester Labs</h3>
+                    <p>Hands-on penetration testing labs</p>
+                </div>
+                <div class="cert-card fade-in">
+                    <div class="cert-badge">⭐</div>
+                    <h3>Spot Recognition Awards</h3>
+                    <p>Initiatives • Creativity • Exceptional Skills</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title">Let's Connect</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">📧</div>
+                        <div>
+                            <h4>Email</h4>
+                            <p>srirammanansri@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">💼</div>
+                        <div>
+                            <h4>LinkedIn</h4>
+                            <p>linkedin.com/in/srirammanan</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div>
+                            <h4>Location</h4>
+                            <p>Bengaluru, Karnataka, India</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">🎯</div>
+                        <div>
+                            <h4>Open To</h4>
+                            <p>Pentesting, Security Analyst, AppSec roles</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <h3 style="margin-bottom: 1.5rem; color: #00ff88;">Send a Message</h3>
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add fade-in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0.2s';
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.skill-card, .timeline-item, .cert-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.querySelector('.particles');
+            const particleCount = 20;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        createParticles();
+
+        // Navbar scroll effect
+        window.addEventListener('
