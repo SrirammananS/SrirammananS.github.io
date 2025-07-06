@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAPT Career Roadmap - Professional Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+
+        .vapt-definition {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .vapt-definition h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .vapt-steps {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .step {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .step h3 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .roadmap-section {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 30px 0;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .roadmap-section h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .phase {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            border-radius: 12px;
+            color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .phase h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .phase-number {
+            background: rgba(255, 255, 255, 0.2);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .skill-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .skill-card h4 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .skill-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .skill-card li {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .skill-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .resources {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .resources h5 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .resource-link {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .resource-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .certifications {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .certifications h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .cert-levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .cert-level {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .cert-level h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .timeline {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .timeline h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            border-radius: 10px;
+            color: white;
+        }
+
+        .timeline-duration {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            margin-right: 20px;
+            font-weight: bold;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .salary-info {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .salary-info h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .salary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .salary-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .salary-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .salary-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00ff88;
+        }
+
+        .footer {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .footer h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .footer p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .vapt-steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ VAPT Career Roadmap</h1>
+            <p class="subtitle">Your Complete Guide to Vulnerability Assessment & Penetration Testing</p>
+            <p><strong>Master Cybersecurity • Build Your Career • Earn Premium Salaries</strong></p>
+        </div>
+
+        <div class="vapt-definition">
+            <h2>What is VAPT?</h2>
+            <p><strong>VAPT</strong> stands for <strong>Vulnerability Assessment and Penetration Testing</strong>. It's a comprehensive two-step cybersecurity process used to identify and address security weaknesses in systems, networks, and applications.</p>
+            
+            <div class="vapt-steps">
+                <div class="step">
+                    <h3>1. Vulnerability Assessment (VA)</h3>
+                    <p>Automated scanning and identification of known vulnerabilities in systems, networks, and applications using specialized tools and techniques.</p>
+                </div>
+                <div class="step">
+                    <h3>2. Penetration Testing (PT)</h3>
+                    <p>Simulating real-world cyber attacks to exploit identified vulnerabilities and assess their actual impact on business operations.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="roadmap-section">
+            <h2>🎯 Complete VAPT Learning Roadmap</h2>
+            
+            <div class="phase">
+                <h3><span class="phase-number">1</span>Foundation Building</h3>
+                <div class="skills-grid">
+                    <div class="skill-card">
+                        <h4>🌐 Networking Fundamentals</h4>
+                        <ul>
+                            <li>OSI Model (7 Layers)</li>
+                            <li>TCP/IP Protocol Suite</li>
+                            <li>DNS Resolution Process</li>
+                            <li>Client-Server Architecture</li>
+                            <li>TLS/SSL Encryption</li>
+                            <li>Network Protocols (HTTP/HTTPS, FTP, SSH)</li>
+                            <li>Subnetting and VLANs</li>
+                        </ul>
+                        <div class="resources">
+                            <h5>📚 Resources:</h5>
+                            <span class="resource-link">Cisco Networking Academy</span>
+                            <span class="resource-link">CompTIA Network+</span>
+                            <span class="resource-link">Wireshark University</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-card">
+                        <h4>🐧 Linux Command Line Mastery</h4>
+                        <ul>
+                            <li>File System Navigation</li>
+                            <li>File Permissions & Ownership</li>
+                            <li>Bash Scripting Fundamentals</li>
+                            <li>Process Management</li>
+                            <li>Network Configuration</li>
+                            <li>Log Analysis</li>
+                            <li>Package Management</li>
+                        </ul>
+                        <div class="resources">
+                            <h5>📚 Resources:</h5>
+                            <span class="resource-link">OverTheWire Bandit</span>
+                            <span class="resource-link">Linux Journey</span>
+                            <span class="resource-link">Ubuntu Documentation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phase">
+                <h3><span class="phase-number">2</span>Cybersecurity Fundamentals</h3>
+                <div class="skills-grid">
+                    <div class="skill-card">
+                        <h4>🔐 Security Principles</h4>
+                        <ul>
+                            <li>CIA Triad (Confidentiality, Integrity, Availability)</li>
+                            <li>Risk Assessment Methodologies</li>
+                            <li>Threat Modeling</li>
+                            <li>Security Controls & Frameworks</li>
+                            <li>Incident Response Planning</li>
+                            <li>Compliance Standards (ISO 27001, NIST)</li>
+                        </ul>
+                        <div class="resources">
+                            <h5>📚 Resources:</h5>
+                            <span class="resource-link">NIST Cybersecurity Framework</span>
+                            <span class="resource-link">SANS Institute</span>
+                            <span class="resource-link">Cybrary</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-card">
+                        <h4>⚔️ Ethical Hacking Introduction</h4>
+                        <ul>
+                            <li>Ethical Hacking Methodology</li>
+                            <li>Legal & Ethical Considerations</li>
+                            <li>Reconnaissance Techniques</li>
+                            <li>Vulnerability Assessment Tools</li>
+                            <li>Penetration Testing Phases</li>
+                            <li>Report Writing & Documentation</li>
+                        </ul>
+                        <div class="resources">
+                            <h5>📚 Resources:</h5>
+                            <span class="resource-link">EC-Council Free Resources</span>
+                            <span class="resource-link">OWASP Testing Guide</span>
+                            <span class="resource-link">PenTest Standard</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phase">
+                <h3><span class="phase-number">3</span>Hands-On Laboratory Setup</h3>
+                <div class="skills-grid">
+                    <div class="skill-card">
+                        <h4>🔧 Virtual Lab Environment</h4>
+                        <ul>
+                            <li>VirtualBox/VMware Installation</li>
+                            <li>Kali Linux Distribution</li>
+                            <li>Metasploitable 2 & 3</li>
+                            <li>DVWA (Damn Vulnerable Web App)</li>
+                            <li>Windows Server/Client VMs</li>
+                            <li>Network Simulation Tools</li>
+                        </ul>
+                        <div class="resources">
+                            <h5>📚 Resources:</h5>
+                            <span class="resource-link">Kali Linux Official</span>
+                            <span class="resource-link">VulnHub</span>
+                            <span class="resource-link">Metasploitable</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-card">
+                        <h4>🛠️ Essential Tools Mastery</h4>
+                        <ul>
+                            <li>Nmap (Network Scanning)</li>
+                            <li>Burp Suite (Web App Testing)</li>
+                            <li>Metasploit Framework</li>
+                            <li>Wireshark (Network Analysis)</li>
+                            <li>SQLMap (SQL Injection)</li>
+                            <li>John the Ripper (Password Cracking)</li>
+                        </ul>
+                        <div class="resources">
+                            <h5>📚 Resources:</h5>
+                            <span class="resource-link">Offensive Security</span>
+                            <span class="resource-link">Metasploit Unleashed</span>
+                            <span class="resource-link">Burp Suite Academy</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phase">
+                <h3><span class="phase-number">4</span>Web Application Security</h3>
+                <div class="skills-grid">
+                    <div class="skill-card">
+                        <h4>🌐 OWASP Top 10 Mastery</h4>
+                        <ul>
+                            <li>Injection Attacks (SQL, NoSQL, LDAP)</li>
+                            <li>Broken Authentication</li>
+                            <li>Sensitive Data Exposure</li>
+                            <li>XML External Entities (XXE)</li>
+                            <li>Broken Access Control</li>
+                            <li>Security Misconfiguration</li>
+                            <li>Cross-Site Scripting (XSS)</li>
+                            <li>Insecure Deserialization</li>
+                        </ul>
+                        <div class="resources">
+                            <h5>📚 Resources:</h5>
+                            <span class="resource-link">OWASP Top 10</span>
+                            <span class="resource-link">PortSwigger Academy</span>
+                            <span class="resource-link">OWASP WebGoat</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-card">
+                        <h4>🔍 Advanced Web Testing</h4>
+                        <ul>
+                            <li>Manual Testing Techniques</li>
+                            <li>Automated Scanning Tools</li>
+                            <li>API Security Testing</li>
+                            <li>Session Management Testing</li>
+                            <li>Business Logic Flaws</li>
+                            <li>Client-Side Security</li>
+                        </ul>
+                        <div class="resources">
+                            <h5>📚 Resources:</h5>
+                            <span class="resource-link">Web Security Academy</span>
+                            <span class="resource-link">HackerOne Reports</span>
+                            <span class="resource-link">Bugcrowd University</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phase">
+                <h3><span class="phase-number">5</span>Practical Training Platforms</h3>
+                <div class="skills-grid">
+                    <div class="skill-card">
+                        <h4>🎮 Interactive Learning</h4>
+                        <ul>
+                            <li>TryHackMe (Beginner-Friendly)</li>
+                            <li>Hack The Box (Advanced)</li>
+                            <li>OverTheWire Wargames</li>
+                            <li>VulnHub Challenges</li>
+                            <li>PicoCTF Competitions</li>
+                            <li>Root Me Platform</li>
+                        </ul>
+                        <div class="resources">
+                            <h5>📚 Resources:</h5>
+                            <span class="resource-link">TryHackMe</span>
+                            <span class="resource-link">Hack The Box</span>
+                            <span class="resource-link">CTF Time</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-card">
+                        <h4>🏆 Capture The Flag (CTF)</h4>
+                        <ul>
+                            <li>Web Application Challenges</li>
+                            <li>Binary Exploitation</li>
+                            <li>Cryptography Challenges</li>
+                            <li>Reverse Engineering</li>
+                            <li>Forensics & Steganography</li>
+                            <li>Network Security</li>
+                        </ul>
+                        <div class="resources">
+                            <h5>📚 Resources:</h5>
+                            <span class="resource-link">CTF Field Guide</span>
+                            <span class="resource-link">PicoCTF</span>
+                            <span class="resource-link">OverTheWire</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="certifications">
+            <h2>🎓 Professional Certifications</h2>
+            <div class="cert-levels">
+                <div class="cert-level">
+                    <h3>🌟 Beginner Level</h3>
+                    <ul>
+                        <li><strong>CEH (Certified Ethical Hacker)</strong> - EC-Council</li>
+                        <li><strong>GPEN</strong> - SANS Penetration Testing</li>
+                        <li><strong>CompTIA PenTest+</strong> - CompTIA</li>
+                        <li><strong>eJPT</strong> - eLearnSecurity Junior</li>
+                    </ul>
+                </div>
+                
+                <div class="cert-level">
+                    <h3>🚀 Intermediate Level</h3>
+                    <ul>
+                        <li><strong>OSCP</strong> - Offensive Security Certified Professional</li>
+                        <li><strong>GCIH</strong> - GIAC Certified Incident Handler</li>
+                        <li><strong>CISSP</strong> - Information Systems Security Professional</li>
+                        <li><strong>eCPPT</strong> - eLearnSecurity Certified Professional</li>
+                    </ul>
+                </div>
+                
+                <div class="cert-level">
+                    <h3>🎯 Advanced Level</h3>
+                    <ul>
+                        <li><strong>OSEP</strong> - Offensive Security Experienced</li>
+                        <li><strong>GXPN</strong> - GIAC Exploit Researcher</li>
+                        <li><strong>OSCE</strong> - Offensive Security Certified Expert</li>
+                        <li><strong>CISSP</strong> - Certified Information Systems Security Professional</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline">
+            <h2>⏰ Learning Timeline</h2>
+            <div class="timeline-item">
+                <div class="timeline-duration">Months 1-2</div>
+                <div>
+                    <h3>Foundation Building</h3>
+                    <p>Master networking basics, Linux command line, and cybersecurity fundamentals</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-duration">Months 3-4</div>
+                <div>
+                    <h3>Lab Setup & Tools</h3>
+                    <p>Create virtual labs, learn essential tools, and start hands-on practice</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-duration">Months 5-6</div>
+                <div>
+                    <h3>Web Application Security</h3>
+                    <p>Master OWASP Top 10, web testing methodologies, and automated tools</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-duration">Months 7-8</div>
+                <div>
+                    <h3>Practical Training</h3>
+                    <p>Complete CTF challenges, practice platforms, and real-world scenarios</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-duration">Months 9-12</div>
+                <div>
+                    <h3>Certification & Career</h3>
+                    <p>Prepare for certifications, build portfolio, and start job hunting</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="salary-info">
+            <h2>💰 Salary Expectations</h2>
+            <div class="salary-grid">
+                <div class="salary-card">
+                    <h3>Entry Level</h3>
+                    <div class="salary-amount">$50K - $70K</div>
+                    <p>Junior Penetration Tester</p>
+                </div>
+                
+                <div class="salary-card">
+                    <h3>Mid Level</h3>
+                    <div class="salary-amount">$70K - $100K</div>
+                    <p>Security Analyst/Consultant</p>
+                </div>
+                
+                <div class="salary-card">
+                    <h3>Senior Level</h3>
+                    <div class="salary-amount">$100K - $150K</div>
+                    <p>Senior Security Consultant</p>
+                </div>
+                
+                <div class="salary-card">
+                    <h3>Expert Level</h3>
+                    <div class="salary-amount">$150K+</div>
+                    <p>Principal Security Architect</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h3>🚀 Start Your VAPT Journey Today!</h3>
+            <p>This comprehensive roadmap provides everything you need to build a successful career in Vulnerability Assessment and Penetration Testing. Follow the structured path, practice consistently, and join the cybersecurity community!</p>
+        </div>
+    </div>
+
+    <script>
+        // Add smooth scrolling and interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to cards
+            const cards = document.querySelectorAll('.skill-card, .cert-level, .salary-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Add print functionality
+            const printBtn = document.createElement('button');
+            printBtn.textContent = '📄 Print PDF';
+            printBtn.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+                border: none;
+                padding: 15px 25px;
+                border-radius: 25px;
+                font-size: 16px;
+                cursor: pointer;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+                z-index: 1000;
+            `;
+            
+            printBtn.addEventListener('click', function() {
+                window.print();
+            });
+            
+            document.body.appendChild(printBtn);
+        });
+    </script>
+
+    <style media="print">
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            .container {
+                max-width: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            .phase, .certifications, .salary-info, .vapt-definition {
+                background: white !important;
+                color: black !important;
+                border: 1px solid #ccc !important;
+                margin: 20px 0 !important;
+                page-break-inside: avoid;
+            }
+            
+            .roadmap-section, .timeline {
+                background: white !important;
+                color: black !important;
+                border: 1px solid #ccc !important;
+            }
+            
+            .skill-card, .cert-level, .salary-card {
+                background: white !important;
+                color: black !important;
+                border: 1px solid #ddd !important;
+            }
+            
+            .resource-link {
+                background: #f0f0f0 !important;
+                color: black !important;
+                border: 1px solid #ccc !important;
+            }
+            
+            h1, h2, h3, h4, h5 {
+                color: black !important;
+            }
+            
+            .header {
+                background: white !important;
+                color: black !important;
+                border: 2px solid #000 !important;
+            }
+            
+            button {
+                display: none !important;
+            }
+        }
+    </style>
+</body>
+</html>
