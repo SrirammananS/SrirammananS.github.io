@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Srirammanan</title>
+  <style>
+    /* Reset and base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 8vw, 6rem);
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-align: center;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #ffffff, #d6e0f0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: fadeIn 2s ease-in-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @media (max-height: 500px) {
+      h1 {
+        font-size: 3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Coming Soon</h1>
+</body>
+</html>
