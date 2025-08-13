@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWTLens Advanced - Professional JWT Security Testing Tool</title>
+    <meta name="description" content="Advanced JWT security testing tool with algorithm attacks, brute force, payload fuzzing, and comprehensive vulnerability analysis. Professional penetration testing for JWT tokens.">
+    <meta name="keywords" content="jwt security testing, jwt penetration testing, jwt vulnerability scanner, jwt algorithm attacks, jwt brute force, jwt payload fuzzing">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g'%3E%3Cstop stop-color='%23667eea'/%3E%3Cstop offset='1' stop-color='%23764ba2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='url(%23g)' stroke-width='2'/%3E%3Ctext x='16' y='20' text-anchor='middle' font-size='8' font-weight='bold' fill='url(%23g)'%3EJWT%3C/text%3E%3C/svg%3E">
+    
+    <!-- Socket.IO -->
+    <script src="/socket.io/socket.io.js"></script>
+    
+    <!-- External Libraries -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="logo-container">
+                <svg class="logo" width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="lensGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                        </linearGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <circle cx="40" cy="40" r="35" fill="none" stroke="url(#lensGradient)" stroke-width="3" opacity="0.8" filter="url(#glow)"/>
+                    <circle cx="40" cy="40" r="25" fill="none" stroke="url(#lensGradient)" stroke-width="2" opacity="0.6"/>
+                    <text x="40" y="35" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="url(#lensGradient)">JWT</text>
+                    <circle cx="40" cy="40" r="15" fill="url(#lensGradient)" opacity="0.3">
+                        <animate attributeName="r" from="15" to="20" dur="2s" repeatCount="indefinite"/>
+                        <animate attributeName="opacity" from="0.3" to="0.1" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <path d="M40 45 L35 50 L40 55 L45 50 Z" fill="url(#lensGradient)" opacity="0.8"/>
+                    <circle cx="30" cy="30" r="3" fill="#ffffff" opacity="0.6"/>
+                    <circle cx="50" cy="50" r="2" fill="#ffffff" opacity="0.4"/>
+                </svg>
+            </div>
+            <h2>JWTLens Advanced</h2>
+            <p>Loading advanced security testing features...</p>
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="app" class="app" style="display: none;">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-container">
+                    <svg class="logo" width="60" height="60" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="lensGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                            </linearGradient>
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <circle cx="40" cy="40" r="35" fill="none" stroke="url(#lensGradient)" stroke-width="3" opacity="0.8" filter="url(#glow)"/>
+                        <circle cx="40" cy="40" r="25" fill="none" stroke="url(#lensGradient)" stroke-width="2" opacity="0.6"/>
+                        <text x="40" y="35" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="url(#lensGradient)">JWT</text>
+                        <circle cx="40" cy="40" r="15" fill="url(#lensGradient)" opacity="0.3">
+                            <animate attributeName="r" from="15" to="20" dur="2s" repeatCount="indefinite"/>
+                            <animate attributeName="opacity" from="0.3" to="0.1" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                        <path d="M40 45 L35 50 L40 55 L45 50 Z" fill="url(#lensGradient)" opacity="0.8"/>
+                        <circle cx="30" cy="30" r="3" fill="#ffffff" opacity="0.6"/>
+                        <circle cx="50" cy="50" r="2" fill="#ffffff" opacity="0.4"/>
+                    </svg>
+                </div>
+                <h1>JWTLens Advanced</h1>
+                <p>Professional JWT Security Testing & Vulnerability Analysis</p>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <div class="nav-container">
+                <button class="nav-tab active" data-tab="analyzer">
+                    <i class="fas fa-search"></i>
+                    <span>Security Analyzer</span>
+                </button>
+                <button class="nav-tab" data-tab="attacks">
+                    <i class="fas fa-bug"></i>
+                    <span>Offensive Testing</span>
+                </button>
+                <button class="nav-tab" data-tab="bruteforce">
+                    <i class="fas fa-key"></i>
+                    <span>Brute Force</span>
+                </button>
+                <button class="nav-tab" data-tab="fuzzer">
+                    <i class="fas fa-random"></i>
+                    <span>Payload Fuzzer</span>
+                </button>
+                <button class="nav-tab" data-tab="editor">
+                    <i class="fas fa-edit"></i>
+                    <span>Token Editor</span>
+                </button>
+                <button class="nav-tab" data-tab="batch">
+                    <i class="fas fa-layer-group"></i>
+                    <span>Batch Generator</span>
+                </button>
+                <button class="nav-tab" data-tab="validation">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Signature Validation</span>
+                </button>
+
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Security Analyzer Tab -->
+            <div id="analyzer" class="tab-content active">
+                <div class="content-header">
+                    <h2><i class="fas fa-search"></i> JWT Security Analyzer</h2>
+                    <p>Comprehensive A-Z security analysis and vulnerability detection with 26+ attack vectors</p>
+                </div>
+                
+                <div class="input-section">
+                    <div class="input-group">
+                        <label for="jwtInput">JWT Token</label>
+                        <textarea id="jwtInput" placeholder="Paste your JWT token here..." spellcheck="false"></textarea>
+                    </div>
+                    <button id="analyzeBtn" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                        Analyze Security
+                    </button>
+                </div>
+
+                <div id="analysisResults" class="results-section" style="display: none;">
+                    <div class="results-header">
+                        <h3>Analysis Results</h3>
+                        <div class="severity-summary" id="severitySummary"></div>
+                    </div>
+                    
+                    <div class="jwt-parts">
+                        <div class="part-card">
+                            <h4><i class="fas fa-file-code"></i> Header</h4>
+                            <pre id="headerContent" class="code-block"></pre>
+                        </div>
+                        <div class="part-card">
+                            <h4><i class="fas fa-database"></i> Payload</h4>
+                            <pre id="payloadContent" class="code-block"></pre>
+                        </div>
+                        <div class="part-card">
+                            <h4><i class="fas fa-signature"></i> Signature</h4>
+                            <pre id="signatureContent" class="code-block"></pre>
+                        </div>
+                    </div>
+
+                    <div class="findings-section">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Security Findings</h3>
+                        <div id="findingsContent"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Offensive Testing Tab -->
+            <div id="attacks" class="tab-content">
+                <div class="content-header">
+                    <h2><i class="fas fa-bug"></i> Offensive Testing</h2>
+                    <p>Active attack simulation and algorithm manipulation</p>
+                </div>
+
+                <div class="attacks-grid">
+                    <div class="attack-card">
+                        <h3><i class="fas fa-ban"></i> Algorithm None Attack</h3>
+                        <p>Convert JWT to alg:none and remove signature verification</p>
+                        <div class="attack-input">
+                            <textarea id="noneAttackInput" placeholder="Enter JWT token..."></textarea>
+                            <button class="btn btn-danger" id="noneAttackBtn">
+                                <i class="fas fa-play"></i> Execute Attack
+                            </button>
+                        </div>
+                        <div id="noneAttackResult" class="attack-result"></div>
+                    </div>
+
+                    <div class="attack-card">
+                        <h3><i class="fas fa-exchange-alt"></i> Algorithm Confusion</h3>
+                        <p>Convert between different JWT algorithms</p>
+                        <div class="attack-input">
+                            <textarea id="confusionAttackInput" placeholder="Enter JWT token..."></textarea>
+                            <select id="confusionAlgorithm">
+                                <option value="HS256">HS256</option>
+                                <option value="HS384">HS384</option>
+                                <option value="HS512">HS512</option>
+                                <option value="RS256">RS256</option>
+                                <option value="RS384">RS384</option>
+                                <option value="RS512">RS512</option>
+                            </select>
+                            <button class="btn btn-warning" id="confusionAttackBtn">
+                                <i class="fas fa-play"></i> Execute Attack
+                            </button>
+                        </div>
+                        <div id="confusionAttackResult" class="attack-result"></div>
+                    </div>
+
+                    <div class="attack-card">
+                        <h3><i class="fas fa-key"></i> Key Confusion Attack</h3>
+                        <p>Use public key as HMAC secret</p>
+                        <div class="attack-input">
+                            <textarea id="keyConfusionInput" placeholder="Enter JWT token..."></textarea>
+                            <textarea id="publicKeyInput" placeholder="Enter public key..."></textarea>
+                            <button class="btn btn-danger" id="keyConfusionAttackBtn">
+                                <i class="fas fa-play"></i> Execute Attack
+                            </button>
+                        </div>
+                        <div id="keyConfusionResult" class="attack-result"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Brute Force Tab -->
+            <div id="bruteforce" class="tab-content">
+                <div class="content-header">
+                    <h2><i class="fas fa-key"></i> Brute Force Attack</h2>
+                    <p>Attempt to crack JWT secrets using wordlists</p>
+                </div>
+
+                <div class="brute-force-section">
+                    <div class="input-group">
+                        <label for="bruteForceInput">JWT Token</label>
+                        <textarea id="bruteForceInput" placeholder="Enter JWT token to brute force..."></textarea>
+                    </div>
+
+                    <div class="wordlist-section">
+                        <h3>Wordlist Options</h3>
+                        <div class="wordlist-options">
+                            <label>
+                                <input type="radio" name="wordlist" value="builtin" checked>
+                                Built-in Common Secrets
+                            </label>
+                            <label>
+                                <input type="radio" name="wordlist" value="custom">
+                                Custom Wordlist
+                            </label>
+                        </div>
+                        <div id="customWordlistInput" class="custom-wordlist" style="display: none;">
+                            <textarea placeholder="Enter custom secrets (one per line)"></textarea>
+                        </div>
+                    </div>
+
+                    <button id="bruteForceBtn" class="btn btn-danger">
+                        <i class="fas fa-play"></i> Start Brute Force
+                    </button>
+
+                    <div id="bruteForceProgress" class="progress-section" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <p class="progress-text">Testing secrets...</p>
+                    </div>
+
+                    <div id="bruteForceResult" class="attack-result"></div>
+                </div>
+            </div>
+
+            <!-- Payload Fuzzer Tab -->
+            <div id="fuzzer" class="tab-content">
+                <div class="content-header">
+                    <h2><i class="fas fa-random"></i> Payload Fuzzer</h2>
+                    <p>Generate fuzzed tokens for testing</p>
+                </div>
+
+                <div class="fuzzer-section">
+                    <div class="input-group">
+                        <label for="fuzzerInput">Base JWT Token</label>
+                        <textarea id="fuzzerInput" placeholder="Enter base JWT token..."></textarea>
+                    </div>
+
+                    <div class="fuzz-options">
+                        <h3>Fuzzing Options</h3>
+                        <div class="fuzz-type-selector">
+                            <label>
+                                <input type="radio" name="fuzzType" value="roles" checked>
+                                Role Escalation
+                            </label>
+                            <label>
+                                <input type="radio" name="fuzzType" value="exp">
+                                Expiration Times
+                            </label>
+                            <label>
+                                <input type="radio" name="fuzzType" value="claims">
+                                Custom Claims
+                            </label>
+                        </div>
+                        <div id="customClaimsSection" class="custom-claims-section" style="display: none;">
+                            <label for="customClaimsInput">Custom Claims (JSON)</label>
+                            <textarea id="customClaimsInput" placeholder='{"admin": true, "role": "superuser", "permissions": ["read", "write", "delete"]}'></textarea>
+                        </div>
+                    </div>
+
+                    <button id="fuzzBtn" class="btn btn-warning">
+                        <i class="fas fa-play"></i> Generate Fuzzed Tokens
+                    </button>
+
+                    <div id="fuzzResults" class="fuzz-results"></div>
+                </div>
+            </div>
+
+            <!-- Token Editor Tab -->
+            <div id="editor" class="tab-content">
+                <div class="content-header">
+                    <h2><i class="fas fa-edit"></i> Live JWT Editor</h2>
+                    <p>Edit JWT components in real-time</p>
+                </div>
+
+                <div class="editor-section">
+                    <div class="editor-grid">
+                        <div class="editor-panel">
+                            <h3>Header</h3>
+                            <textarea id="headerEditor" class="json-editor" placeholder='{"alg": "HS256", "typ": "JWT"}'></textarea>
+                        </div>
+                        <div class="editor-panel">
+                            <h3>Payload</h3>
+                            <textarea id="payloadEditor" class="json-editor" placeholder='{"sub": "1234567890", "name": "John Doe", "iat": 1516239022}'></textarea>
+                        </div>
+                    </div>
+
+                    <div class="editor-actions">
+                        <button id="formatJsonBtn" class="btn btn-secondary">
+                            <i class="fas fa-code"></i> Format JSON
+                        </button>
+                        <button id="generateTokenBtn" class="btn btn-primary">
+                            <i class="fas fa-magic"></i> Generate Token
+                        </button>
+                        <button id="copyTokenBtn" class="btn btn-success">
+                            <i class="fas fa-copy"></i> Copy Token
+                        </button>
+                    </div>
+
+                    <div class="generated-token">
+                        <h3>Generated Token</h3>
+                        <div class="token-display">
+                            <pre id="generatedTokenDisplay"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Batch Generator Tab -->
+            <div id="batch" class="tab-content">
+                <div class="content-header">
+                    <h2><i class="fas fa-layer-group"></i> Batch Token Generator</h2>
+                    <p>Generate multiple tokens with iterated claims</p>
+                </div>
+
+                <div class="batch-section">
+                    <div class="template-editor">
+                        <h3>Token Template</h3>
+                        <div class="template-grid">
+                            <div class="template-panel">
+                                <h4>Header Template</h4>
+                                <textarea id="batchHeaderTemplate" class="json-editor" placeholder='{"alg": "HS256", "typ": "JWT"}'></textarea>
+                            </div>
+                            <div class="template-panel">
+                                <h4>Payload Template</h4>
+                                <textarea id="batchPayloadTemplate" class="json-editor" placeholder='{"sub": "user_{{index}}", "role": "user", "iat": 1516239022}'></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="batch-options">
+                        <div class="option-group">
+                            <label for="batchIterations">Number of Tokens:</label>
+                            <input type="number" id="batchIterations" min="1" max="1000" value="10">
+                        </div>
+                        <button id="generateBatchBtn" class="btn btn-primary">
+                            <i class="fas fa-play"></i> Generate Batch
+                        </button>
+                    </div>
+
+                    <div id="batchResults" class="batch-results"></div>
+                </div>
+            </div>
+
+            <!-- Signature Validation Tab -->
+            <div id="validation" class="tab-content">
+                <div class="content-header">
+                    <h2><i class="fas fa-check-circle"></i> Signature Validation</h2>
+                    <p>Validate JWT signatures with custom keys</p>
+                </div>
+
+                <div class="validation-section">
+                    <div class="input-group">
+                        <label for="validationInput">JWT Token</label>
+                        <textarea id="validationInput" placeholder="Enter JWT token to validate..."></textarea>
+                    </div>
+
+                    <div class="key-inputs">
+                        <div class="key-input">
+                            <label for="secretKey">Secret Key (for HMAC)</label>
+                            <textarea id="secretKey" placeholder="Enter secret key..."></textarea>
+                        </div>
+                        <div class="key-input">
+                            <label for="publicKeyValidation">Public Key (for RSA)</label>
+                            <textarea id="publicKeyValidation" placeholder="Enter public key..."></textarea>
+                        </div>
+                    </div>
+
+                    <button id="validateBtn" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Validate Signature
+                    </button>
+
+                    <div id="validationResult" class="validation-result"></div>
+                </div>
+            </div>
+
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <span class="footer-text">Crafted with 💜 by</span>
+                <a href="https://github.com/chawdamrunal" target="_blank" rel="noopener noreferrer" class="footer-link">Mrunal Chawda</a>
+                <span class="footer-divider">|</span>
+                <span class="footer-text">© 2025 JWTLens Advanced</span>
+                <span class="footer-divider">|</span>
+                <a href="https://github.com/chawdamrunal/jwtlens" target="_blank" rel="noopener noreferrer" class="footer-link">View on GitHub</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html> 
