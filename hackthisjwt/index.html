@@ -1,31 +1,445 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JWTLens Advanced - Professional JWT Security Testing Tool</title>
-    <meta name="description" content="Advanced JWT security testing tool with algorithm attacks, brute force, payload fuzzing, and comprehensive vulnerability analysis. Professional penetration testing for JWT tokens.">
-    <meta name="keywords" content="jwt security testing, jwt penetration testing, jwt vulnerability scanner, jwt algorithm attacks, jwt brute force, jwt payload fuzzing">
-    
-    <!-- Favicon -->
+    <title>JWTLens - Free JWT Decoder & Security Scanner</title>
+    <meta name="keywords" content="jwt analyzer, jwt decoder online, jwt security scanner, jwt vulnerability checker, online jwt decoder, free jwt analyzer, jwt token analyzer, jwt validator online">
+    <meta name="description" content="Free JWT analyzer & decoder online. Instantly scan JWT tokens for security vulnerabilities, XSS attacks, and algorithm confusion. Professional JWT security scanner for penetration testing & developers. Decode JWT online safely.">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g'%3E%3Cstop stop-color='%23667eea'/%3E%3Cstop offset='1' stop-color='%23764ba2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='url(%23g)' stroke-width='2'/%3E%3Ctext x='16' y='20' text-anchor='middle' font-size='8' font-weight='bold' fill='url(%23g)'%3EJWT%3C/text%3E%3C/svg%3E">
-    
-    <!-- Socket.IO -->
-    <script src="/socket.io/socket.io.js"></script>
-    
-    <!-- External Libraries -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
-    
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 80px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 12, 41, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            text-align: center;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-text {
+            color: #a0a0a0;
+            font-size: 14px;
+        }
+
+        .footer-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .footer-link:hover {
+            color: #764ba2;
+            text-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+        }
+
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        .footer-link:hover::after {
+            width: 100%;
+        }
+
+        .footer-divider {
+            color: #666;
+            margin: 0 10px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .logo-container {
+            display: inline-block;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .logo {
+            filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.5));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #a0a0a0;
+        }
+
+        .input-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .jwt-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e0e0e0;
+            font-size: 16px;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .jwt-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .analyze-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .analyze-btn:active {
+            transform: translateY(0);
+        }
+
+        .results-section {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .jwt-parts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .jwt-part {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .jwt-part h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .jwt-content {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            word-break: break-all;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .findings {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .findings h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 2em;
+        }
+
+        .finding-category {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .finding-category h3 {
+            color: #e0e0e0;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .finding-item {
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .finding-item:hover {
+            transform: translateX(5px);
+        }
+
+        .severity-critical {
+            background: rgba(255, 67, 54, 0.2);
+            border-left: 3px solid #ff4336;
+        }
+
+        .severity-high {
+            background: rgba(255, 152, 0, 0.2);
+            border-left: 3px solid #ff9800;
+        }
+
+        .severity-medium {
+            background: rgba(255, 193, 7, 0.2);
+            border-left: 3px solid #ffc107;
+        }
+
+        .severity-low {
+            background: rgba(76, 175, 80, 0.2);
+            border-left: 3px solid #4caf50;
+        }
+
+        .severity-info {
+            background: rgba(33, 150, 243, 0.2);
+            border-left: 3px solid #2196f3;
+        }
+
+        .severity-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+            text-transform: uppercase;
+        }
+
+        .badge-critical {
+            background: #ff4336;
+            color: white;
+        }
+
+        .badge-high {
+            background: #ff9800;
+            color: white;
+        }
+
+        .badge-medium {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .badge-low {
+            background: #4caf50;
+            color: white;
+        }
+
+        .badge-info {
+            background: #2196f3;
+            color: white;
+        }
+
+        .error-message {
+            background: rgba(255, 67, 54, 0.2);
+            border: 1px solid #ff4336;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #667eea;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #a0a0a0;
+            font-size: 0.9em;
+        }
+
+        /* Navigation Styles */
+        .navigation {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .nav-link {
+            display: inline-block;
+            color: #667eea;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 25px;
+            background: rgba(102, 126, 234, 0.1);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: white;
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-1px);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.7);
+        }
+    </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div id="loadingScreen" class="loading-screen">
-        <div class="loading-content">
+    <div class="container">
+        <div class="header">
             <div class="logo-container">
                 <svg class="logo" width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Outer lens ring -->
                     <defs>
                         <linearGradient id="lensGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
@@ -39,414 +453,591 @@
                             </feMerge>
                         </filter>
                     </defs>
+                    
+                    <!-- Lens outer ring -->
                     <circle cx="40" cy="40" r="35" fill="none" stroke="url(#lensGradient)" stroke-width="3" opacity="0.8" filter="url(#glow)"/>
+                    
+                    <!-- Lens iris -->
                     <circle cx="40" cy="40" r="25" fill="none" stroke="url(#lensGradient)" stroke-width="2" opacity="0.6"/>
+                    
+                    <!-- JWT text in the center -->
                     <text x="40" y="35" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="url(#lensGradient)">JWT</text>
+                    
+                    <!-- Lens center with scanning effect -->
                     <circle cx="40" cy="40" r="15" fill="url(#lensGradient)" opacity="0.3">
                         <animate attributeName="r" from="15" to="20" dur="2s" repeatCount="indefinite"/>
                         <animate attributeName="opacity" from="0.3" to="0.1" dur="2s" repeatCount="indefinite"/>
                     </circle>
+                    
+                    <!-- Security shield accent -->
                     <path d="M40 45 L35 50 L40 55 L45 50 Z" fill="url(#lensGradient)" opacity="0.8"/>
+                    
+                    <!-- Lens flare effects -->
                     <circle cx="30" cy="30" r="3" fill="#ffffff" opacity="0.6"/>
                     <circle cx="50" cy="50" r="2" fill="#ffffff" opacity="0.4"/>
                 </svg>
             </div>
-            <h2>JWTLens Advanced</h2>
-            <p>Loading advanced security testing features...</p>
+            <h1>JWTLens</h1>
+            <p>Advanced JWT Security Analysis & Vulnerability Detection</p>
+        </div>
+        <!-- Navigation Section -->
+        <div class="navigation">
+            <a class='nav-link' href='/guide'>📚 Complete JWT Security Guide</a>
+        </div>
+
+        <div class="input-section">
+            <textarea 
+                id="jwtInput" 
+                class="jwt-input" 
+                placeholder="Paste your JWT token here..."
+                spellcheck="false"
+            ></textarea>
+            <button id="analyzeBtn" class="analyze-btn">Analyze JWT Security</button>
+            <div id="errorMessage" class="error-message"></div>
+        </div>
+
+        <div class="loading" id="loading">
             <div class="spinner"></div>
+            <p style="margin-top: 10px;">Analyzing JWT security with JWTLens...</p>
+        </div>
+
+        <div id="results" class="results-section">
+            <div class="jwt-parts">
+                <div class="jwt-part">
+                    <h3>Header</h3>
+                    <div id="headerContent" class="jwt-content"></div>
+                </div>
+                <div class="jwt-part">
+                    <h3>Payload</h3>
+                    <div id="payloadContent" class="jwt-content"></div>
+                </div>
+                <div class="jwt-part">
+                    <h3>Signature</h3>
+                    <div id="signatureContent" class="jwt-content"></div>
+                </div>
+            </div>
+
+            <div class="summary-stats" id="summaryStats"></div>
+
+            <div class="findings">
+                <h2>Security Findings</h2>
+                <div id="findingsContent"></div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <a href="#headerContent" class="nav-link">View Header</a>
+            <a href="#payloadContent" class="nav-link">View Payload</a>
+            <a href="#signatureContent" class="nav-link">View Signature</a>
         </div>
     </div>
 
-    <!-- Main Application -->
-    <div id="app" class="app" style="display: none;">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <div class="logo-container">
-                    <svg class="logo" width="60" height="60" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="lensGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
-                            </linearGradient>
-                            <filter id="glow">
-                                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                                <feMerge>
-                                    <feMergeNode in="coloredBlur"/>
-                                    <feMergeNode in="SourceGraphic"/>
-                                </feMerge>
-                            </filter>
-                        </defs>
-                        <circle cx="40" cy="40" r="35" fill="none" stroke="url(#lensGradient)" stroke-width="3" opacity="0.8" filter="url(#glow)"/>
-                        <circle cx="40" cy="40" r="25" fill="none" stroke="url(#lensGradient)" stroke-width="2" opacity="0.6"/>
-                        <text x="40" y="35" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="url(#lensGradient)">JWT</text>
-                        <circle cx="40" cy="40" r="15" fill="url(#lensGradient)" opacity="0.3">
-                            <animate attributeName="r" from="15" to="20" dur="2s" repeatCount="indefinite"/>
-                            <animate attributeName="opacity" from="0.3" to="0.1" dur="2s" repeatCount="indefinite"/>
-                        </circle>
-                        <path d="M40 45 L35 50 L40 55 L45 50 Z" fill="url(#lensGradient)" opacity="0.8"/>
-                        <circle cx="30" cy="30" r="3" fill="#ffffff" opacity="0.6"/>
-                        <circle cx="50" cy="50" r="2" fill="#ffffff" opacity="0.4"/>
-                    </svg>
-                </div>
-                <h1>JWTLens Advanced</h1>
-                <p>Professional JWT Security Testing & Vulnerability Analysis</p>
-            </div>
-        </header>
+    <footer class="footer">
+        <div class="footer-content">
+            <span class="footer-text">Crafted with 💜 by</span>
+            <a href="https://github.com/chawdamrunal" target="_blank" rel="noopener noreferrer" class="footer-link">Mrunal Chawda</a>
+            <span class="footer-divider">|</span>
+            <span class="footer-text">© 2025 JWTLens</span>
+            <span class="footer-divider">|</span>
+            <a href="https://github.com/chawdamrunal/jwtlens" target="_blank" rel="noopener noreferrer" class="footer-link">View on GitHub</a>
+        </div>
+    </footer>
 
-        <!-- Navigation -->
-        <nav class="navigation">
-            <div class="nav-container">
-                <button class="nav-tab active" data-tab="analyzer">
-                    <i class="fas fa-search"></i>
-                    <span>Security Analyzer</span>
-                </button>
-                <button class="nav-tab" data-tab="attacks">
-                    <i class="fas fa-bug"></i>
-                    <span>Offensive Testing</span>
-                </button>
-                <button class="nav-tab" data-tab="bruteforce">
-                    <i class="fas fa-key"></i>
-                    <span>Brute Force</span>
-                </button>
-                <button class="nav-tab" data-tab="fuzzer">
-                    <i class="fas fa-random"></i>
-                    <span>Payload Fuzzer</span>
-                </button>
-                <button class="nav-tab" data-tab="editor">
-                    <i class="fas fa-edit"></i>
-                    <span>Token Editor</span>
-                </button>
-                <button class="nav-tab" data-tab="batch">
-                    <i class="fas fa-layer-group"></i>
-                    <span>Batch Generator</span>
-                </button>
-                <button class="nav-tab" data-tab="validation">
-                    <i class="fas fa-check-circle"></i>
-                    <span>Signature Validation</span>
-                </button>
+    <script>
+        class JWTSecurityAnalyzer {
+            constructor() {
+                this.findings = [];
+                this.init();
+            }
 
-            </div>
-        </nav>
+            init() {
+                document.getElementById('analyzeBtn').addEventListener('click', () => this.analyzeJWT());
+                document.getElementById('jwtInput').addEventListener('keydown', (e) => {
+                    if (e.ctrlKey && e.key === 'Enter') {
+                        this.analyzeJWT();
+                    }
+                });
+            }
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Security Analyzer Tab -->
-            <div id="analyzer" class="tab-content active">
-                <div class="content-header">
-                    <h2><i class="fas fa-search"></i> JWT Security Analyzer</h2>
-                    <p>Comprehensive A-Z security analysis and vulnerability detection with 26+ attack vectors</p>
-                </div>
+            analyzeJWT() {
+                const jwtInput = document.getElementById('jwtInput').value.trim();
+                if (!jwtInput) {
+                    this.showError('Please enter a JWT token');
+                    return;
+                }
+
+                this.hideError();
+                this.showLoading(true);
+                this.findings = [];
+
+                setTimeout(() => {
+                    try {
+                        this.performSecurityAnalysis(jwtInput);
+                        this.displayResults();
+                    } catch (error) {
+                        this.showError('Error analyzing JWT: ' + error.message);
+                    } finally {
+                        this.showLoading(false);
+                    }
+                }, 500);
+            }
+
+            performSecurityAnalysis(jwt) {
+                // Basic structure validation
+                const parts = jwt.split('.');
                 
-                <div class="input-section">
-                    <div class="input-group">
-                        <label for="jwtInput">JWT Token</label>
-                        <textarea id="jwtInput" placeholder="Paste your JWT token here..." spellcheck="false"></textarea>
-                    </div>
-                    <button id="analyzeBtn" class="btn btn-primary">
-                        <i class="fas fa-search"></i>
-                        Analyze Security
-                    </button>
-                </div>
+                // Test 1: Malformed Token Structure
+                this.testTokenStructure(jwt, parts);
 
-                <div id="analysisResults" class="results-section" style="display: none;">
-                    <div class="results-header">
-                        <h3>Analysis Results</h3>
-                        <div class="severity-summary" id="severitySummary"></div>
-                    </div>
+                if (parts.length === 3) {
+                    try {
+                        const header = this.decodeBase64Url(parts[0]);
+                        const payload = this.decodeBase64Url(parts[1]);
+                        const signature = parts[2];
+
+                        // Store decoded parts for display
+                        this.header = header;
+                        this.payload = payload;
+                        this.signature = signature;
+
+                        // Parse JSON
+                        const headerObj = JSON.parse(header);
+                        const payloadObj = JSON.parse(payload);
+
+                        // Perform various security tests
+                        this.testAlgorithmVulnerabilities(headerObj);
+                        this.testSignatureIssues(signature, headerObj);
+                        this.testPayloadSecurity(payloadObj);
+                        this.testTimeBasedAttacks(payloadObj);
+                        this.testClaimValidation(payloadObj);
+                        this.testSensitiveDataExposure(payloadObj);
+                        this.testKeyStrength(headerObj, signature);
+                        this.testStorageRecommendations();
+                        this.testInjectionVulnerabilities(payloadObj);
+
+                    } catch (e) {
+                        this.addFinding('critical', 'Token Structure', 'Invalid JSON in token parts: ' + e.message);
+                    }
+                }
+            }
+
+            testTokenStructure(jwt, parts) {
+                if (parts.length !== 3) {
+                    this.addFinding('critical', 'Token Structure', `Invalid token structure: Expected 3 parts, found ${parts.length}`);
+                }
+
+                if (jwt.includes(' ')) {
+                    this.addFinding('medium', 'Token Structure', 'Token contains whitespace characters');
+                }
+
+                parts.forEach((part, index) => {
+                    if (part.length === 0) {
+                        this.addFinding('critical', 'Token Structure', `Empty segment at position ${index + 1}`);
+                    }
                     
-                    <div class="jwt-parts">
-                        <div class="part-card">
-                            <h4><i class="fas fa-file-code"></i> Header</h4>
-                            <pre id="headerContent" class="code-block"></pre>
-                        </div>
-                        <div class="part-card">
-                            <h4><i class="fas fa-database"></i> Payload</h4>
-                            <pre id="payloadContent" class="code-block"></pre>
-                        </div>
-                        <div class="part-card">
-                            <h4><i class="fas fa-signature"></i> Signature</h4>
-                            <pre id="signatureContent" class="code-block"></pre>
-                        </div>
+                    // Check for valid base64url characters
+                    if (!/^[A-Za-z0-9_-]*$/.test(part)) {
+                        this.addFinding('critical', 'Token Structure', `Invalid base64url characters in segment ${index + 1}`);
+                    }
+                });
+            }
+
+            testAlgorithmVulnerabilities(header) {
+                const alg = header.alg;
+
+                if (!alg) {
+                    this.addFinding('critical', 'Algorithm', 'Missing algorithm in header');
+                    return;
+                }
+
+                // Algorithm confusion attacks
+                if (alg.toLowerCase() === 'none') {
+                    this.addFinding('critical', 'Algorithm', 'Algorithm "none" detected - Token has no signature verification!');
+                }
+
+                if (alg === 'HS256' || alg === 'HS384' || alg === 'HS512') {
+                    this.addFinding('high', 'Algorithm', `HMAC algorithm (${alg}) used - Vulnerable to key confusion attacks if expecting RSA`);
+                }
+
+                const weakAlgorithms = ['HS1', 'RS1', 'ES1', 'PS1'];
+                if (weakAlgorithms.some(weak => alg.includes(weak))) {
+                    this.addFinding('high', 'Algorithm', `Weak algorithm detected: ${alg} - Consider using stronger algorithms`);
+                }
+
+                if (!['HS256', 'HS384', 'HS512', 'RS256', 'RS384', 'RS512', 'ES256', 'ES384', 'ES512', 'PS256', 'PS384', 'PS512'].includes(alg)) {
+                    this.addFinding('medium', 'Algorithm', `Non-standard algorithm: ${alg}`);
+                }
+            }
+
+            testSignatureIssues(signature, header) {
+                if (!signature || signature.length === 0) {
+                    this.addFinding('critical', 'Signature', 'Missing signature - Token can be tampered with!');
+                }
+
+                if (signature.length < 20) {
+                    this.addFinding('high', 'Signature', 'Signature appears too short - Possible weak signing key');
+                }
+
+                // Check for common test/weak signatures
+                const weakSignatures = ['test', 'secret', 'password', '123456'];
+                if (weakSignatures.some(weak => signature.toLowerCase().includes(weak))) {
+                    this.addFinding('critical', 'Signature', 'Signature contains common weak pattern');
+                }
+            }
+
+            testPayloadSecurity(payload) {
+                const stringPayload = JSON.stringify(payload);
+
+                // XSS detection
+                const xssPatterns = [
+                    /<script/i,
+                    /javascript:/i,
+                    /on\w+\s*=/i,
+                    /<iframe/i,
+                    /<object/i,
+                    /<embed/i,
+                    /document\./,
+                    /window\./,
+                    /eval\(/
+                ];
+
+                xssPatterns.forEach(pattern => {
+                    if (pattern.test(stringPayload)) {
+                        this.addFinding('high', 'XSS', `Potential XSS vector detected: ${pattern.source}`);
+                    }
+                });
+
+                // SQL Injection patterns
+                const sqlPatterns = [
+                    /(\b(union|select|insert|update|delete|drop|create)\b.*\b(from|into|where|table)\b)/i,
+                    /('|")\s*(or|and)\s*('|")?(\d|[a-z])/i,
+                    /\b(exec|execute)\s*\(/i,
+                    /;\s*(drop|delete|insert|update)/i
+                ];
+
+                sqlPatterns.forEach(pattern => {
+                    if (pattern.test(stringPayload)) {
+                        this.addFinding('high', 'SQL Injection', `Potential SQL injection pattern detected`);
+                    }
+                });
+
+                // Check for privilege escalation attempts
+                if (payload.role || payload.roles || payload.permissions) {
+                    this.addFinding('info', 'Authorization', 'Token contains role/permission claims - Ensure proper server-side validation');
+                    
+                    const adminPatterns = /admin|root|superuser|administrator/i;
+                    if (adminPatterns.test(stringPayload)) {
+                        this.addFinding('high', 'Privilege Escalation', 'Token contains high-privilege role claims');
+                    }
+                }
+
+                // Check for sensitive data
+                const sensitiveFields = ['password', 'secret', 'api_key', 'apiKey', 'private_key', 'privateKey', 'ssn', 'creditCard'];
+                Object.keys(payload).forEach(key => {
+                    if (sensitiveFields.some(field => key.toLowerCase().includes(field.toLowerCase()))) {
+                        this.addFinding('critical', 'Data Exposure', `Sensitive field "${key}" found in token payload`);
+                    }
+                });
+            }
+
+            testTimeBasedAttacks(payload) {
+                const now = Math.floor(Date.now() / 1000);
+
+                if (payload.exp) {
+                    if (payload.exp < now) {
+                        this.addFinding('high', 'Expiration', `Token is expired (expired ${this.formatTimeAgo(now - payload.exp)} ago)`);
+                    } else if (payload.exp > now + 365 * 24 * 60 * 60) {
+                        this.addFinding('medium', 'Expiration', 'Token has very long expiration (> 1 year)');
+                    }
+                } else {
+                    this.addFinding('high', 'Expiration', 'Token has no expiration claim (exp) - Never expires!');
+                }
+
+                if (payload.iat) {
+                    if (payload.iat > now) {
+                        this.addFinding('high', 'Time Validation', 'Token issued in the future - Possible clock skew or tampering');
+                    }
+                } else {
+                    this.addFinding('low', 'Time Validation', 'Token missing issued at (iat) claim');
+                }
+
+                if (payload.nbf) {
+                    if (payload.nbf > now) {
+                        this.addFinding('medium', 'Time Validation', 'Token not yet valid (nbf claim)');
+                    }
+                }
+            }
+
+            testClaimValidation(payload) {
+                // Check required claims
+                if (!payload.iss) {
+                    this.addFinding('medium', 'Claims', 'Missing issuer (iss) claim - Cannot verify token source');
+                }
+
+                if (!payload.sub && !payload.user_id && !payload.userId) {
+                    this.addFinding('low', 'Claims', 'Missing subject/user identifier claim');
+                }
+
+                if (!payload.aud) {
+                    this.addFinding('medium', 'Claims', 'Missing audience (aud) claim - Token can be used on any service');
+                }
+
+                // Check for JWT ID for replay protection
+                if (!payload.jti) {
+                    this.addFinding('low', 'Claims', 'Missing JWT ID (jti) - No replay attack protection');
+                }
+            }
+
+            testSensitiveDataExposure(payload) {
+                // Check for PII
+                const piiPatterns = {
+                    email: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/,
+                    phone: /\b(?:\+?1[-.\s]?)?\(?([0-9]{3})\)?[-.\s]?([0-9]{3})[-.\s]?([0-9]{4})\b/,
+                    ssn: /\b\d{3}-\d{2}-\d{4}\b/,
+                    creditCard: /\b\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b/
+                };
+
+                // Convert payload to string but exclude common ID fields from phone detection
+                const payloadStr = JSON.stringify(payload);
+                
+                Object.entries(piiPatterns).forEach(([type, pattern]) => {
+                    if (type === 'phone') {
+                        // For phone numbers, check each value individually to avoid false positives
+                        Object.entries(payload).forEach(([key, value]) => {
+                            // Skip common ID fields that might be 10-digit numbers
+                            if (!['sub', 'id', 'user_id', 'userId', 'account_id', 'accountId', 'customer_id', 'customerId'].includes(key)) {
+                                if (typeof value === 'string' && pattern.test(value)) {
+                                    this.addFinding('high', 'Data Exposure', `Potential phone number detected in field "${key}"`);
+                                }
+                            }
+                        });
+                    } else if (pattern.test(payloadStr)) {
+                        this.addFinding('high', 'Data Exposure', `Potential ${type} PII detected in token`);
+                    }
+                });
+
+                // Check payload size
+                if (payloadStr.length > 1000) {
+                    this.addFinding('medium', 'Data Exposure', 'Large payload size - Consider minimizing data in token');
+                }
+
+                // Internal system information
+                const internalPatterns = ['internal', 'debug', 'stacktrace', 'error_details'];
+                Object.keys(payload).forEach(key => {
+                    if (internalPatterns.some(pattern => key.toLowerCase().includes(pattern))) {
+                        this.addFinding('medium', 'Data Exposure', `Potential internal information in field: ${key}`);
+                    }
+                });
+            }
+
+            testKeyStrength(header, signature) {
+                // Estimate key strength based on signature length
+                const signatureBytes = this.base64UrlToBytes(signature);
+                
+                if (header.alg && header.alg.startsWith('HS')) {
+                    if (signatureBytes < 32) {
+                        this.addFinding('high', 'Key Strength', 'Weak signing key detected - Use at least 256-bit keys');
+                    }
+                }
+            }
+
+            testStorageRecommendations() {
+                this.addFinding('info', 'Storage', 'Recommended: Store in httpOnly, secure cookies instead of localStorage');
+                this.addFinding('info', 'Storage', 'Avoid storing JWTs in localStorage (XSS vulnerable) or URL parameters (logged)');
+                this.addFinding('info', 'Transmission', 'Always transmit JWTs over HTTPS');
+            }
+
+            testInjectionVulnerabilities(payload) {
+                const stringPayload = JSON.stringify(payload);
+
+                // LDAP Injection
+                const ldapPatterns = /[*()\\|&]/;
+                if (ldapPatterns.test(stringPayload)) {
+                    this.addFinding('medium', 'LDAP Injection', 'Potential LDAP injection characters detected');
+                }
+
+                // Command Injection
+                const cmdPatterns = /[;&|`$()]/;
+                if (cmdPatterns.test(stringPayload)) {
+                    this.addFinding('medium', 'Command Injection', 'Potential command injection characters detected');
+                }
+
+                // NoSQL Injection
+                if (stringPayload.includes('$') && (stringPayload.includes('{') || stringPayload.includes('['))) {
+                    this.addFinding('medium', 'NoSQL Injection', 'Potential NoSQL injection pattern detected');
+                }
+            }
+
+            decodeBase64Url(str) {
+                str = str.replace(/-/g, '+').replace(/_/g, '/');
+                while (str.length % 4) {
+                    str += '=';
+                }
+                return atob(str);
+            }
+
+            base64UrlToBytes(str) {
+                return Math.floor((str.length * 3) / 4);
+            }
+
+            formatTimeAgo(seconds) {
+                const intervals = [
+                    { label: 'year', seconds: 31536000 },
+                    { label: 'month', seconds: 2592000 },
+                    { label: 'day', seconds: 86400 },
+                    { label: 'hour', seconds: 3600 },
+                    { label: 'minute', seconds: 60 }
+                ];
+
+                for (const interval of intervals) {
+                    const count = Math.floor(seconds / interval.seconds);
+                    if (count >= 1) {
+                        return `${count} ${interval.label}${count > 1 ? 's' : ''}`;
+                    }
+                }
+                return `${seconds} seconds`;
+            }
+
+            addFinding(severity, category, message) {
+                this.findings.push({ severity, category, message });
+            }
+
+            displayResults() {
+                document.getElementById('results').style.display = 'block';
+
+                // Display JWT parts
+                document.getElementById('headerContent').textContent = this.formatJSON(this.header);
+                document.getElementById('payloadContent').textContent = this.formatJSON(this.payload);
+                document.getElementById('signatureContent').textContent = this.signature;
+
+                // Display summary statistics
+                this.displaySummaryStats();
+
+                // Display findings
+                this.displayFindings();
+            }
+
+            displaySummaryStats() {
+                const severityCounts = {
+                    critical: 0,
+                    high: 0,
+                    medium: 0,
+                    low: 0,
+                    info: 0
+                };
+
+                this.findings.forEach(finding => {
+                    severityCounts[finding.severity]++;
+                });
+
+                const statsHtml = `
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: #ff4336">${severityCounts.critical}</div>
+                        <div class="stat-label">Critical</div>
                     </div>
-
-                    <div class="findings-section">
-                        <h3><i class="fas fa-exclamation-triangle"></i> Security Findings</h3>
-                        <div id="findingsContent"></div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: #ff9800">${severityCounts.high}</div>
+                        <div class="stat-label">High</div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Offensive Testing Tab -->
-            <div id="attacks" class="tab-content">
-                <div class="content-header">
-                    <h2><i class="fas fa-bug"></i> Offensive Testing</h2>
-                    <p>Active attack simulation and algorithm manipulation</p>
-                </div>
-
-                <div class="attacks-grid">
-                    <div class="attack-card">
-                        <h3><i class="fas fa-ban"></i> Algorithm None Attack</h3>
-                        <p>Convert JWT to alg:none and remove signature verification</p>
-                        <div class="attack-input">
-                            <textarea id="noneAttackInput" placeholder="Enter JWT token..."></textarea>
-                            <button class="btn btn-danger" id="noneAttackBtn">
-                                <i class="fas fa-play"></i> Execute Attack
-                            </button>
-                        </div>
-                        <div id="noneAttackResult" class="attack-result"></div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: #ffc107">${severityCounts.medium}</div>
+                        <div class="stat-label">Medium</div>
                     </div>
-
-                    <div class="attack-card">
-                        <h3><i class="fas fa-exchange-alt"></i> Algorithm Confusion</h3>
-                        <p>Convert between different JWT algorithms</p>
-                        <div class="attack-input">
-                            <textarea id="confusionAttackInput" placeholder="Enter JWT token..."></textarea>
-                            <select id="confusionAlgorithm">
-                                <option value="HS256">HS256</option>
-                                <option value="HS384">HS384</option>
-                                <option value="HS512">HS512</option>
-                                <option value="RS256">RS256</option>
-                                <option value="RS384">RS384</option>
-                                <option value="RS512">RS512</option>
-                            </select>
-                            <button class="btn btn-warning" id="confusionAttackBtn">
-                                <i class="fas fa-play"></i> Execute Attack
-                            </button>
-                        </div>
-                        <div id="confusionAttackResult" class="attack-result"></div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: #4caf50">${severityCounts.low}</div>
+                        <div class="stat-label">Low</div>
                     </div>
-
-                    <div class="attack-card">
-                        <h3><i class="fas fa-key"></i> Key Confusion Attack</h3>
-                        <p>Use public key as HMAC secret</p>
-                        <div class="attack-input">
-                            <textarea id="keyConfusionInput" placeholder="Enter JWT token..."></textarea>
-                            <textarea id="publicKeyInput" placeholder="Enter public key..."></textarea>
-                            <button class="btn btn-danger" id="keyConfusionAttackBtn">
-                                <i class="fas fa-play"></i> Execute Attack
-                            </button>
-                        </div>
-                        <div id="keyConfusionResult" class="attack-result"></div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: #2196f3">${severityCounts.info}</div>
+                        <div class="stat-label">Info</div>
                     </div>
-                </div>
-            </div>
+                `;
 
-            <!-- Brute Force Tab -->
-            <div id="bruteforce" class="tab-content">
-                <div class="content-header">
-                    <h2><i class="fas fa-key"></i> Brute Force Attack</h2>
-                    <p>Attempt to crack JWT secrets using wordlists</p>
-                </div>
+                document.getElementById('summaryStats').innerHTML = statsHtml;
+            }
 
-                <div class="brute-force-section">
-                    <div class="input-group">
-                        <label for="bruteForceInput">JWT Token</label>
-                        <textarea id="bruteForceInput" placeholder="Enter JWT token to brute force..."></textarea>
-                    </div>
+            displayFindings() {
+                const groupedFindings = {};
+                
+                this.findings.forEach(finding => {
+                    if (!groupedFindings[finding.category]) {
+                        groupedFindings[finding.category] = [];
+                    }
+                    groupedFindings[finding.category].push(finding);
+                });
 
-                    <div class="wordlist-section">
-                        <h3>Wordlist Options</h3>
-                        <div class="wordlist-options">
-                            <label>
-                                <input type="radio" name="wordlist" value="builtin" checked>
-                                Built-in Common Secrets
-                            </label>
-                            <label>
-                                <input type="radio" name="wordlist" value="custom">
-                                Custom Wordlist
-                            </label>
-                        </div>
-                        <div id="customWordlistInput" class="custom-wordlist" style="display: none;">
-                            <textarea placeholder="Enter custom secrets (one per line)"></textarea>
-                        </div>
-                    </div>
+                let findingsHtml = '';
+                
+                // Sort categories by severity
+                const sortedCategories = Object.keys(groupedFindings).sort((a, b) => {
+                    const severityOrder = { critical: 0, high: 1, medium: 2, low: 3, info: 4 };
+                    const aMaxSeverity = Math.min(...groupedFindings[a].map(f => severityOrder[f.severity]));
+                    const bMaxSeverity = Math.min(...groupedFindings[b].map(f => severityOrder[f.severity]));
+                    return aMaxSeverity - bMaxSeverity;
+                });
 
-                    <button id="bruteForceBtn" class="btn btn-danger">
-                        <i class="fas fa-play"></i> Start Brute Force
-                    </button>
+                sortedCategories.forEach(category => {
+                    findingsHtml += `<div class="finding-category">`;
+                    findingsHtml += `<h3>${category}</h3>`;
+                    
+                    groupedFindings[category]
+                        .sort((a, b) => {
+                            const severityOrder = { critical: 0, high: 1, medium: 2, low: 3, info: 4 };
+                            return severityOrder[a.severity] - severityOrder[b.severity];
+                        })
+                        .forEach(finding => {
+                            findingsHtml += `
+                                <div class="finding-item severity-${finding.severity}">
+                                    <span class="severity-badge badge-${finding.severity}">${finding.severity}</span>
+                                    <span>${finding.message}</span>
+                                </div>
+                            `;
+                        });
+                    
+                    findingsHtml += `</div>`;
+                });
 
-                    <div id="bruteForceProgress" class="progress-section" style="display: none;">
-                        <div class="progress-bar">
-                            <div class="progress-fill"></div>
-                        </div>
-                        <p class="progress-text">Testing secrets...</p>
-                    </div>
+                if (this.findings.length === 0) {
+                    findingsHtml = '<div class="finding-item severity-low"><span class="severity-badge badge-low">PASS</span><span>No security issues detected. Token appears to follow best practices.</span></div>';
+                }
 
-                    <div id="bruteForceResult" class="attack-result"></div>
-                </div>
-            </div>
+                document.getElementById('findingsContent').innerHTML = findingsHtml;
+            }
 
-            <!-- Payload Fuzzer Tab -->
-            <div id="fuzzer" class="tab-content">
-                <div class="content-header">
-                    <h2><i class="fas fa-random"></i> Payload Fuzzer</h2>
-                    <p>Generate fuzzed tokens for testing</p>
-                </div>
+            formatJSON(jsonStr) {
+                try {
+                    const obj = JSON.parse(jsonStr);
+                    return JSON.stringify(obj, null, 2);
+                } catch (e) {
+                    return jsonStr;
+                }
+            }
 
-                <div class="fuzzer-section">
-                    <div class="input-group">
-                        <label for="fuzzerInput">Base JWT Token</label>
-                        <textarea id="fuzzerInput" placeholder="Enter base JWT token..."></textarea>
-                    </div>
+            showError(message) {
+                const errorEl = document.getElementById('errorMessage');
+                errorEl.textContent = message;
+                errorEl.style.display = 'block';
+                document.getElementById('results').style.display = 'none';
+            }
 
-                    <div class="fuzz-options">
-                        <h3>Fuzzing Options</h3>
-                        <div class="fuzz-type-selector">
-                            <label>
-                                <input type="radio" name="fuzzType" value="roles" checked>
-                                Role Escalation
-                            </label>
-                            <label>
-                                <input type="radio" name="fuzzType" value="exp">
-                                Expiration Times
-                            </label>
-                            <label>
-                                <input type="radio" name="fuzzType" value="claims">
-                                Custom Claims
-                            </label>
-                        </div>
-                        <div id="customClaimsSection" class="custom-claims-section" style="display: none;">
-                            <label for="customClaimsInput">Custom Claims (JSON)</label>
-                            <textarea id="customClaimsInput" placeholder='{"admin": true, "role": "superuser", "permissions": ["read", "write", "delete"]}'></textarea>
-                        </div>
-                    </div>
+            hideError() {
+                document.getElementById('errorMessage').style.display = 'none';
+            }
 
-                    <button id="fuzzBtn" class="btn btn-warning">
-                        <i class="fas fa-play"></i> Generate Fuzzed Tokens
-                    </button>
+            showLoading(show) {
+                document.getElementById('loading').style.display = show ? 'block' : 'none';
+                document.getElementById('analyzeBtn').disabled = show;
+            }
+        }
 
-                    <div id="fuzzResults" class="fuzz-results"></div>
-                </div>
-            </div>
+        // Initialize the analyzer
+        const analyzer = new JWTSecurityAnalyzer();
 
-            <!-- Token Editor Tab -->
-            <div id="editor" class="tab-content">
-                <div class="content-header">
-                    <h2><i class="fas fa-edit"></i> Live JWT Editor</h2>
-                    <p>Edit JWT components in real-time</p>
-                </div>
+        // Add example JWT for testing
+        document.getElementById('jwtInput').placeholder = `Paste your JWT token here...
 
-                <div class="editor-section">
-                    <div class="editor-grid">
-                        <div class="editor-panel">
-                            <h3>Header</h3>
-                            <textarea id="headerEditor" class="json-editor" placeholder='{"alg": "HS256", "typ": "JWT"}'></textarea>
-                        </div>
-                        <div class="editor-panel">
-                            <h3>Payload</h3>
-                            <textarea id="payloadEditor" class="json-editor" placeholder='{"sub": "1234567890", "name": "John Doe", "iat": 1516239022}'></textarea>
-                        </div>
-                    </div>
-
-                    <div class="editor-actions">
-                        <button id="formatJsonBtn" class="btn btn-secondary">
-                            <i class="fas fa-code"></i> Format JSON
-                        </button>
-                        <button id="generateTokenBtn" class="btn btn-primary">
-                            <i class="fas fa-magic"></i> Generate Token
-                        </button>
-                        <button id="copyTokenBtn" class="btn btn-success">
-                            <i class="fas fa-copy"></i> Copy Token
-                        </button>
-                    </div>
-
-                    <div class="generated-token">
-                        <h3>Generated Token</h3>
-                        <div class="token-display">
-                            <pre id="generatedTokenDisplay"></pre>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Batch Generator Tab -->
-            <div id="batch" class="tab-content">
-                <div class="content-header">
-                    <h2><i class="fas fa-layer-group"></i> Batch Token Generator</h2>
-                    <p>Generate multiple tokens with iterated claims</p>
-                </div>
-
-                <div class="batch-section">
-                    <div class="template-editor">
-                        <h3>Token Template</h3>
-                        <div class="template-grid">
-                            <div class="template-panel">
-                                <h4>Header Template</h4>
-                                <textarea id="batchHeaderTemplate" class="json-editor" placeholder='{"alg": "HS256", "typ": "JWT"}'></textarea>
-                            </div>
-                            <div class="template-panel">
-                                <h4>Payload Template</h4>
-                                <textarea id="batchPayloadTemplate" class="json-editor" placeholder='{"sub": "user_{{index}}", "role": "user", "iat": 1516239022}'></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="batch-options">
-                        <div class="option-group">
-                            <label for="batchIterations">Number of Tokens:</label>
-                            <input type="number" id="batchIterations" min="1" max="1000" value="10">
-                        </div>
-                        <button id="generateBatchBtn" class="btn btn-primary">
-                            <i class="fas fa-play"></i> Generate Batch
-                        </button>
-                    </div>
-
-                    <div id="batchResults" class="batch-results"></div>
-                </div>
-            </div>
-
-            <!-- Signature Validation Tab -->
-            <div id="validation" class="tab-content">
-                <div class="content-header">
-                    <h2><i class="fas fa-check-circle"></i> Signature Validation</h2>
-                    <p>Validate JWT signatures with custom keys</p>
-                </div>
-
-                <div class="validation-section">
-                    <div class="input-group">
-                        <label for="validationInput">JWT Token</label>
-                        <textarea id="validationInput" placeholder="Enter JWT token to validate..."></textarea>
-                    </div>
-
-                    <div class="key-inputs">
-                        <div class="key-input">
-                            <label for="secretKey">Secret Key (for HMAC)</label>
-                            <textarea id="secretKey" placeholder="Enter secret key..."></textarea>
-                        </div>
-                        <div class="key-input">
-                            <label for="publicKeyValidation">Public Key (for RSA)</label>
-                            <textarea id="publicKeyValidation" placeholder="Enter public key..."></textarea>
-                        </div>
-                    </div>
-
-                    <button id="validateBtn" class="btn btn-primary">
-                        <i class="fas fa-check"></i> Validate Signature
-                    </button>
-
-                    <div id="validationResult" class="validation-result"></div>
-                </div>
-            </div>
-
-
-        </main>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="footer-content">
-                <span class="footer-text">Crafted with 💜 by</span>
-                <a href="https://github.com/chawdamrunal" target="_blank" rel="noopener noreferrer" class="footer-link">Mrunal Chawda</a>
-                <span class="footer-divider">|</span>
-                <span class="footer-text">© 2025 JWTLens Advanced</span>
-                <span class="footer-divider">|</span>
-                <a href="https://github.com/chawdamrunal/jwtlens" target="_blank" rel="noopener noreferrer" class="footer-link">View on GitHub</a>
-            </div>
-        </footer>
-    </div>
-
-    <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
-    <script src="/js/app.js"></script>
+Example:
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c`;
+    </script>
 </body>
-</html> 
+</html>
