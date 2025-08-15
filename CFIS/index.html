@@ -2,94 +2,98 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="description" content="Download PDF notes easily and securely from our responsive portal." />
   <meta name="keywords" content="PDF, notes, download, study, education" />
-  <meta name="author" content="Your Name or Organization" />
+  <meta name="author" content="CF-IS" />
   <meta property="og:title" content="M.Sc. CF-IS Cyber Crime Notes" />
   <meta property="og:description" content="Access and download PDF notes with ease." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://SrirammananS.github.io/" />
-  <meta property="og:image" content="https://SrirammananS.github.io/thumbnail.png" />
-  <meta name="robots" content="noindex">
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
-
-  <title>M.Sc. CF-IS Cyber Crime Notes</title>
-
-
+  <meta property="og:url" content="https://srirammanans.github.io/" />
+  <meta property="og:image" content="https://srirammanans.github.io/thumbnail.png" />
+  <meta name="robots" content="noindex" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' https://visitor-badge.laobi.icu data:; style-src 'self'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+  <link rel="icon" href="favicon.ico" />
+  <link rel="preload" href="styles.css" as="style" />
   <link rel="stylesheet" href="styles.css" />
+  <title>M.Sc. CF-IS Cyber Crime Notes</title>
 </head>
 
-
 <body>
-  <header>
+  <header role="banner">
     <h1>MSc. CF-IS Notes Portal</h1>
-
-
+    <button id="darkModeToggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
   </header>
 
-  
-  <main>
-
-    
-<!-- <section id="updates" class="sticky-banner">
-  <p>📢 M.Sc Elective - I postponed to <strong>19.07.2025 (FN)</strong></p>
-</section> -->
-
-    
-    <section id="cyber-criminology" >
-  <h2>🕵🏿Semester - II PDF Books<span class="blink-red" ></span></h2>
-      <img src="/CFIS/pdfs/Syllabus.jpg" alt="Syllabus" class="styled-image">
-  <ul>
-    <li><a href="pdfs/Network Security and Cryptography.pdf" target="_blank">Network Security and Cryptography</a></li>
-    <li><a href="pdfs/Basics of Cyber Forensics.pdf" target="_blank">Basics of Cyber Forensics</a></li>
-    <li><a href="pdfs/IT AND TELECOM FRAUDS & COUNTERMEASURES.pdf" target="_blank">IT AND TELECOM FRAUDS & COUNTERMEASURES.pdf</a></li>
-    <li><a href="pdfs/BFSI FRAUDS & COUNTERMEASURES.pdf" target="_blank">BFSI FRAUDS & COUNTERMEASURES.pdf</a></li>
-   
-    
-</ul>
+  <main id="main" role="main">
+    <!-- Hero + Semester II visual -->
+    <section id="cyber-criminology" aria-labelledby="sem2-heading">
+      <h2 id="sem2-heading">🕵🏿 Semester&nbsp;II PDF Books <span class="blink-red" aria-hidden="true">●</span></h2>
+      <img src="pdfs/Syllabus.jpg" alt="Semester II Syllabus" class="styled-image" loading="lazy"
+           onerror="this.style.display='none'">
+      <!-- No plain list; content shown below via unified grid -->
     </section>
 
+    <!-- Unified PDF Portal -->
+    <section id="pdf-portal" aria-labelledby="library-heading">
+      <h2 id="library-heading">📄 Library</h2>
 
+      <div class="pdf-controls" role="region" aria-label="Filters and search">
+        <div class="control">
+          <label for="categoryFilter">Category</label>
+          <select id="categoryFilter" autocomplete="off">
+            <option value="all">All</option>
+            <option value="semester2">Semester II</option>
+            <option value="library">Library</option>
+          </select>
+        </div>
 
+        <div class="control">
+          <label for="sortOrder">Sort</label>
+          <select id="sortOrder" autocomplete="off">
+            <option value="az">A–Z</option>
+            <option value="za">Z–A</option>
+            <option value="newest">Newest first</option>
+          </select>
+        </div>
 
-    
-    <section id="pdf-downloads">
-      <h2>📄 Library </h2>
-      <div class="search-container">
-  <input type="text" id="searchBox" placeholder="Search notes..." />
-</div>
+        <div class="control search">
+          <label class="sr-only" for="searchBox">Search notes</label>
+          <input type="search" id="searchBox" placeholder="Search notes…" inputmode="search" />
+        </div>
 
-      <div id="pdfList" class="grid-container"></div>
-      <div id="loading">Loading PDFs...</div>
-      <div id="error" class="hidden">Failed to load PDFs. Please try again later.</div>
+        <div class="control">
+          <button id="clearFilters" class="btn" type="button">Reset</button>
+        </div>
+      </div>
+
+      <div id="tagsBar" class="tags-bar" aria-live="polite"></div>
+
+      <div id="pdfList" class="grid-container" aria-live="polite" aria-busy="true"></div>
+      <div id="loading" class="status">Loading PDFs…</div>
+      <div id="noResults" class="status hidden">No matching PDFs found.</div>
+      <div id="error" class="status hidden">Failed to load PDFs. Try again later.</div>
     </section>
 
-
-
-    <section id="important-links">
-      <h2>🔗 Important Links</h2>
-      <ul>
-<!--         <li><a href="https://exam.unom.ac.in/hallticket/login_pg.asp" target="_blank">Download Hall Ticket</a></li> -->
-<!--         <li><a href="https://exam.unom.ac.in/IDEDATA/IDETT/MSc.PDF" target="_blank">Time Table</a></li> -->
-        <li><a href="https://egovernance.unom.ac.in/qpregular/FrmStudDownloadQP.aspx?IDE_REG=IDE" target="_blank">Old Question Paper Portal</a></li>
-        <li><a href="http://ideunom.ac.in/Book/book_view.php" target="_blank">Online Study Materials</a></li>
+    <section id="important-links" aria-labelledby="links-heading">
+      <h2 id="links-heading">🔗 Important Links</h2>
+      <ul class="link-list">
+        <li><a href="https://egovernance.unom.ac.in/qpregular/FrmStudDownloadQP.aspx?IDE_REG=IDE" target="_blank" rel="noopener noreferrer">Old Question Paper Portal</a></li>
+        <li><a href="http://ideunom.ac.in/Book/book_view.php" target="_blank" rel="noopener noreferrer">Online Study Materials</a></li>
       </ul>
     </section>
-  <section>
-     <img src="https://visitor-badge.laobi.icu/badge?page_id=sriram.github.io.notes" alt="visitor badge"/>
-  </section>
 
-
-    
+    <section aria-label="Visitor statistics">
+      <img src="https://visitor-badge.laobi.icu/badge?page_id=sriram.github.io.notes" alt="Visitor count badge" loading="lazy" />
+    </section>
   </main>
 
-  <footer>
+  <footer role="contentinfo">
     <p>&copy; 2025 PDF Notes Portal. All rights reserved.</p>
   </footer>
 
-  <script src="app.js"></script>
+  <script src="app.js" defer></script>
 </body>
 </html>
-
