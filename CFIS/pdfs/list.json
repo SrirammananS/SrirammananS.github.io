@@ -2,39 +2,52 @@
   {
     "title": "Network and Communication Protocols",
     "description": "Important Questions",
-    "filename": "PCI1B Network and Communication Protocols.pdf"
+    "filename": "PCI1B Network and Communication Protocols.pdf",
+    "category": "quickaccess",
+    "tags": ["network", "protocols"]
   },
   {
     "title": "Forms of Cyber Crimes",
     "description": "Important Questions",
-    "filename": "PCI1E Cyber Crimes.pdf"
-    },
+    "filename": "PCI1E Cyber Crimes.pdf",
+    "category": "quickaccess",
+    "tags": ["cybercrime"]
+  },
   {
     "title": "Introduction to Cyber Criminology",
     "description": "Important Questions",
-    "filename": "PCI1A Cyber Criminology.pdf"
-    },
+    "filename": "PCI1A Cyber Criminology.pdf",
+    "category": "quickaccess",
+    "tags": ["criminology"]
+  },
   {
     "title": "IT Infrastructure and Cloud Computing",
     "description": "Important Questions",
-    "filename": "PCI1D IT infra and Cloud Computing.pdf"
-    },
+    "filename": "PCI1D IT infra and Cloud Computing.pdf",
+    "category": "quickaccess",
+    "tags": ["cloud", "infrastructure"]
+  },
   {
     "title": "Introduction to Information Security",
     "description": "Important Questions",
-    "filename": "PCI1C Information Security.pdf"
-   },
+    "filename": "PCI1C Information Security.pdf",
+    "category": "quickaccess",
+    "tags": ["security"]
+  },
   {
     "title": "Network and Communication Protocols",
     "description": "Most Important Topics",
-    "filename": "SPCI102_Lastmin.pdf"
+    "filename": "SPCI102_Lastmin.pdf",
+    "category": "quickaccess",
+    "tags": ["network", "protocols", "lastminute"]
   },
   {
     "title": "Network and Communication Protocols - Keywords",
     "description": "Important questions with keys",
-    "filename": "Networking.html"
+    "filename": "Networking.html",
+    "category": "quickaccess",
+    "tags": ["network", "keywords"]
   },
-  [
   {
     "title": "Network Security and Cryptography",
     "description": "Protocols, crypto primitives, and secure architectures.",
