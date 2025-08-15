@@ -1,0 +1,11 @@
+{
+  "name": "M.Sc. CF-IS Notes",
+  "short_name": "CF-IS Notes",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    { "src": "favicon.ico", "sizes": "48x48 64x64", "type": "image/x-icon" }
+  ]
+}
