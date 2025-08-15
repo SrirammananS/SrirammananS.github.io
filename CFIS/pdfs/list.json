@@ -39,28 +39,28 @@
     "title": "Network Security and Cryptography",
     "description": "Protocols, crypto primitives, and secure architectures.",
     "filename": "Network Security and Cryptography.pdf",
-    "category": "semester2"
+    "category": "semester2",
     "tags": ["network", "crypto", "security"]
   },
   {
     "title": "Basics of Cyber Forensics",
     "description": "Evidence handling, acquisition, and analysis fundamentals.",
     "filename": "Basics of Cyber Forensics.pdf",
-    "category": "semester2"
+    "category": "semester2",
     "tags": ["forensics", "investigation"]
   },
   {
     "title": "IT and Telecom Frauds & Countermeasures",
     "description": "Fraud patterns and mitigations across telecom systems.",
     "filename": "IT AND TELECOM FRAUDS & COUNTERMEASURES.pdf",
-    "category": "semester2"
+    "category": "semester2",
     "tags": ["telecom", "fraud"]
   },
   {
     "title": "BFSI Frauds & Countermeasures",
     "description": "Threat landscape across banking and insurance verticals.",
     "filename": "BFSI FRAUDS & COUNTERMEASURES.pdf",
-    "category": "semester2"
+    "category": "semester2",
     "tags": ["bfsi", "fraud"]
   }
 ]
