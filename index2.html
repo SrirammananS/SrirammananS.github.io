@@ -1,56 +1,41 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Srirammanan</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Embedded Presentation</title>
   <style>
-    /* Reset and base */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      height: 100%;
+    :root { color-scheme: light dark; }
+    .embed {
       width: 100%;
-      font-family: 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
+      max-width: 700px;
+      margin: 0 auto;
+      border: 2px solid #dee1e5;
+      border-radius: 6px;
       overflow: hidden;
+      aspect-ratio: 16 / 12; /* ~700x525 */
+      background: #fff;
     }
-
-    h1 {
-      font-size: clamp(2rem, 8vw, 6rem);
-      font-weight: 800;
-      letter-spacing: 0.1em;
-      text-align: center;
-      text-transform: uppercase;
-      background: linear-gradient(90deg, #ffffff, #d6e0f0);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: fadeIn 2s ease-in-out forwards;
-      opacity: 0;
+    /* Fallback for older browsers */
+    @supports not (aspect-ratio: 1) {
+      .embed { position: relative; height: 0; padding-top: 75%; }
+      .embed > iframe { position: absolute; inset: 0; height: 100%; }
     }
-
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
-    }
-
-    @media (max-height: 500px) {
-      h1 {
-        font-size: 3rem;
-      }
-    }
+    iframe { width: 100%; height: 100%; border: 0; display: block; }
   </style>
+  <link rel="preconnect" href="https://app.presentations.ai" crossorigin />
 </head>
 <body>
-  <h1>Coming Soon</h1>
+  <div class="embed" id="ppt-embed">
+    <iframe
+      title="Presentations.ai deck"
+      src="https://app.presentations.ai/view/cjgPFXdlCh"
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allow="autoplay; clipboard-write; fullscreen; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>
+  <noscript>This presentation requires JavaScript enabled to load efficiently.</noscript>
 </body>
 </html>
