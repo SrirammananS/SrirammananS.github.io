@@ -644,40 +644,63 @@
 
             try {
                 // 1. Upload File
-                const content = await toBase64(file);
+                const rawContent = await toBase64(file);
                 const owner = document.getElementById('repoOwner').value;
                 const repo = document.getElementById('repoName').value;
-                const path = document.getElementById('targetPath').value;
+                // Sanitize path: remove trailing slash
+                const path = document.getElementById('targetPath').value.replace(/\/+$/, '');
+                // Sanitize filename: replace spaces/special chars with underscores to prevent URL issues
+                const safeFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
 
                 // Check if file exists to allow overwrite (fixes SHA error)
                 let fileSha = null;
                 try {
                     status.innerText = 'Checking for duplicates...';
-                    const existing = await githubGet(pat, owner, repo, `${path}/${file.name}`);
+                    const existing = await githubGet(pat, owner, repo, `${path}/${safeFileName}`);
                     fileSha = existing.sha;
                 } catch (e) { /* File is new */ }
 
                 status.innerText = 'Pushing file...';
-                await githubPut(pat, owner, repo, `${path}/${file.name}`, content, "Upload via Admin", fileSha);
+                await githubPut(pat, owner, repo, `${path}/${safeFileName}`, rawContent, "Upload via Admin", fileSha);
 
                 // 2. Update list.json
                 status.innerText = 'Updating list.json...';
                 const listPath = `${path}/list.json`;
-                // Fetch existing
-                const listData = await githubGet(pat, owner, repo, listPath);
-                const listJson = JSON.parse(atob(listData.content));
 
-                // Append
-                listJson.push({
-                    filename: file.name,
+                let listJson = [];
+                let listSha = null;
+                try {
+                    // Fetch existing
+                    const listData = await githubGet(pat, owner, repo, listPath);
+                    listJson = JSON.parse(atob(listData.content));
+                    listSha = listData.sha;
+                } catch (e) {
+                    if (e.message === 'Not Found') {
+                        console.log('list.json not found, creating new.');
+                        listJson = [];
+                    } else {
+                        throw e; // Propagate other errors
+                    }
+                }
+
+                // Check if entry already exists to update it or append
+                const entryIndex = listJson.findIndex(x => x.filename === safeFileName);
+                const newEntry = {
+                    filename: safeFileName,
                     title: document.getElementById('fileTitle').value || file.name,
                     description: "Uploaded via Admin v2",
                     category: document.getElementById('fileSem').value,
                     tags: [document.getElementById('fileSub').value]
-                });
+                };
+
+                if (entryIndex >= 0) {
+                    listJson[entryIndex] = newEntry;
+                } else {
+                    listJson.push(newEntry);
+                }
 
                 // Push
-                await githubPut(pat, owner, repo, listPath, btoa(JSON.stringify(listJson, null, 2)), "Update list.json", listData.sha);
+                await githubPut(pat, owner, repo, listPath, btoa(JSON.stringify(listJson, null, 2)), "Update list.json", listSha);
 
                 status.innerText = 'Success!';
                 status.className = 'status-msg success';
