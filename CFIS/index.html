@@ -61,19 +61,35 @@
 
     <!-- Focus Mode Overlay -->
     <div id="focus-overlay"
-        style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:50; transition: background 0.5s;">
+        style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9000; transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);">
     </div>
 
-    <div id="focus-controls"
-        style="position:fixed; bottom:2rem; right:2rem; z-index:100; display:none; flex-direction:column; align-items:flex-end;">
-        <div class="glass-panel" style="margin-bottom:1rem; padding:1rem; display:flex; gap:1rem; align-items:center;">
-            <span style="font-size:2rem; font-family:var(--font-mono);" id="focus-timer">25:00</span>
-            <button onclick="toggleTimer()" class="icon-btn"
-                style="background:var(--accent-color); color:white;">▶</button>
+    <!-- Centered Focus Controls (Hidden by default) -->
+    <div id="focus-controls" class="glass-panel"
+        style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:9001; display:none; flex-direction:column; align-items:center; padding:3rem; border-radius:32px; box-shadow: 0 0 100px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1);">
+
+        <h2 style="font-weight:300; margin-bottom: 2rem; color:rgba(255,255,255,0.7); letter-spacing: 2px;">DEEP FOCUS
+        </h2>
+
+        <div style="display:flex; gap:2rem; align-items:center; margin-bottom: 3rem;">
+            <button onclick="adjustTimer(-5)" class="icon-btn" style="font-size:1.5rem; opacity:0.5;">-</button>
+            <span
+                style="font-size:6rem; font-family:var(--font-mono); font-weight:700; font-variant-numeric: tabular-nums;"
+                id="focus-timer">25:00</span>
+            <button onclick="adjustTimer(5)" class="icon-btn" style="font-size:1.5rem; opacity:0.5;">+</button>
         </div>
-        <button onclick="toggleFocusMode()"
-            style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:white; padding:0.5rem 1rem; border-radius:30px; cursor:pointer;">Exit
-            Focus Mode</button>
+
+        <div style="display:flex; gap:1.5rem;">
+            <button onclick="toggleTimer()" id="timer-btn" class="btn-glass"
+                style="background:white; color:black; font-weight:600; padding: 1rem 3rem; font-size:1.1rem; border:none;">
+                Start Session
+            </button>
+            <button onclick="toggleFocusMode()" class="btn-glass" style="padding: 1rem 2rem; font-size:1.1rem;">
+                Exit
+            </button>
+        </div>
+
+        <p style="margin-top:2rem; font-size:0.9rem; opacity:0.4;">Distractions Hidden</p>
     </div>
 
     <!-- PDF Preview Modal -->
@@ -94,16 +110,29 @@
             </div>
             <div class="modal-body">
                 <iframe id="pdf-frame" src="" frameborder="0"></iframe>
+                <!-- Comments Section Moved -->
             </div>
+        </div>
+    </div>
 
-            <!-- Comments Section -->
-            <div id="giscus-container"
-                style="background:#0d1117; padding:1rem; border-top:1px solid var(--glass-border); max-height: 200px; overflow-y: auto;">
-                <script src="https://giscus.app/client.js" data-repo="SrirammananS/SrirammananS.github.io"
-                    data-repo-id="R_kgDONX_0hQ" data-category="Announcements" data-category-id="DIC_kwDONX_0hc4ClA6p"
-                    data-mapping="title" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0"
-                    data-input-position="bottom" data-theme="dark" data-lang="en" crossorigin="anonymous" async>
-                    </script>
+    <!-- Separate Comments Modal -->
+    <div class="modal-search-overlay" id="comments-modal">
+        <div class="glass-panel modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3 id="comments-title">Community Discussions</h3>
+                <div class="modal-actions">
+                    <button class="icon-btn" onclick="closeCommentsModal()">✕</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div id="giscus-container" style="min-height:400px; padding:1rem;">
+                    <script src="https://giscus.app/client.js" data-repo="SrirammananS/SrirammananS.github.io"
+                        data-repo-id="R_kgDONX_0hQ" data-category="Announcements"
+                        data-category-id="DIC_kwDONX_0hc4ClA6p" data-mapping="title" data-strict="0"
+                        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="dark"
+                        data-lang="en" crossorigin="anonymous" async>
+                        </script>
+                </div>
             </div>
         </div>
     </div>
@@ -116,9 +145,16 @@
         <header class="hero-section">
             <nav class="top-nav">
                 <div class="logo">CFIS<span class="dot">.</span></div>
-                <div class="visitor-counter glass-panel" style="padding: 0.2rem 0.5rem;">
-                    <img src="https://visitor-badge.laobi.icu/badge?page_id=sriram.github.io.notes"
-                        alt="Visitor count badge" loading="lazy" style="height: 20px;">
+                <div style="display:flex; gap:1rem; align-items:center;">
+                    <button onclick="openCommentsModal()" class="glass-panel"
+                        style="padding: 0.4rem 1rem; border-radius: 100px; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); color: var(--text-secondary); height: 32px; font-size: 0.85rem; font-weight: 500; transition: all 0.3s;">
+                        <span>💬</span>
+                        <span>Discuss</span>
+                    </button>
+                    <div class="visitor-counter glass-panel" style="padding: 0.2rem 0.5rem;">
+                        <img src="https://visitor-badge.laobi.icu/badge?page_id=sriram.github.io.notes"
+                            alt="Visitor count badge" loading="lazy" style="height: 20px;">
+                    </div>
                 </div>
             </nav>
 
@@ -128,7 +164,8 @@
                     <span>Systems Updated</span>
                 </div>
                 <h1 class="hero-title" id="scramble-text">ACADEMIC_ARCHIVE</h1>
-                <p class="hero-subtitle">Curated resources for the modern scholar. A collection of notes, papers, and
+                <p class="hero-subtitle">Curated resources for the modern scholar. A collection of notes, papers,
+                    and
                     references.</p>
             </div>
         </header>
@@ -136,13 +173,12 @@
         <!-- DASHBOARD (News & Links) -->
         <section class="dashboard-grid">
             <!-- News Feed -->
-            <div class="glass-panel dashboard-card">
+            <div class="glass-panel dashboard-card" style="min-height: 200px;">
                 <div class="dash-header">
-                    <h3>⚡ Live Feed</h3>
-                    <span class="pulse-dot"></span>
+                    <h3>🔔 Notifications & Updates</h3>
                 </div>
-                <div class="news-list" id="news-feed">
-                    <!-- Injected JS -->
+                <div id="news-feed" class="news-list">
+                    <!-- Dynamic -->
                 </div>
             </div>
 
