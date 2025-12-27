@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cfis-archive-v1';
+const CACHE_NAME = 'cfis-archive-v2.1.1';
 const ASSETS = [
     './',
     './index.html',
@@ -15,8 +15,20 @@ self.addEventListener('install', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-    // Simple Cache First Strategy
+    // Network First Strategy
     e.respondWith(
-        caches.match(e.request).then((response) => response || fetch(e.request))
+        fetch(e.request)
+            .then((response) => {
+                // If the fetch is successful, clone it and update the cache
+                const responseClone = response.clone();
+                caches.open(CACHE_NAME).then((cache) => {
+                    cache.put(e.request, responseClone);
+                });
+                return response;
+            })
+            .catch(() => {
+                // If fetch fails, fall back to the cache
+                return caches.match(e.request);
+            })
     );
 });
