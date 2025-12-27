@@ -2,7 +2,7 @@
 // --- Configuration ---
 const REPO_BASE = 'https://github.com/SrirammananS/SrirammananS.github.io/raw/main/CFIS/pdfs/';
 const LIST_JSON_URL = 'https://raw.githubusercontent.com/SrirammananS/SrirammananS.github.io/main/CFIS/pdfs/list.json';
-const SITE_CONFIG_URL = 'https://raw.githubusercontent.com/SrirammananS/SrirammananS.github.io/main/CFIS/pdfs/site_config.json';
+const SITE_CONFIG_URL = 'https://raw.githubusercontent.com/SrirammananS/SrirammananS.github.io/main/CFIS/site_config.json';
 // Note: We assume site_config.json is in the same folder as list.json for simplicity in this demo,
 // or we can put it in root. Let's assume user uploads it to the same pdfs folder via admin for now,
 // or we can fetch a local fallback if remote fails during dev.
