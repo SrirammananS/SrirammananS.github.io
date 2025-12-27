@@ -2,6 +2,13 @@
 <html lang="en">
 
 <head>
+    <!-- [SEC] CAMOUFLAGE MODE -->
+    <script>
+        // If the URL doesn't satisfy the key, bounce to home
+        if (new URLSearchParams(window.location.search).get('key') !== 'cfis_admin') {
+            window.location.replace('index.html');
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CFIS Admin Console v2</title>
@@ -436,7 +443,7 @@
 
     <script>
         // --- SECURITY LOGIC ---
-        const MASTER_HASH = "75f5533dc390341bf3f4787008a88ba404dff36fb4e04b21b55ccfc3e00b6d1a";
+        const MASTER_HASH = "c97836f504abc6e8be45d68396938bd7b9bf13f0fd9b4fc52ab182fd77d1fe44";
         const ENC_STORAGE_KEY = 'cfis_enc_secret';
         let currentTOTP = null;
         let sessionTimer;
@@ -642,8 +649,16 @@
                 const repo = document.getElementById('repoName').value;
                 const path = document.getElementById('targetPath').value;
 
+                // Check if file exists to allow overwrite (fixes SHA error)
+                let fileSha = null;
+                try {
+                    status.innerText = 'Checking for duplicates...';
+                    const existing = await githubGet(pat, owner, repo, `${path}/${file.name}`);
+                    fileSha = existing.sha;
+                } catch (e) { /* File is new */ }
+
                 status.innerText = 'Pushing file...';
-                await githubPut(pat, owner, repo, `${path}/${file.name}`, content, "Upload via Admin");
+                await githubPut(pat, owner, repo, `${path}/${file.name}`, content, "Upload via Admin", fileSha);
 
                 // 2. Update list.json
                 status.innerText = 'Updating list.json...';
