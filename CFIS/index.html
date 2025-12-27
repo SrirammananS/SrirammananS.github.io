@@ -147,7 +147,7 @@
                         <span>Discuss</span>
                     </button>
                     <div class="visitor-counter glass-panel" style="padding: 0.2rem 0.5rem;">
-                        <img src="https://visitor-badge.laobi.icu/badge?page_id=sriram.github.io.notes"
+                        <img src="https://visitor-badge.laobi.icu/badge?page_id=sriram.github.io.notes&left_color=151515&right_color=0ae448&left_text=Visitors"
                             alt="Visitor count badge" loading="lazy" style="height: 20px;">
                     </div>
                 </div>
@@ -181,7 +181,8 @@
                 <div class="dash-header">
                     <h3>🔗 Important Links</h3>
                 </div>
-                <div class="links-grid" id="quick-links">
+                <!-- Removed legacy 'links-grid' class to prevent layout conflict with new ticker -->
+                <div id="quick-links" style="width:100%; flex:1;">
                     <!-- Injected JS -->
                 </div>
             </div>
@@ -209,6 +210,22 @@
 
             <div class="bento-grid" id="notes-grid">
                 <!-- Grid items injected via JS -->
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section class="gallery-section" id="gallery-section" oncontextmenu="return false;">
+            <div class="section-header">
+                <h2 class="section-title">Admin Archives</h2>
+                <div style="flex:1; height:1px; background:var(--glass-border);"></div>
+            </div>
+
+            <div class="marquee-container horizontal">
+                <div class="marquee-content" id="gallery-track">
+                    <!-- Items injected here -->
+                </div>
+                <div class="marquee-overlay-left"></div>
+                <div class="marquee-overlay-right"></div>
             </div>
         </section>
 

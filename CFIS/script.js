@@ -38,7 +38,8 @@ async function initApp() {
     // Parallel Data Fetch
     await Promise.all([
         fetchNotes(),
-        fetchSiteConfig()
+        fetchSiteConfig(),
+        fetchGallery()
     ]);
 
 
@@ -141,14 +142,30 @@ function renderNews() {
 }
 
 // Render Links
-function renderQuickLinks() {
+function renderQuickLinks() { // 4. Quick Links (Vertical Ticker - Restored Style)
     const container = document.getElementById('quick-links');
-    container.innerHTML = linksData.map(link => `
-        <a href="${link.url}" target="_blank" class="quick-link">
-            <span class="link-icon">${link.icon}</span>
-            <span class="link-label">${link.title}</span>
-        </a>
-    `).join('');
+    if (linksData && linksData.length > 0) {
+        // We use the original .quick-link class inside the ticker track
+        // The CSS for .quick-link is already in style.css, providing the "box" look.
+        const createLink = (l) => `
+            <a href="${l.url}" target="_blank" class="quick-link">
+                <span class="link-icon" style="font-size:1.5rem;">${l.icon}</span>
+                <span class="link-label" style="font-weight:500;">${l.title}</span>
+            </a>
+        `;
+
+        container.innerHTML = `
+            <div class="quick-links-container">
+                <div class="links-ticker-track">
+                    ${linksData.map(createLink).join('')}
+                    <!-- Duplicate for infinite scroll -->
+                    ${linksData.map(createLink).join('')}
+                </div>
+            </div>
+        `;
+    } else {
+        container.innerHTML = '<p class="text-secondary">No quick links available.</p>';
+    }
 }
 
 // Render Notes (with Filter & Search)
@@ -656,6 +673,130 @@ function openCommentsModal() {
 window.openCommentsModal = openCommentsModal;
 window.closeCommentsModal = function () {
     document.getElementById('comments-modal').classList.remove('active');
+}
+
+// 5. Gallery (Horizontal Marquee)
+async function fetchGallery() {
+    const track = document.getElementById('gallery-track');
+    if (!track) return;
+
+    const REPO_OWNER = 'SrirammananS';
+    const REPO_NAME = 'SrirammananS.github.io';
+    const IMAGES_JSON_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/CFIS/images/images.json`;
+
+    try {
+        const response = await fetch(IMAGES_JSON_URL);
+        if (!response.ok) throw new Error('No gallery config');
+        let assets = await response.json();
+        assets = assets.reverse(); // Newest first
+
+        if (assets.length === 0) return;
+
+        // Render helper with PROXY FIX
+        const createItem = (asset) => {
+            const isImg = asset.type.startsWith('image') || /\.(jpg|jpeg|png|webp|gif)$/i.test(asset.name);
+
+            // Proxy URL generator
+            const getProxyUrl = (rawUrl) => {
+                return rawUrl.replace('raw.githubusercontent.com', 'raw.githack.com');
+            };
+
+            const proxyUrl = getProxyUrl(asset.url);
+
+            // Added .no-copy class for protection logic
+            if (isImg) {
+                return `
+                <div class="gallery-item no-copy" onclick="openGalleryModal('${asset.url}', '${asset.name}', 'image')">
+                    <img src="${asset.url}" alt="${asset.name}" class="gallery-img" loading="lazy">
+                </div>`;
+            } else {
+                // For HTML, use iframe with PROXY URL
+                return `
+                <div class="gallery-item no-copy" onclick="openGalleryModal('${proxyUrl}', '${asset.name}', 'html')">
+                    <div style="position:relative; height:100%; min-height:200px; background:white;">
+                         <iframe src="${proxyUrl}" class="html-thumb-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+                         <div style="position:absolute; inset:0; z-index:2; background:transparent;"></div> <!-- Click shield -->
+                    </div>
+                </div>`;
+            }
+        };
+
+        // Populate Track (Duplicate content for infinite scroll illusion)
+        // Repeat items enough times to fill width + scroll area
+        const itemsHtml = assets.map(createItem).join('');
+        // Repeat at least 6 times to safe-guard wide screens
+        track.innerHTML = itemsHtml.repeat(6);
+
+    } catch (e) {
+        console.warn('Gallery load failed', e);
+    }
+}
+
+// Gallery Modal (Dynamic)
+function openGalleryModal(url, title, type) {
+    let modal = document.getElementById('gallery-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'gallery-modal';
+        modal.className = 'modal-search-overlay';
+        modal.innerHTML = `
+            <div class="glass-panel modal-content" style="max-width:90vw; height:90vh; background:rgba(0,0,0,0.9);">
+                <div class="modal-header">
+                    <h3 id="gallery-modal-title"></h3>
+                     <div style="display:flex; gap:0.5rem;">
+                        <button class="btn-primary" id="gallery-share-btn" style="padding:0.3rem 0.8rem; font-size:0.8rem;">🔗 Share</button>
+                        <button class="icon-btn" onclick="document.getElementById('gallery-modal').classList.remove('active')">✕</button>
+                    </div>
+                </div>
+                <!-- Action Bar injected via JS -->
+                <div class="modal-body" id="gallery-modal-body" style="display:flex; align-items:center; justify-content:center; height:100%; padding:0;">
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    const body = document.getElementById('gallery-modal-body');
+    const shareBtn = document.getElementById('gallery-share-btn');
+    document.getElementById('gallery-modal-title').innerText = title;
+
+    // Attach Share Logic
+    shareBtn.onclick = () => shareItem(url, title);
+
+    if (type === 'image') {
+        body.innerHTML = `<img src="${url}" style="max-width:100%; max-height:100%; object-fit:contain;" class="no-copy" oncontextmenu="return false;">`;
+    } else {
+        // Protected Iframe
+        body.innerHTML = `<iframe src="${url}" style="width:100%; height:100%; border:none;" sandbox="allow-scripts allow-forms allow-same-origin" class="no-copy"></iframe>`;
+    }
+
+    modal.classList.add('active');
+}
+
+// Share Function
+async function shareItem(url, title) {
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: 'Admin Archives: ' + title,
+                text: 'Check out this item from the archives:',
+                url: url
+            });
+        } catch (err) {
+            // User cancelled or failed
+            copyToClipboard(url);
+        }
+    } else {
+        copyToClipboard(url);
+    }
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert("Link copied to clipboard!");
+    }).catch(err => {
+        prompt("Copy link manually:", text);
+    });
 }
 
 function animateValue(obj, start, end, duration) {

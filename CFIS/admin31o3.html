@@ -256,12 +256,28 @@
                 </div>
             </details>
 
+            <!-- Security Config Header -->
+            <details
+                style="margin-bottom: 1.5rem; border: 1px solid var(--accent-color); border-radius: 8px; padding: 0.5rem; background: rgba(10, 228, 72, 0.05);">
+                <summary style="cursor: pointer; font-size: 0.8rem; color: var(--accent-color);">🛡️ Security
+                    Configuration (VirusTotal)</summary>
+                <div style="margin-top: 1rem;">
+                    <div class="input-group">
+                        <label>VirusTotal API Key (Free Tier OK)</label>
+                        <input type="password" id="vtKey" class="input-field" placeholder="Enter VT API Key">
+                    </div>
+                    <p style="font-size:0.75rem; color:var(--text-secondary);">Used to scan HTML/Image uploads for
+                        malware. If empty, only basic heuristics are used.</p>
+                </div>
+            </details>
+
             <!-- Navigation -->
             <div class="nav-tabs">
                 <button class="tab-btn active" onclick="switchTab('upload')">📤 Upload Resource</button>
                 <button class="tab-btn" onclick="switchTab('news')">⚡ Live Feed</button>
                 <button class="tab-btn" onclick="switchTab('links')">🔗 Quick Links</button>
                 <button class="tab-btn" onclick="switchTab('analytics')">📊 Analytics</button>
+                <button class="tab-btn" onclick="switchTab('assets')">🖼️ Assets & Embeds</button>
             </div>
 
             <!-- TAB 4: ANALYTICS -->
@@ -308,6 +324,48 @@
                 </div>
                 <button onclick="handleUpload()" class="btn-primary" id="uploadBtn">Upload & Push</button>
                 <div id="uploadStatus" class="status-msg"></div>
+
+                <!-- Resource Management -->
+                <div style="margin-top: 2rem; border-top: 1px solid var(--glass-border); padding-top: 1rem;">
+                    <h4>Manage Resources (PDFs)</h4>
+                    <div style="display:flex; gap:1rem; margin-bottom:1rem;">
+                        <button onclick="loadResourceList()" class="btn-primary" style="flex:1;">🔄 Refresh List
+                            (JSON)</button>
+                        <button onclick="fetchDirectoryList()" class="btn-primary"
+                            style="flex:1; background:#3b82f6;">📂 Load from Directory (API)</button>
+                    </div>
+                    <div id="resourceList" class="item-list" style="max-height: 400px; overflow-y: auto;">
+                        <!-- List items injected here -->
+                    </div>
+                    <p id="listStats" style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.5rem;">
+                        Total Files: <span id="statTotal">0</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- TAB 5: ASSETS (Images / HTML) -->
+            <div id="assetsTab" class="tab-content">
+                <div class="input-group">
+                    <label>Upload Image or HTML Embed</label>
+                    <input type="file" id="assetInput" class="input-field" accept="image/*,text/html">
+                </div>
+                <div class="input-group">
+                    <label>Asset Name (Optional)</label>
+                    <input type="text" id="assetName" class="input-field" placeholder="Auto-filled">
+                </div>
+                <button onclick="handleAssetUpload()" class="btn-primary" id="assetUploadBtn">Upload Asset</button>
+                <div id="assetStatus" class="status-msg"></div>
+
+                <div style="margin-top: 2rem;">
+                    <h4>🖼️ Gallery & Embeds</h4>
+                    <button onclick="loadAssetList()"
+                        style="margin-bottom:1rem; font-size:0.8rem; background:rgba(255,255,255,0.1); border:none; color:white; padding:0.4rem; border-radius:4px; cursor:pointer;">🔄
+                        Refresh Assets</button>
+                    <div id="assetGallery" class="bento-grid"
+                        style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+                        <!-- Assets injected here -->
+                    </div>
+                </div>
             </div>
 
             <!-- TAB 2: NEWS -->
@@ -324,7 +382,15 @@
                         <input type="checkbox" id="newsNew" style="margin-right:0.5rem;"> Is New?
                     </label>
                 </div>
-                <button onclick="addNewsItem()" class="btn-primary" style="margin-bottom: 2rem;">Add to Feed</button>
+                <div style="display:flex; gap:1rem;">
+                    <button onclick="addNewsItem()" class="btn-primary" style="margin-bottom: 2rem; flex:1;">Add to
+                        Feed</button>
+                    <button onclick="updateNewsItem()" class="btn-primary" id="updateNewsBtn"
+                        style="margin-bottom: 2rem; display:none; background:#eab308; color:black; flex:1;">Update
+                        Entry</button>
+                    <button onclick="cancelEdit('news')" id="cancelNewsBtn"
+                        style="margin-bottom: 2rem; display:none; background:transparent; border:1px solid white; color:white; flex:0.5;">Cancel</button>
+                </div>
 
                 <h4>Current Items (Local State)</h4>
                 <div class="list-header">
@@ -348,7 +414,15 @@
                 <div class="input-group"><label>Icon (Emoji)</label><input type="text" id="linkIcon" class="input-field"
                         style="width: 60px;"></div>
 
-                <button onclick="addLinkItem()" class="btn-primary" style="margin-bottom: 2rem;">Add Link</button>
+                <div style="display:flex; gap:1rem;">
+                    <button onclick="addLinkItem()" class="btn-primary" style="margin-bottom: 2rem; flex:1;">Add
+                        Link</button>
+                    <button onclick="updateLinkItem()" class="btn-primary" id="updateLinkBtn"
+                        style="margin-bottom: 2rem; display:none; background:#eab308; color:black; flex:1;">Update
+                        Link</button>
+                    <button onclick="cancelEdit('links')" id="cancelLinkBtn"
+                        style="margin-bottom: 2rem; display:none; background:transparent; border:1px solid white; color:white; flex:0.5;">Cancel</button>
+                </div>
 
                 <h4>Current Links (Local State)</h4>
                 <div id="linksList" class="item-list"></div>
@@ -496,6 +570,10 @@
             document.getElementById('masterKeyInput').value = '';
             document.getElementById('totpInput').value = '';
 
+            // Load saved settings
+            const savedVtKey = localStorage.getItem('cfis_vt_key');
+            if (savedVtKey) document.getElementById('vtKey').value = savedVtKey;
+
             // Load config initially
             renderLists();
         }
@@ -595,8 +673,10 @@
                 btn.disabled = false;
             }
         }
+        // --- CMS LOGIC (EDIT SUPPORT) ---
+        let editIndexNews = -1;
+        let editIndexLinks = -1;
 
-        // --- CMS LOGIC ---
         async function loadRemoteConfig(type) {
             const pat = document.getElementById('ghPat').value;
             if (!pat) return alert('PAT required to fetch. Please enter it in "GitHub Configuration" above.');
@@ -641,10 +721,34 @@
             if (!text) return alert('Please enter text');
 
             localSiteConfig.news.unshift({
-                date: "", // Deprecated
+                date: "",
                 text: text,
                 new: isNew
             });
+            renderLists();
+
+            // Clear inputs
+            document.getElementById('newsText').value = '';
+            document.getElementById('newsNew').checked = false;
+        }
+
+        function editNews(index) {
+            const item = localSiteConfig.news[index];
+            document.getElementById('newsText').value = item.text;
+            document.getElementById('newsNew').checked = item.new || false;
+
+            editIndexNews = index;
+            document.querySelector('#newsTab button[onclick="addNewsItem()"]').style.display = 'none';
+            document.getElementById('updateNewsBtn').style.display = 'inline-block';
+            document.getElementById('cancelNewsBtn').style.display = 'inline-block';
+        }
+
+        function updateNewsItem() {
+            if (editIndexNews === -1) return;
+            localSiteConfig.news[editIndexNews].text = document.getElementById('newsText').value;
+            localSiteConfig.news[editIndexNews].new = document.getElementById('newsNew').checked;
+
+            cancelEdit('news');
             renderLists();
         }
 
@@ -656,6 +760,53 @@
                 icon: document.getElementById('linkIcon').value
             });
             renderLists();
+
+            // Clear inputs
+            document.getElementById('linkTitle').value = '';
+            document.getElementById('linkUrl').value = '';
+            document.getElementById('linkIcon').value = '';
+        }
+
+        function editLink(index) {
+            const item = localSiteConfig.links[index];
+            document.getElementById('linkTitle').value = item.title;
+            document.getElementById('linkUrl').value = item.url;
+            document.getElementById('linkIcon').value = item.icon;
+
+            editIndexLinks = index;
+            document.querySelector('#linksTab button[onclick="addLinkItem()"]').style.display = 'none';
+            document.getElementById('updateLinkBtn').style.display = 'inline-block';
+            document.getElementById('cancelLinkBtn').style.display = 'inline-block';
+        }
+
+        function updateLinkItem() {
+            if (editIndexLinks === -1) return;
+            // Maintain ID if possible, but localized update is enough
+            localSiteConfig.links[editIndexLinks].title = document.getElementById('linkTitle').value;
+            localSiteConfig.links[editIndexLinks].url = document.getElementById('linkUrl').value;
+            localSiteConfig.links[editIndexLinks].icon = document.getElementById('linkIcon').value;
+
+            cancelEdit('links');
+            renderLists();
+        }
+
+        function cancelEdit(type) {
+            if (type === 'news') {
+                editIndexNews = -1;
+                document.getElementById('newsText').value = '';
+                document.getElementById('newsNew').checked = false;
+                document.querySelector('#newsTab button[onclick="addNewsItem()"]').style.display = 'inline-block';
+                document.getElementById('updateNewsBtn').style.display = 'none';
+                document.getElementById('cancelNewsBtn').style.display = 'none';
+            } else {
+                editIndexLinks = -1;
+                document.getElementById('linkTitle').value = '';
+                document.getElementById('linkUrl').value = '';
+                document.getElementById('linkIcon').value = '';
+                document.querySelector('#linksTab button[onclick="addLinkItem()"]').style.display = 'inline-block';
+                document.getElementById('updateLinkBtn').style.display = 'none';
+                document.getElementById('cancelLinkBtn').style.display = 'none';
+            }
         }
 
         function deleteItem(type, id) {
@@ -674,22 +825,31 @@
             newsContainer.innerHTML = localSiteConfig.news.map((item, index) => `
                 <div class="list-item">
                     <span>${item.text} ${item.new ? '🔥' : ''}</span>
-                    <div class="item-actions"><button onclick="deleteNews(${index})">✕</button></div>
+                    <div class="item-actions">
+                        <button onclick="editNews(${index})" style="color:var(--text-secondary);">✏️</button>
+                        <button onclick="deleteNews(${index})">✕</button>
+                    </div>
                 </div>
             `).join('');
 
             const linksContainer = document.getElementById('linksList');
-            linksContainer.innerHTML = localSiteConfig.links.map(l => `
+            linksContainer.innerHTML = localSiteConfig.links.map((l, index) => `
                 <div class="list-item">
                     <span>${l.icon} ${l.title}</span>
-                    <div class="item-actions"><button onclick="deleteItem('links', '${l.id}')">✕</button></div>
+                    <div class="item-actions">
+                        <button onclick="editLink(${index})" style="color:var(--text-secondary);">✏️</button>
+                        <button onclick="deleteItem('links', '${l.id}')">✕</button>
+                    </div>
                 </div>
             `).join('');
         }
 
         async function saveConfig() {
             const pat = document.getElementById('ghPat').value;
+            const vtKey = document.getElementById('vtKey').value;
             if (!pat) return alert('PAT required');
+
+            if (vtKey) localStorage.setItem('cfis_vt_key', vtKey);
 
             const btn = event.target;
             btn.disabled = true;
@@ -705,7 +865,7 @@
                 try {
                     const existing = await githubGet(pat, owner, repo, path);
                     sha = existing.sha;
-                } catch (e) { } // File might not exist
+                } catch (e) { /* File might not exist */ }
 
                 await githubPut(pat, owner, repo, path, btoa(unescape(encodeURIComponent(JSON.stringify(localSiteConfig, null, 2)))), "Update site_config.json", sha);
                 alert('Saved!');
@@ -730,14 +890,17 @@
                 const data = await githubGet(pat, owner, repo, path);
                 const json = JSON.parse(atob(data.content));
 
-                // 1. Total
-                document.getElementById('statTotal').innerText = json.length;
+                // 1. Total (Update Stat element if exists)
+                const statEl = document.getElementById('statTotal');
+                if (statEl) statEl.innerText = json.length;
 
                 // 2. By Semester
                 const counts = {};
                 json.forEach(item => {
                     counts[item.category] = (counts[item.category] || 0) + 1;
                 });
+
+                // ... (rest of stats)
 
                 document.getElementById('statSem').innerHTML = Object.entries(counts).map(([k, v]) => `
                     <li style="display:flex; justify-content:space-between; padding:0.2rem 0;">
@@ -793,6 +956,392 @@
         document.getElementById('fileInput').addEventListener('change', function () {
             if (this.files[0]) document.getElementById('fileTitle').value = this.files[0].name.replace('.pdf', '').replace(/_/g, ' ');
         });
+
+        document.getElementById('assetInput').addEventListener('change', function () {
+            if (this.files[0]) document.getElementById('assetName').value = this.files[0].name;
+        });
+
+        // --- MANAGE RESOURCES (PDFs) ---
+        async function loadResourceList() {
+            const listContainer = document.getElementById('resourceList');
+            listContainer.innerHTML = '<p style="opacity:0.5">Loading...</p>';
+
+            const pat = document.getElementById('ghPat').value;
+            const owner = document.getElementById('repoOwner').value;
+            const repo = document.getElementById('repoName').value;
+            const path = document.getElementById('targetPath').value + '/list.json';
+
+            try {
+                // Force Raw Fetch for list.json to avoid API limits and ensure full list
+                console.log('Fetching raw list.json...');
+                const rawResp = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/${path}?t=${Date.now()}`);
+
+                if (!rawResp.ok) throw new Error(`Failed to fetch list.json (Status: ${rawResp.status})`);
+
+                const json = await rawResp.json();
+                document.getElementById('statTotal').innerText = json.length; // Update stats too
+
+                listContainer.innerHTML = json.map((item, index) => `
+                    <div class="list-item">
+                        <div style="display:flex; flex-direction:column;">
+                            <span style="font-weight:600">${item.title}</span>
+                            <span style="font-size:0.8rem; opacity:0.6">${item.filename}</span>
+                        </div>
+                        <div class="item-actions">
+                            <button onclick="deleteResource('${item.filename}', ${index})" title="Delete File & Entry">🗑️</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                console.error(e);
+                listContainer.innerHTML = `<p class="error">Failed to load list: ${e.message}<br><small>Check console for details.</small></p>`;
+            }
+        }
+
+        async function fetchDirectoryList() {
+            const listContainer = document.getElementById('resourceList');
+            listContainer.innerHTML = '<p style="opacity:0.5">Fetching directory contents via API...</p>';
+
+            const pat = document.getElementById('ghPat').value;
+            const owner = document.getElementById('repoOwner').value;
+            const repo = document.getElementById('repoName').value;
+            const path = document.getElementById('targetPath').value; // Target folder e.g. CFIS/resources or just CFIS
+
+            if (!pat) return alert('PAT required for API Directory Listing');
+
+            try {
+                // GET /repos/{owner}/{repo}/contents/{path}
+                const data = await githubGet(pat, owner, repo, path);
+
+                // Filter for PDF files
+                const pdfs = Array.isArray(data) ? data.filter(f => f.name.toLowerCase().endsWith('.pdf')) : [];
+
+                document.getElementById('statTotal').innerText = pdfs.length;
+
+                if (pdfs.length === 0) {
+                    listContainer.innerHTML = '<p>No PDF files found in this directory.</p>';
+                    return;
+                }
+
+                listContainer.innerHTML = pdfs.map((item, index) => `
+                    <div class="list-item">
+                        <div style="display:flex; flex-direction:column;">
+                            <span style="font-weight:600">${item.name}</span>
+                            <span style="font-size:0.8rem; opacity:0.6">${(item.size / 1024).toFixed(1)} KB</span>
+                        </div>
+                        <div class="item-actions">
+                             <!-- Delete using direct file sha if available, or just filename -->
+                            <button onclick="deleteResource('${item.name}', -1, '${item.sha}')" title="Delete File">🗑️</button>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (e) {
+                console.error(e);
+                listContainer.innerHTML = `<p class="error">Directory fetch failed: ${e.message}</p>`;
+            }
+        }
+
+        async function deleteResource(filename, index, shaByPass = null) {
+            if (!confirm(`Are you sure you want to delete "${filename}"?\n\nThis cannot be undone.`)) return;
+
+            // ... (rest of logic handles deletion)
+            // Note: If index is -1, it means we are in "Directory Mode" and there is no list.json entry to remove index-wise,
+            // we might still want to try updating list.json if the file exists there, but simpler is just delete file.
+
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = '⏳';
+            btn.disabled = true;
+
+            const pat = document.getElementById('ghPat').value;
+            const owner = document.getElementById('repoOwner').value;
+            const repo = document.getElementById('repoName').value;
+            const folder = document.getElementById('targetPath').value;
+
+            try {
+                // 1. Delete actual file
+                // If we don't have SHA, current deleteFile function fetches it. 
+                // We can update deleteFile or just use it as is if it supports fetching.
+
+                // Let's reuse existing flow logic but handle the list.json update carefully
+
+                // Fetch SHA if not provided
+                let fileSha = shaByPass;
+                if (!fileSha) {
+                    try {
+                        const fileData = await githubGet(pat, owner, repo, `${folder}/${filename}`);
+                        fileSha = fileData.sha;
+                    } catch (err) {
+                        console.log("File not found or already deleted");
+                    }
+                }
+
+                if (fileSha) {
+                    await githubDelete(pat, owner, repo, `${folder}/${filename}`, fileSha, `Delete ${filename}`);
+                }
+
+                // 2. Update list.json (Attempt to remove entry if it exists)
+                // We always try to clean up list.json even if we came from Directory View
+                try {
+                    const listPath = folder + '/list.json';
+                    let listData;
+                    let listSha;
+
+                    // Fetch Raw/API for List
+                    try {
+                        const d = await githubGet(pat, owner, repo, listPath);
+                        listSha = d.sha;
+                        listData = JSON.parse(atob(d.content));
+                    } catch (e) {
+                        // Fallback raw
+                        const r = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/${listPath}?t=${Date.now()}`);
+                        listData = await r.json();
+                        // We still need SHA to update it, so we must rely on the API call above succeeding for SHA.
+                        // If API failed for size, we can't update it easily via API without blob.
+                        // For now assume API works for list.json metadata (SHA) even if content is large (get content=false? No, standard GET gets all).
+                        // If we are here, we might have failed the first GET.
+                    }
+
+                    if (listData && listSha) {
+                        const newList = listData.filter(i => i.filename !== filename);
+                        if (newList.length !== listData.length) {
+                            await githubPut(pat, owner, repo, listPath, btoa(unescape(encodeURIComponent(JSON.stringify(newList, null, 2)))), `Remove ${filename} from list`, listSha);
+                        }
+                    }
+                } catch (e) {
+                    console.error("Could not update list.json", e);
+                    alert("File deleted, but could not update list.json (might be desynced).");
+                }
+
+                alert('Deleted successfully.');
+
+                // Refresh based on what view we are likely in
+                if (index === -1) {
+                    fetchDirectoryList();
+                } else {
+                    loadResourceList();
+                }
+
+            } catch (e) {
+                alert('Error deleting: ' + e.message);
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+        // --- ASSETS LOGIC ---
+        // Config for images is simple: just reading the directory or a separate json?
+        // Plan said "images.json".
+        const IMAGES_JSON_PATH = 'CFIS/images/images.json';
+        const IMAGES_DIR = 'CFIS/images';
+
+        async function handleAssetUpload() {
+            const file = document.getElementById('assetInput').files[0];
+            const pat = document.getElementById('ghPat').value;
+            if (!file || !pat) return alert('File and PAT required');
+
+            // Security Scan with VirusTotal
+            const vtKey = document.getElementById('vtKey').value;
+            const status = document.getElementById('assetStatus');
+            status.innerText = 'Scanning...';
+            status.className = 'status-msg';
+
+            try {
+                await performSecurityScan(file, vtKey);
+            } catch (scanErr) {
+                if (!confirm(`SECURITY WARNING: ${scanErr.message}\n\nDo you really want to upload this?`)) {
+                    status.innerText = 'Upload Cancelled.';
+                    return;
+                }
+            }
+
+            const btn = document.getElementById('assetUploadBtn');
+            btn.disabled = true;
+            status.innerText = 'Processing...';
+
+            try {
+                const owner = document.getElementById('repoOwner').value;
+                const repo = document.getElementById('repoName').value;
+
+                // 1. Upload File
+                const content = await toBase64(file);
+                await githubPut(pat, owner, repo, `${IMAGES_DIR}/${file.name}`, content, "Upload Asset");
+
+                // 2. Update images.json
+                // Try fetch existing
+                let assetsList = [];
+                let sha = null;
+                try {
+                    const res = await githubGet(pat, owner, repo, IMAGES_JSON_PATH);
+                    assetsList = JSON.parse(atob(res.content));
+                    sha = res.sha;
+                } catch (e) { /* New file */ }
+
+                assetsList.push({
+                    name: file.name,
+                    url: `https://raw.githubusercontent.com/${owner}/${repo}/main/${IMAGES_DIR}/${file.name}`,
+                    type: file.type,
+                    date: new Date().toISOString()
+                });
+
+                await githubPut(pat, owner, repo, IMAGES_JSON_PATH, btoa(JSON.stringify(assetsList, null, 2)), "Update images.json", sha);
+
+                status.innerText = 'Asset Uploaded!';
+                status.className = 'status-msg success';
+                loadAssetList();
+            } catch (e) {
+                status.innerText = 'Error: ' + e.message;
+                status.className = 'status-msg error';
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        // --- SECURITY ---
+        async function performSecurityScan(file, apiKey) {
+            // 1. Basic Heuristics (Always run)
+            if (file.name.endsWith('.html') || file.type === 'text/html') {
+                const isSafe = await scanHtmlContent(file);
+                if (!isSafe) throw new Error('Suspicious HTML Content (Scripts detected)');
+            }
+
+            // 2. VirusTotal Scan (If Key present)
+            if (apiKey && file.size < 32 * 1024 * 1024) { // VT Limit 32MB
+                // Calculate SHA
+                const hash = await crypto.subtle.digest('SHA-256', await file.arrayBuffer());
+                const hashArray = Array.from(new Uint8Array(hash));
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+                // Check Report
+                const reportResp = await fetch(`https://www.virustotal.com/api/v3/files/${hashHex}`, {
+                    headers: { 'x-apikey': apiKey }
+                });
+
+                if (reportResp.ok) {
+                    const report = await reportResp.json();
+                    const stats = report.data.attributes.last_analysis_stats;
+                    if (stats.malicious > 0) {
+                        throw new Error(`VirusTotal found ${stats.malicious} malicious reports!`);
+                    }
+                } else if (reportResp.status === 404) {
+                    // File unknown, could upload but that requires complex multipart form logic 
+                    // usually not possible purely client-side without CORS issues often.
+                    // For now, we trust heuristic if VT unknown + user confirmation.
+                    console.log('File unknown to VT. Proceeding with caution.');
+                }
+            }
+        }
+
+        async function scanHtmlContent(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const text = e.target.result.toLowerCase();
+                    // Basic heuristic checks
+                    if (text.includes('<script') ||
+                        text.includes('javascript:') ||
+                        text.includes('onclick=') ||
+                        text.includes('onload=') ||
+                        text.includes('onerror=')) {
+                        resolve(false);
+                    } else {
+                        resolve(true);
+                    }
+                };
+                reader.readAsText(file);
+            });
+        }
+
+        async function loadAssetList() {
+            const gallery = document.getElementById('assetGallery');
+            gallery.innerHTML = '<p>Loading...</p>';
+
+            const pat = document.getElementById('ghPat').value;
+            const owner = document.getElementById('repoOwner').value;
+            const repo = document.getElementById('repoName').value;
+
+            try {
+                const res = await githubGet(pat, owner, repo, IMAGES_JSON_PATH);
+                const assets = JSON.parse(atob(res.content));
+
+                // Reverse to show newest first
+                gallery.innerHTML = assets.reverse().map((asset, index) => {
+                    const isImg = asset.type.startsWith('image') || /\.(jpg|jpeg|png|webp|gif)$/i.test(asset.name);
+
+                    return `
+                    <div class="glass-panel" style="padding:1rem; display:flex; flex-direction:column; gap:0.5rem;">
+                        ${isImg
+                            ? `<img src="${asset.url}" style="width:100%; height:120px; object-fit:cover; border-radius:4px; background:#222;">`
+                            : `<div style="width:100%; height:120px; display:flex; align-items:center; justify-content:center; background:#222; border-radius:4px; font-size:2rem;">📄</div>`
+                        }
+                        <div style="font-size:0.8rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${asset.name}">${asset.name}</div>
+                        
+                        <div style="display:flex; gap:0.5rem; margin-top:auto;">
+                            <button onclick="copyEmbed('${asset.url}', '${isImg ? 'img' : 'iframe'}')" class="btn-primary" style="font-size:0.7rem; padding:0.4rem;">Copy Embed</button>
+                            <button onclick="deleteAsset('${asset.name}')" style="background:rgba(239, 68, 68, 0.2); color:#ef4444; border:none; border-radius:4px; padding:0.4rem; cursor:pointer;">🗑️</button>
+                        </div>
+                    </div>
+                    `;
+                }).join('');
+
+            } catch (e) {
+                gallery.innerHTML = '<p style="opacity:0.5">No assets found or config missing.</p>';
+            }
+        }
+
+        async function deleteAsset(name) {
+            if (!confirm(`Delete asset "${name}"?`)) return;
+
+            const pat = document.getElementById('ghPat').value;
+            const owner = document.getElementById('repoOwner').value;
+            const repo = document.getElementById('repoName').value;
+
+            try {
+                // 1. Delete File
+                try {
+                    const fileRes = await githubGet(pat, owner, repo, `${IMAGES_DIR}/${name}`);
+                    await githubDelete(pat, owner, repo, `${IMAGES_DIR}/${name}`, fileRes.sha, `Delete ${name}`);
+                } catch (e) { console.warn('File might already be gone', e); }
+
+                // 2. Update JSON
+                const res = await githubGet(pat, owner, repo, IMAGES_JSON_PATH);
+                const assets = JSON.parse(atob(res.content));
+                const newAssets = assets.filter(a => a.name !== name);
+
+                await githubPut(pat, owner, repo, IMAGES_JSON_PATH, btoa(JSON.stringify(newAssets, null, 2)), `Removed ${name}`, res.sha);
+
+                loadAssetList();
+                alert('Deleted!');
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+        }
+
+        function copyEmbed(url, type) {
+            let code = '';
+            if (type === 'img') {
+                code = `<img src="${url}" alt="Embedded Image" style="max-width:100%; border-radius:8px;">`;
+            } else {
+                code = `<iframe src="https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true" style="width:100%; height:500px;" frameborder="0"></iframe>`;
+            }
+            navigator.clipboard.writeText(code);
+            alert('Embed code copied to clipboard!');
+        }
+
+        async function githubDelete(token, owner, repo, path, sha, msg) {
+            const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: msg, sha: sha })
+            });
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.message);
+            }
+        }
     </script>
 </body>
 

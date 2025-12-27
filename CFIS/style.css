@@ -361,17 +361,17 @@ body {
     margin-top: 2px;
 }
 
-/* Quick Links Grid */
+/* Quick Links Grid
 .links-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 1rem;
     overflow-y: auto;
-    flex: 1;
+    flex: 2;
     padding-right: 0.5rem;
     align-content: start;
-    /* Don't stretch rows */
-}
+
+} */
 
 .quick-link {
     display: flex;
@@ -798,6 +798,294 @@ kbd {
     align-items: center;
     padding: 1rem 1.5rem;
     border-bottom: 1px solid var(--glass-border);
+}
+
+/* Gallery Section */
+.gallery-section {
+    margin-bottom: 4rem;
+}
+
+.section-header {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Marquee Layout (Horizontal) */
+.marquee-container.horizontal {
+    height: 320px;
+    /* Adjusted height for single row */
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}
+
+.marquee-content {
+    display: flex;
+    gap: 1.5rem;
+    animation: scrollHorizontal 40s linear infinite;
+    width: max-content;
+    /* Ensure it allows content to flow horizontally */
+}
+
+/* Pause on hover */
+.marquee-content:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scrollHorizontal {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Vertical Ticker for Links (2-Column Grid) */
+.quick-links-container {
+    height: 400px;
+    /* Increased height for grid */
+    overflow: hidden;
+    position: relative;
+    mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+}
+
+.links-ticker-track {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* 2 items per row */
+    gap: 1rem;
+    animation: scrollVerticalLinks 30s linear infinite;
+    /* Slower for readability */
+    padding-bottom: 2rem;
+    /* Spacing */
+}
+
+.quick-links-container:hover .links-ticker-track {
+    animation-play-state: paused;
+}
+
+@keyframes scrollVerticalLinks {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-50%);
+    }
+}
+
+/* Base Styles for Quick Link Card (Boxed UI reused) */
+.quick-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    padding: 1.5rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+    text-align: center;
+    height: 100%;
+    /* Fill grid cell */
+}
+
+.quick-link:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    color: var(--text-primary);
+}
+
+/* Copy Protection Class */
+.no-copy {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.no-copy img {
+    pointer-events: none;
+    /* Disables drag/right-click context on image itself */
+}
+
+/* --- RESPONSIVENESS --- */
+@media (max-width: 768px) {
+
+    /* Stack Links on Mobile */
+    .links-ticker-track {
+        grid-template-columns: 1fr;
+    }
+
+    .marquee-container.horizontal {
+        height: 250px;
+        /* Smaller Gallery on Mobile */
+    }
+
+    .gallery-item {
+        width: 200px;
+        /* Smaller items */
+    }
+}
+
+/* Marquee Layout */
+.marquee-container {
+    height: 600px;
+    /* Fixed height for scrolling window */
+    display: flex;
+    gap: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+}
+
+.marquee-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    animation: scrollVertical 40s linear infinite;
+}
+
+.marquee-column.reverse {
+    animation-direction: reverse;
+}
+
+.marquee-column:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scrollVertical {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-50%);
+    }
+}
+
+.gallery-grid {
+    /* Deprecated but kept for safety if fallback needed */
+    columns: 3 250px;
+    column-gap: 1.5rem;
+}
+
+.gallery-item {
+    width: 300px;
+    /* Fixed width for horizontal items */
+    height: aspect-ratio;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    transition: all 0.3s;
+    cursor: pointer;
+    flex-shrink: 0;
+    /* Prevent squishing */
+}
+
+.gallery-item:hover {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 20px rgba(10, 228, 72, 0.1);
+}
+
+/* HTML Thumbnail Embed */
+.html-thumb-frame {
+    width: 100%;
+    height: 250px;
+    border: none;
+    pointer-events: none;
+    /* Make it just a visual thumbnail */
+    display: block;
+    background: #fff;
+    /* Ensure contrast for pages */
+    overflow: hidden;
+    transform: scale(1);
+    transform-origin: top left;
+}
+
+.gallery-img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.gallery-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s;
+}
+
+.gallery-item:hover .gallery-overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.gallery-caption {
+    font-size: 0.9rem;
+    color: white;
+    font-weight: 500;
+}
+
+.gallery-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+}
+
+#giscus-container {
+    max-height: 60vh;
+    overflow-y: auto;
+    /* Custom Scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-color) var(--glass-bg);
+}
+
+#giscus-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+#giscus-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+#giscus-container::-webkit-scrollbar-thumb {
+    background-color: var(--accent-color);
+    border-radius: 20px;
 }
 
 .modal-actions {
