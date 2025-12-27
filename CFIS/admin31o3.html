@@ -198,13 +198,11 @@
             <div id="setupMFA"
                 style="display:none; margin-bottom: 2rem; padding: 1rem; border: 1px dashed var(--accent-color); border-radius: 8px;">
                 <h3 style="margin-top:0;">⚠️ First Time Setup</h3>
-                <p style="font-size: 0.9rem;">1. Set a Master Password (encrypts your secret)</p>
-                <div class="auth-input-group">
-                    <input type="password" id="newMasterPass" class="input-field" placeholder="Create Master Password"
-                        style="text-align:center;">
+                <p>Welcome, Admin. To secure your console, please set up Multi-Factor Authentication (MFA).</p>
+                <!-- Removed explicit Password field. We will use the Master Key as the encryption secret implicitly. -->
+                <div style="margin-top:1rem;">
+                    <button onclick="generateMFA()" class="btn-primary">Generate QR Code</button>
                 </div>
-
-                <p style="font-size: 0.9rem; margin-top:1rem;">2. Scan QR with Authenticator</p>
                 <div id="qrcode"></div>
                 <p style="font-family: monospace; font-size: 0.8rem; opacity: 0.7; margin-top: 10px;"
                     id="secretDisplay"></p>
@@ -213,21 +211,22 @@
             </div>
 
             <div id="loginForm">
+                <h3 style="margin-top:0;">🔐 Login</h3>
+                <p>Enter Master Key & MFA Code</p>
                 <div class="auth-input-group">
-                    <input type="password" id="masterPassRef" class="input-field" placeholder="Enter Master Password"
+                    <input type="password" id="masterKeyInput" class="input-field" placeholder="Master Key"
                         style="text-align:center; margin-bottom: 1rem;">
-                    <input type="text" id="totpInput" class="auth-code-input" placeholder="000000" maxlength="6"
-                        autocomplete="one-time-code">
+                    <input type="text" id="totpInput" class="auth-code-input" placeholder="000 000" maxlength="7">
                 </div>
+                <button onclick="login()" class="btn-primary">Unlock Console</button>
+                <p id="authMsg" class="status-msg"></p>
 
-                <button onclick="login()" class="btn-primary" style="max-width: 200px;">Unlock Console</button>
+                <div style="margin-top: 2rem; border-top: 1px solid var(--glass-border); padding-top: 1rem;">
+                    <button onclick="resetMFA()"
+                        style="background:transparent; border:none; color: #ef4444; font-size:0.8rem; cursor:pointer;">Reset
+                        MFA</button>
+                </div>
             </div>
-
-            <p id="authMsg" class="status-msg"></p>
-
-            <button onclick="resetMFA()"
-                style="margin-top: 2rem; background: none; border: none; color: #333; font-size: 0.7rem; cursor: pointer;">(Reset
-                MFA)</button>
         </div>
 
         <!-- DASHBOARD SECTION -->
@@ -317,20 +316,21 @@
                     style="font-size:0.8rem; margin-bottom:1rem; background:rgba(255,255,255,0.1); border:none; color:white; padding:0.4rem; border-radius:4px; cursor:pointer;">🔄
                     Fetch Current Feed from GitHub</button>
 
-                <div class="input-group">
-                    <label>New Announcement</label>
-                    <input type="text" id="newsText" class="input-field" placeholder="Message...">
-                </div>
-                <div style="display:flex; gap:1rem;">
-                    <input type="text" id="newsDate" class="input-field" placeholder="Date (e.g. Dec 31)"
-                        style="flex:1;">
-                    <label style="display:flex; align-items:center; color:white; font-size:0.9rem;">
-                        <input type="checkbox" id="newsIsNew" style="margin-right:0.5rem;"> Is New?
+                <div style="display:flex; gap:1rem; margin-bottom: 1rem;">
+                    <input type="text" id="newsText" placeholder="Headline / Update Text" class="input-field"
+                        style="flex:2">
+                    <label class="checkbox-container"
+                        style="display:flex; align-items:center; color:white; font-size:0.9rem; flex:1;">
+                        <input type="checkbox" id="newsNew" style="margin-right:0.5rem;"> Is New?
                     </label>
                 </div>
                 <button onclick="addNewsItem()" class="btn-primary" style="margin-bottom: 2rem;">Add to Feed</button>
 
                 <h4>Current Items (Local State)</h4>
+                <div class="list-header">
+                    <span>Headline</span>
+                    <span>Action</span>
+                </div>
                 <div id="newsList" class="item-list"></div>
                 <button onclick="saveConfig()" class="btn-primary" style="background: #22c55e; margin-top:2rem;">💾 Save
                     Changes to site_config.json</button>
@@ -366,14 +366,15 @@
         let currentTOTP = null;
         let sessionTimer;
         let tempSecret = null; // Used during setup only
+        const MFA_SECRET_STORAGE_KEY = 'cfis_mfa_enc'; // New key for encrypted MFA secret
 
         document.addEventListener('DOMContentLoaded', () => {
-            const encryptedData = localStorage.getItem(ENC_STORAGE_KEY);
+            const setupComplete = localStorage.getItem('cfis_setup_complete');
 
-            if (!encryptedData) {
+            if (!setupComplete) {
                 // New User / Reset
                 document.getElementById('loginForm').style.display = 'none';
-                startSetup();
+                document.getElementById('setupMFA').style.display = 'block'; // SHOW THE UI
             } else {
                 // Existing User
                 document.getElementById('setupMFA').style.display = 'none';
@@ -386,12 +387,12 @@
         });
 
         // --- SETUP FLOW ---
-        function startSetup() {
+        function generateMFA() {
             // 1. Generate Secret
             tempSecret = new OTPAuth.Secret({ size: 20 });
 
-            // 2. Show UI
-            document.getElementById('setupMFA').style.display = 'block';
+            // 2. Show UI elements for QR and secret
+            document.getElementById('qrcode').style.display = 'flex'; // Ensure QR code div is visible
             document.getElementById('secretDisplay').textContent = tempSecret.base32;
 
             // 3. Render QR
@@ -414,12 +415,22 @@
         }
 
         function finalizeSetup() {
-            const pass = document.getElementById('newMasterPass').value;
-            if (pass.length < 4) return alert('Master Password must be at least 4 chars');
+            if (!tempSecret) {
+                alert('Please generate the QR code first.');
+                return;
+            }
 
-            // Encrypt and Save
-            const encrypted = CryptoJS.AES.encrypt(tempSecret.base32, pass).toString();
-            localStorage.setItem(ENC_STORAGE_KEY, encrypted);
+            const secret = tempSecret.base32;
+            // We use a fixed string or the master key hash itself as encryption key, 
+            // since user wants to rely solely on Master Key + MFA.
+            // CAUTION: Hardcoding encryption key simplifies UX but reduces security if local storage is dumped.
+            // Given the requirement: "we soley on the master key which we hashed and the mfa"
+            const encryptionKey = "MASTER_KEY_FIXED_SALT";
+
+            const encryptedSecret = CryptoJS.AES.encrypt(secret, encryptionKey).toString();
+
+            localStorage.setItem(MFA_SECRET_STORAGE_KEY, encryptedSecret);
+            localStorage.setItem('cfis_setup_complete', 'true');
 
             alert('Setup Complete! Please log in now.');
             location.reload();
@@ -427,18 +438,30 @@
 
         // --- LOGIN FLOW ---
         function login() {
-            const pass = document.getElementById('masterPassRef').value;
+            const keyInput = document.getElementById('masterKeyInput').value;
             const code = document.getElementById('totpInput').value.replace(/\s/g, '');
-            const encrypted = localStorage.getItem(ENC_STORAGE_KEY);
+            const encryptedSecret = localStorage.getItem(MFA_SECRET_STORAGE_KEY);
 
-            if (!pass || !code) return showStatus('Password and Code required', 'error');
+            if (!encryptedSecret) return showStatus('Setup not found. Please Reset.', 'error');
+            if (!keyInput || !code) return showStatus('Master Key and Code required', 'error');
+
+            // 1. Verify Master Key Hash
+            // hash("02091431@Sriram") = "75f5533dc390341bf3f4787008a88ba404dff36fb4e04b21b55ccfc3e00b6d1a"
+            const inputHash = CryptoJS.SHA256(keyInput).toString(CryptoJS.enc.Hex);
+            if (inputHash !== MASTER_HASH) {
+                return showStatus('Invalid Master Key', 'error');
+            }
+
+            // 2. Decrypt MFA Secret (using Fixed Salt)
+            // We use fixed salt because we validated the user via the Hash Check above.
+            const encryptionKey = "MASTER_KEY_FIXED_SALT";
 
             try {
                 // 1. Decrypt Secret
-                const bytes = CryptoJS.AES.decrypt(encrypted, pass);
+                const bytes = CryptoJS.AES.decrypt(encryptedSecret, encryptionKey);
                 const originalSecret = bytes.toString(CryptoJS.enc.Utf8);
 
-                if (!originalSecret) throw new Error('Wrong Password');
+                if (!originalSecret) throw new Error('Decryption Failed');
 
                 // 2. Init TOTP
                 currentTOTP = new OTPAuth.TOTP({
@@ -472,7 +495,7 @@
             resetSessionTimer();
 
             // Clear sensitive inputs
-            document.getElementById('masterPassRef').value = '';
+            document.getElementById('masterKeyInput').value = '';
             document.getElementById('totpInput').value = '';
 
             // Load config initially
@@ -486,8 +509,9 @@
         }
 
         function resetMFA() {
-            if (confirm('HARD RESET: This will delete your Master Password and Secret. You lock yourself out if you do not have the files. Proceed?')) {
-                localStorage.removeItem(ENC_STORAGE_KEY);
+            if (confirm('HARD RESET: This will delete your MFA Secret. You lock yourself out if you do not have the files. Proceed?')) {
+                localStorage.removeItem(MFA_SECRET_STORAGE_KEY);
+                localStorage.removeItem('cfis_setup_complete');
                 location.reload();
             }
         }
@@ -522,6 +546,70 @@
             event.target.classList.add('active');
         }
 
+        // Precompute SHA-256 for "02091431@Sriram"
+        const MASTER_HASH = "75f5533dc390341bf3f4787008a88ba404dff36fb4e04b21b55ccfc3e00b6d1a";
+
+        // Admin Access Check
+        async function checkAccess() {
+            const tokenInput = document.getElementById('tokenInput').value;
+            const status = document.getElementById('status');
+
+            if (!tokenInput) {
+                status.innerText = 'Please enter Key / Token';
+                return;
+            }
+
+            // 1. Check if Master Key (Hash Check)
+            const inputHash = CryptoJS.SHA256(tokenInput).toString(CryptoJS.enc.Hex);
+
+            if (inputHash === MASTER_HASH) {
+                // Determine user for commit purposes - using a "system" user context or prompts
+                // For simplicity, we ask for PAT if they want to write, OR we store a default PAT if available?
+                // Actually, the user likely wants to use this key TO login. 
+                // Since we need a PAT to talk to GitHub API, we might need to store the PAT *encrypted* with this key?
+                // OR, the user just wants to bypass the check? 
+
+                // If it's a master key, we might need a stored PAT to actually work. 
+                // For now, let's assume if they provide this key, we prompt for the PAT *once* or use a stored one.
+
+                // User Request: "login with admin to improve security"
+                // Let's assume this key grants access. But we still need a PAT for API operations.
+                // WE WILL PROMPT FOR PAT if not in local storage, but Verify against this Hash first.
+
+                status.innerText = 'Master Key Verified. Access Granted.';
+                status.style.color = '#4ade80';
+
+                // In a real app we'd decode an encrypted PAT here. 
+                // For this static site, we'll treat this as "Login Successful" and ask for PAT if needed for operations,
+                // OR we assume the input IS the PAT if it doesn't match the hash.
+
+                // Let's refine: The user wants to login WITH this key.
+                // We'll set a session flag.
+                sessionStorage.setItem('cfis_admin_session', 'true');
+
+                // Check if we have a saved PAT
+                const savedPat = localStorage.getItem('cfis_pat');
+                if (savedPat) {
+                    showAdminUI(savedPat);
+                } else {
+                    // If no PAT, we might still need it for GitHub ops. 
+                    // Let's ask for it inside or handle it. 
+                    // The prompt implies we log in "with admin". 
+                    // I'll show the UI.
+                    showAdminUI('Enter-PAT-For-Operations-If-Needed');
+                }
+                return;
+            }
+
+            // 2. Normal PAT Login (Legacy)
+            if (tokenInput.startsWith('ghp_') || tokenInput.startsWith('github_pat_')) {
+                verifyGitHubToken(tokenInput);
+                return;
+            }
+
+            status.innerText = 'Invalid Key';
+            status.style.color = '#ef4444';
+        }
         // --- UPLOAD LOGIC ---
         async function handleUpload() {
             const file = document.getElementById('fileInput').files[0];
@@ -590,7 +678,7 @@
 
             try {
                 const data = await githubGet(pat, owner, repo, path);
-                const json = JSON.parse(atob(data.content));
+                const json = JSON.parse(decodeURIComponent(escape(atob(data.content))));
                 localSiteConfig = json;
                 renderLists();
                 alert('Config loaded successfully from GitHub!');
@@ -611,11 +699,15 @@
         }
 
         function addNewsItem() {
+            const text = document.getElementById('newsText').value;
+            const isNew = document.getElementById('newsNew').checked;
+
+            if (!text) return alert('Please enter text');
+
             localSiteConfig.news.unshift({
-                id: Date.now(),
-                text: document.getElementById('newsText').value,
-                date: document.getElementById('newsDate').value,
-                new: document.getElementById('newsIsNew').checked
+                date: "", // Deprecated
+                text: text,
+                new: isNew
             });
             renderLists();
         }
@@ -636,12 +728,17 @@
             renderLists();
         }
 
+        function deleteNews(index) {
+            localSiteConfig.news.splice(index, 1);
+            renderLists();
+        }
+
         function renderLists() {
             const newsContainer = document.getElementById('newsList');
-            newsContainer.innerHTML = localSiteConfig.news.map(n => `
+            newsContainer.innerHTML = localSiteConfig.news.map((item, index) => `
                 <div class="list-item">
-                    <span>${n.date} - ${n.text}</span>
-                    <div class="item-actions"><button onclick="deleteItem('news', '${n.id}')">✕</button></div>
+                    <span>${item.text} ${item.new ? '🔥' : ''}</span>
+                    <div class="item-actions"><button onclick="deleteNews(${index})">✕</button></div>
                 </div>
             `).join('');
 
@@ -674,7 +771,7 @@
                     sha = existing.sha;
                 } catch (e) { } // File might not exist
 
-                await githubPut(pat, owner, repo, path, btoa(JSON.stringify(localSiteConfig, null, 2)), "Update site_config.json", sha);
+                await githubPut(pat, owner, repo, path, btoa(unescape(encodeURIComponent(JSON.stringify(localSiteConfig, null, 2)))), "Update site_config.json", sha);
                 alert('Saved!');
             } catch (e) {
                 alert('Save failed: ' + e.message);
