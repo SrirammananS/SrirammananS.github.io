@@ -44,12 +44,29 @@ async function initApp() {
     ]);
 
 
-    checkDeepLink();
-
     // Register PWA Service Worker
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js');
     }
+
+    initChatWidget();
+}
+
+function initChatWidget() {
+    // Debug check
+    const tooltip = document.querySelector('#chat-tooltip');
+    if (!tooltip) return;
+
+    // Show after delay
+    // Show after delay
+    setTimeout(() => {
+        tooltip.classList.add('visible');
+
+        // Hide after 5 seconds of showing
+        setTimeout(() => {
+            tooltip.classList.remove('visible');
+        }, 7000);
+    }, 2000);
 }
 
 async function fetchSiteConfig() {
@@ -111,15 +128,19 @@ async function fetchNotes() {
 // Render News
 function renderNews() {
     const container = document.getElementById('news-feed');
-    container.innerHTML = newsData.map(item => `
+    // Duplicate data for seamless marquee loop
+    const loopData = [...newsData, ...newsData]; // A + A
+
+    const itemsHtml = loopData.map(item => `
         <div class="news-item">
-            <span class="news-date">${item.date}</span>
-            <span class="news-text">
-                ${item.text}
+            <div class="news-content">
+                <span>${item.text}</span>
                 ${item.new ? '<span class="news-badge">NEW</span>' : ''}
-            </span>
+            </div>
         </div>
     `).join('');
+
+    container.innerHTML = `<div class="news-track">${itemsHtml}</div>`;
 }
 
 // Render Links
@@ -489,8 +510,8 @@ function setupCmdPalette() {
         const actions = [
             { type: 'Action', label: 'Go Home', action: () => document.querySelector('[data-filter="all"]').click() },
             { type: 'Action', label: 'Show Favorites', action: () => document.querySelector('[data-filter="favorites"]').click() },
-            { type: 'Action', label: 'Focus Mode 🍅', action: () => toggleFocusMode() }, // [NEW] Focus Mode
-            { type: 'Action', label: 'Admin Console', action: () => window.location.href = 'admin31o3.html' },
+            { type: 'Action', label: 'Focus Mode 🍅', action: () => toggleFocusMode() },
+            { type: 'Action', label: 'Community Discussion', action: () => openCommentsModal() }, // [NEW] Separate Comments
         ];
 
         // Notes (Top 5 matches)
@@ -564,15 +585,17 @@ function toggleFocusMode() {
 }
 
 function toggleTimer() {
-    const btn = document.querySelector('#focus-controls button');
+    const btn = document.getElementById('timer-btn');
 
     if (isFocusRunning) {
         clearInterval(focusInterval);
         isFocusRunning = false;
-        btn.innerText = '▶';
+        btn.innerText = 'Resume';
     } else {
         isFocusRunning = true;
-        btn.innerText = '⏸';
+        btn.innerText = 'Pause';
+
+        // Initial tick
         focusInterval = setInterval(() => {
             focusSeconds--;
             if (focusSeconds <= 0) {
@@ -581,17 +604,60 @@ function toggleTimer() {
                 alert('Focus Session Complete!');
                 focusSeconds = 25 * 60;
                 isFocusRunning = false;
-                btn.innerText = '▶';
+                btn.innerText = 'Start Session';
+                updateTimerDisplay();
+            } else {
+                updateTimerDisplay();
             }
-            updateTimerDisplay();
         }, 1000);
     }
+}
+
+function adjustTimer(minutes) {
+    if (isFocusRunning) return; // Prevent changing while running
+    focusSeconds += minutes * 60;
+    if (focusSeconds < 60) focusSeconds = 60; // Min 1 min
+    if (focusSeconds > 120 * 60) focusSeconds = 120 * 60; // Max 120 mins
+    updateTimerDisplay();
 }
 
 function updateTimerDisplay() {
     const m = Math.floor(focusSeconds / 60);
     const s = focusSeconds % 60;
     document.getElementById('focus-timer').innerText = `${m}:${s < 10 ? '0' + s : s}`;
+}
+
+// 4. Comments Module
+function openCommentsModal() {
+    const modal = document.getElementById('comments-modal');
+    modal.classList.add('active');
+
+    // Lazy load Giscus only when opened to save performance
+    const container = document.getElementById('giscus-container');
+    if (container.innerHTML.trim() === '') {
+        const script = document.createElement('script');
+        script.src = "https://giscus.app/client.js";
+        script.setAttribute("data-repo", "SrirammananS/SrirammananS.github.io");
+        script.setAttribute("data-repo-id", "R_kgDONX_0hQ");
+        script.setAttribute("data-category", "Announcements");
+        script.setAttribute("data-category-id", "DIC_kwDONX_0hc4ClA6p");
+        script.setAttribute("data-mapping", "title");
+        script.setAttribute("data-strict", "0");
+        script.setAttribute("data-reactions-enabled", "1");
+        script.setAttribute("data-emit-metadata", "0");
+        script.setAttribute("data-input-position", "bottom");
+        script.setAttribute("data-theme", "dark");
+        script.setAttribute("data-lang", "en");
+        script.setAttribute("crossorigin", "anonymous");
+        script.async = true;
+        container.appendChild(script);
+    }
+}
+
+// Move this to global scope
+window.openCommentsModal = openCommentsModal;
+window.closeCommentsModal = function () {
+    document.getElementById('comments-modal').classList.remove('active');
 }
 
 function animateValue(obj, start, end, duration) {
