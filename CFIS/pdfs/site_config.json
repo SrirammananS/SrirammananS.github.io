@@ -1,6 +1,12 @@
 {
   "news": [
     {
+      "id": 1766827308038,
+      "text": "Sem 2 commences",
+      "date": "Jan 03",
+      "new": true
+    },
+    {
       "id": 1766827282897,
       "text": "Last Date for Internal Assessment Submission",
       "date": "Dec 31",
