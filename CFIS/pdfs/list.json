@@ -57,17 +57,6 @@
     ]
   },
   {
-    "title": "Network Security and Cryptography",
-    "description": "Protocols, crypto primitives, and secure architectures.",
-    "filename": "Network Security and Cryptography.pdf",
-    "category": "semester2",
-    "tags": [
-      "network",
-      "crypto",
-      "security"
-    ]
-  },
-  {
     "title": "Basics of Cyber Forensics",
     "description": "Evidence handling, acquisition, and analysis fundamentals.",
     "filename": "Basics of Cyber Forensics.pdf",
