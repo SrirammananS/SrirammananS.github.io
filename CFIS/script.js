@@ -9,6 +9,7 @@ const SITE_CONFIG_URL = 'https://raw.githubusercontent.com/SrirammananS/Sriramma
 let notesConfig = [];
 let newsData = [];
 let linksData = [];
+let galleryAssets = []; // [NEW] Global Store
 
 // --- Dashboard Data (Loaded Dynamically) ---
 // Defaults/Fallbacks in case fetch fails
@@ -41,6 +42,24 @@ async function initApp() {
         fetchSiteConfig(),
         fetchGallery()
     ]);
+
+    // Check Deep Links (Asset param)
+    const params = new URLSearchParams(window.location.search);
+    const assetParam = params.get('asset');
+    if (assetParam && galleryAssets.length > 0) {
+        const asset = galleryAssets.find(a => a.name === assetParam);
+        if (asset) {
+            const isImg = asset.type.startsWith('image') || /\.(jpg|jpeg|png|webp|gif)$/i.test(asset.name);
+            const rawUrl = asset.url; // Or proxy if needed
+            // Proxy logic from fetchGallery is needed here or standard raw
+            const getProxyUrl = (u) => u.replace('raw.githubusercontent.com', 'raw.githack.com');
+            const finalUrl = isImg ? rawUrl : getProxyUrl(rawUrl);
+            openGalleryModal(finalUrl, asset.name, isImg ? 'image' : 'html');
+        }
+    }
+
+    // Check Anchor Deep Links (News/Links)
+    setTimeout(checkDeepLink, 1000);
 
 
     // Register PWA Service Worker
@@ -129,16 +148,31 @@ function renderNews() {
     // Duplicate data for seamless marquee loop
     const loopData = [...newsData, ...newsData]; // A + A
 
-    const itemsHtml = loopData.map(item => `
-        <div class="news-item">
+    const itemsHtml = loopData.map(item => createNewsItemHtml(item)).join('');
+
+    container.innerHTML = `<div class="news-track">${itemsHtml}</div>`;
+}
+
+// Render Helper for News Item
+// Render Helper for News Item
+function createNewsItemHtml(item) {
+    // Generate ID for anchor if missing (fallback based on text hash/slug?)
+    // But better to rely on ID if we added it.
+    // Use item.id if exists, else skip anchor.
+    const anchorId = item.id ? `news-${item.id}` : '';
+
+    return `
+        <div class="news-item" ${anchorId ? `id="${anchorId}"` : ''}>
             <div class="news-content">
                 <span>${item.text}</span>
                 ${item.new ? '<span class="news-badge">NEW</span>' : ''}
+                ${item.enableShare && item.id ? `
+                    <button onclick="copyAnchorLink('news-${item.id}')" class="share-icon-btn" title="Share Update">
+                        🔗
+                    </button>` : ''}
             </div>
         </div>
-    `).join('');
-
-    container.innerHTML = `<div class="news-track">${itemsHtml}</div>`;
+    `;
 }
 
 // Render Links
@@ -148,9 +182,13 @@ function renderQuickLinks() { // 4. Quick Links (Vertical Ticker - Restored Styl
         // We use the original .quick-link class inside the ticker track
         // The CSS for .quick-link is already in style.css, providing the "box" look.
         const createLink = (l) => `
-            <a href="${l.url}" target="_blank" class="quick-link">
+            <a href="${l.url}" target="_blank" class="quick-link" ${l.id ? `id="link-${l.id}"` : ''}>
                 <span class="link-icon" style="font-size:1.5rem;">${l.icon}</span>
                 <span class="link-label" style="font-weight:500;">${l.title}</span>
+                ${l.enableShare && l.id ? `
+                    <button onclick="event.preventDefault(); copyAnchorLink('link-${l.id}')" class="share-icon-btn small">
+                        🔗
+                    </button>` : ''}
             </a>
         `;
 
@@ -237,15 +275,15 @@ function renderNotes(filter, searchQuery = '') {
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
                 </button>
             </div>
-        `;
+    `;
 
         // Add mouse move listener for gradient effect
         card.addEventListener('mousemove', (e) => {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-            card.style.setProperty('--mouse-x', `${x}px`);
-            card.style.setProperty('--mouse-y', `${y}px`);
+            card.style.setProperty('--mouse-x', `${x} px`);
+            card.style.setProperty('--mouse-y', `${y} px`);
         });
 
         grid.appendChild(card);
@@ -689,6 +727,7 @@ async function fetchGallery() {
         if (!response.ok) throw new Error('No gallery config');
         let assets = await response.json();
         assets = assets.reverse(); // Newest first
+        galleryAssets = assets; // Store global
 
         if (assets.length === 0) return;
 
@@ -741,9 +780,9 @@ function openGalleryModal(url, title, type) {
         modal.className = 'modal-search-overlay';
         modal.innerHTML = `
             <div class="glass-panel modal-content" style="max-width:90vw; height:90vh; background:rgba(0,0,0,0.9);">
-                <div class="modal-header">
-                    <h3 id="gallery-modal-title"></h3>
-                     <div style="display:flex; gap:0.5rem;">
+                <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; width:100%; box-sizing:border-box;">
+                    <h3 id="gallery-modal-title" style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-right:1rem; font-size:1.1rem;"></h3>
+                     <div style="display:flex; gap:0.5rem; flex-shrink:0;">
                         <button class="btn-primary" id="gallery-share-btn" style="padding:0.3rem 0.8rem; font-size:0.8rem;">🔗 Share</button>
                         <button class="icon-btn" onclick="document.getElementById('gallery-modal').classList.remove('active')">✕</button>
                     </div>
@@ -775,20 +814,32 @@ function openGalleryModal(url, title, type) {
 
 // Share Function
 async function shareItem(url, title) {
+    const deepLink = window.location.origin + window.location.pathname + '?asset=' + encodeURIComponent(title);
+
     if (navigator.share) {
         try {
             await navigator.share({
                 title: 'Admin Archives: ' + title,
                 text: 'Check out this item from the archives:',
-                url: url
+                url: deepLink
             });
         } catch (err) {
             // User cancelled or failed
-            copyToClipboard(url);
+            copyToClipboard(deepLink);
         }
     } else {
-        copyToClipboard(url);
+        copyToClipboard(deepLink);
     }
+}
+
+
+function copyAnchorLink(id) {
+    const url = `${window.location.origin}${window.location.pathname}#${id}`;
+    navigator.clipboard.writeText(url).then(() => {
+        showToast('Link copied!');
+        // Highlight logic
+        checkDeepLink();
+    });
 }
 
 function copyToClipboard(text) {

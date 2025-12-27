@@ -284,7 +284,7 @@
                 <button class="tab-btn" onclick="switchTab('news')">⚡ Live Feed</button>
                 <button class="tab-btn" onclick="switchTab('links')">🔗 Quick Links</button>
                 <button class="tab-btn" onclick="switchTab('analytics')">📊 Analytics</button>
-                <button class="tab-btn" onclick="switchTab('assets')">🖼️ Assets & Embeds</button>
+                <button class="tab-btn" onclick="switchTab('assets')">🖼️ Admin Assets</button>
             </div>
 
             <!-- TAB 4: ANALYTICS -->
@@ -388,6 +388,10 @@
                         style="display:flex; align-items:center; color:white; font-size:0.9rem; flex:1;">
                         <input type="checkbox" id="newsNew" style="margin-right:0.5rem;"> Is New?
                     </label>
+                    <label class="checkbox-container"
+                        style="display:flex; align-items:center; color:white; font-size:0.9rem; flex:1;">
+                        <input type="checkbox" id="newsShare" style="margin-right:0.5rem;"> Enable Share?
+                    </label>
                 </div>
                 <div style="display:flex; gap:1rem;">
                     <button onclick="addNewsItem()" class="btn-primary" style="margin-bottom: 2rem; flex:1;">Add to
@@ -420,6 +424,10 @@
                 <div class="input-group"><label>URL</label><input type="text" id="linkUrl" class="input-field"></div>
                 <div class="input-group"><label>Icon (Emoji)</label><input type="text" id="linkIcon" class="input-field"
                         style="width: 60px;"></div>
+                <div class="input-group" style="display:flex; align-items:center; gap:0.5rem; color:white;">
+                    <input type="checkbox" id="linkShare"> <label for="linkShare"
+                        style="margin:0; color:white; font-size:0.9rem;">Enable Share Button?</label>
+                </div>
 
                 <div style="display:flex; gap:1rem;">
                     <button onclick="addLinkItem()" class="btn-primary" style="margin-bottom: 2rem; flex:1;">Add
@@ -584,6 +592,8 @@
             // Load config initially
             renderLists();
         }
+
+
 
         function showStatus(msg, type) {
             const el = document.getElementById('authMsg');
@@ -755,25 +765,33 @@
         function addNewsItem() {
             const text = document.getElementById('newsText').value;
             const isNew = document.getElementById('newsNew').checked;
+            const enableShare = document.getElementById('newsShare').checked;
 
             if (!text) return alert('Please enter text');
 
+            // Generate ID if missing (for deep linking)
+            const id = Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+
             localSiteConfig.news.unshift({
+                id: id,
                 date: "",
                 text: text,
-                new: isNew
+                new: isNew,
+                enableShare: enableShare
             });
             renderLists();
 
             // Clear inputs
             document.getElementById('newsText').value = '';
             document.getElementById('newsNew').checked = false;
+            document.getElementById('newsShare').checked = false;
         }
 
         function editNews(index) {
             const item = localSiteConfig.news[index];
             document.getElementById('newsText').value = item.text;
             document.getElementById('newsNew').checked = item.new || false;
+            document.getElementById('newsShare').checked = item.enableShare || false;
 
             editIndexNews = index;
             document.querySelector('#newsTab button[onclick="addNewsItem()"]').style.display = 'none';
@@ -785,6 +803,7 @@
             if (editIndexNews === -1) return;
             localSiteConfig.news[editIndexNews].text = document.getElementById('newsText').value;
             localSiteConfig.news[editIndexNews].new = document.getElementById('newsNew').checked;
+            localSiteConfig.news[editIndexNews].enableShare = document.getElementById('newsShare').checked;
 
             cancelEdit('news');
             renderLists();
@@ -792,10 +811,11 @@
 
         function addLinkItem() {
             localSiteConfig.links.push({
-                id: Date.now(),
+                id: Date.now().toString(), // Ensure string ID
                 title: document.getElementById('linkTitle').value,
                 url: document.getElementById('linkUrl').value,
-                icon: document.getElementById('linkIcon').value
+                icon: document.getElementById('linkIcon').value,
+                enableShare: document.getElementById('linkShare').checked
             });
             renderLists();
 
@@ -803,6 +823,7 @@
             document.getElementById('linkTitle').value = '';
             document.getElementById('linkUrl').value = '';
             document.getElementById('linkIcon').value = '';
+            document.getElementById('linkShare').checked = false;
         }
 
         function editLink(index) {
@@ -810,6 +831,7 @@
             document.getElementById('linkTitle').value = item.title;
             document.getElementById('linkUrl').value = item.url;
             document.getElementById('linkIcon').value = item.icon;
+            document.getElementById('linkShare').checked = item.enableShare || false;
 
             editIndexLinks = index;
             document.querySelector('#linksTab button[onclick="addLinkItem()"]').style.display = 'none';
@@ -823,6 +845,7 @@
             localSiteConfig.links[editIndexLinks].title = document.getElementById('linkTitle').value;
             localSiteConfig.links[editIndexLinks].url = document.getElementById('linkUrl').value;
             localSiteConfig.links[editIndexLinks].icon = document.getElementById('linkIcon').value;
+            localSiteConfig.links[editIndexLinks].enableShare = document.getElementById('linkShare').checked;
 
             cancelEdit('links');
             renderLists();
@@ -833,6 +856,7 @@
                 editIndexNews = -1;
                 document.getElementById('newsText').value = '';
                 document.getElementById('newsNew').checked = false;
+                document.getElementById('newsShare').checked = false;
                 document.querySelector('#newsTab button[onclick="addNewsItem()"]').style.display = 'inline-block';
                 document.getElementById('updateNewsBtn').style.display = 'none';
                 document.getElementById('cancelNewsBtn').style.display = 'none';
@@ -841,6 +865,7 @@
                 document.getElementById('linkTitle').value = '';
                 document.getElementById('linkUrl').value = '';
                 document.getElementById('linkIcon').value = '';
+                document.getElementById('linkShare').checked = false;
                 document.querySelector('#linksTab button[onclick="addLinkItem()"]').style.display = 'inline-block';
                 document.getElementById('updateLinkBtn').style.display = 'none';
                 document.getElementById('cancelLinkBtn').style.display = 'none';
@@ -957,8 +982,7 @@
             // Add timestamp to prevent caching of SHA
             const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?t=${Date.now()}`, {
                 headers: {
-                    'Authorization': `token ${token}`,
-                    'Cache-Control': 'no-cache'
+                    'Authorization': `token ${token}`
                 }
             });
             if (res.status === 404) throw new Error('Not Found');
@@ -1207,7 +1231,15 @@
 
                 // 1. Upload File
                 const content = await toBase64(file);
-                await githubPut(pat, owner, repo, `${IMAGES_DIR}/${file.name}`, content, "Upload Asset");
+
+                // Fetch SHA if file exists (fixes 422 error on overwrite)
+                let fileSha = null;
+                try {
+                    const existing = await githubGet(pat, owner, repo, `${IMAGES_DIR}/${file.name}`);
+                    fileSha = existing.sha;
+                } catch (e) { /* New file */ }
+
+                await githubPut(pat, owner, repo, `${IMAGES_DIR}/${file.name}`, content, "Upload Asset", fileSha);
 
                 // 2. Update images.json
                 // Try fetch existing
@@ -1319,7 +1351,6 @@
                         <div style="font-size:0.8rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${asset.name}">${asset.name}</div>
                         
                         <div style="display:flex; gap:0.5rem; margin-top:auto;">
-                            <button onclick="copyEmbed('${asset.url}', '${isImg ? 'img' : 'iframe'}')" class="btn-primary" style="font-size:0.7rem; padding:0.4rem;">Copy Embed</button>
                             <button onclick="deleteAsset('${asset.name}')" style="background:rgba(239, 68, 68, 0.2); color:#ef4444; border:none; border-radius:4px; padding:0.4rem; cursor:pointer;">🗑️</button>
                         </div>
                     </div>
@@ -1359,16 +1390,7 @@
             }
         }
 
-        function copyEmbed(url, type) {
-            let code = '';
-            if (type === 'img') {
-                code = `<img src="${url}" alt="Embedded Image" style="max-width:100%; border-radius:8px;">`;
-            } else {
-                code = `<iframe src="https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true" style="width:100%; height:500px;" frameborder="0"></iframe>`;
-            }
-            navigator.clipboard.writeText(code);
-            alert('Embed code copied to clipboard!');
-        }
+
 
         async function githubDelete(token, owner, repo, path, sha, msg) {
             const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
