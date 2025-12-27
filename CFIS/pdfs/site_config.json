@@ -1,11 +1,15 @@
 {
-  "news": [],
-  "links": [
+  "news": [
     {
-      "id": 1766829524524,
-      "title": "Test",
-      "url": "google.com",
-      "icon": "🗂️"
+      "date": "",
+      "text": "Semester 2 Exam commence on JAN 03 2026",
+      "new": true
+    },
+    {
+      "date": "",
+      "text": "Internal Assessment - SEM II | Last Date - 31/12/2025",
+      "new": true
     }
-  ]
+  ],
+  "links": []
 }
