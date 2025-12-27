@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Security | Analyzer Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #030308;
+            --surface: rgba(15, 15, 25, 0.6);
+            --surface-solid: #0d0d15;
+            --glass-border: rgba(168, 85, 247, 0.2);
+            --glass-shine: rgba(255, 255, 255, 0.05);
+
+            --primary: #a855f7;
+            --secondary: #3b82f6;
+            --accent: #22d3ee;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --text-muted: #475569;
+
+            --gradient-1: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%);
+            --gradient-2: linear-gradient(90deg, #a855f7, #3b82f6);
+            --glow: 0 0 20px rgba(168, 85, 247, 0.3);
+
+            --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(circle at 10% 10%, rgba(168, 85, 247, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(59, 130, 246, 0.08) 0%, transparent 40%);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            width: 100%;
+        }
+
+        /* Animations */
+        @keyframes fadeInBlur {
+            from {
+                opacity: 0;
+                filter: blur(10px);
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                filter: blur(0);
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            animation: fadeInBlur 0.8s var(--ease-in-out) forwards;
+        }
+
+        /* Header */
+        header {
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            padding: 2rem;
+            border-radius: 24px;
+            transition: all 0.4s var(--ease-in-out);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(168, 85, 247, 0.5);
+            box-shadow: var(--glow);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+        }
+
+        /* Search & Controls */
+        .controls-wrapper {
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.25rem 1.5rem 1.25rem 3.5rem;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 1.125rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .search-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+            font-size: 1.25rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        select {
+            background: var(--surface-solid);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 0.75rem 1.5rem;
+            border-radius: 15px;
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        select:hover {
+            border-color: var(--primary);
+        }
+
+        .btn {
+            background: var(--gradient-1);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: var(--glow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: var(--text-dim);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--text-main);
+        }
+
+        /* Sections */
+        .section-box {
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            /* Remove overflow: hidden to prevent clipping shadow/hover effects */
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+            /* Fix: Only pull to top, left, and right. NOT bottom. */
+            margin: -2.5rem -2.5rem 0 -2.5rem;
+            padding: 2.5rem;
+            transition: background 0.3s ease;
+            border-bottom: 1px solid transparent;
+        }
+
+        .section-header:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 8px;
+            height: 32px;
+            background: var(--gradient-1);
+            border-radius: 4px;
+        }
+
+        .collapse-toggle {
+            font-size: 1.5rem;
+            color: var(--text-dim);
+            transition: transform 0.4s var(--ease-in-out);
+        }
+
+        .collapsed .collapse-toggle {
+            transform: rotate(-90deg);
+        }
+
+        .section-content-wrapper {
+            display: grid;
+            grid-template-rows: 1fr;
+            transition: grid-template-rows 0.5s var(--ease-in-out);
+        }
+
+        .collapsed .section-content-wrapper {
+            grid-template-rows: 0fr;
+        }
+
+        .section-content {
+            overflow: hidden;
+            min-height: 0;
+            opacity: 1;
+            transition: opacity 0.4s ease, padding 0.4s ease;
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+            /* Add padding at the bottom of the content */
+        }
+
+        .collapsed .section-content {
+            opacity: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        /* Topic Grid */
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .topic-pill {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 1.25rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .topic-pill:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: scale(1.05);
+        }
+
+        .topic-count {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+        }
+
+        .topic-label {
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            font-weight: 500;
+        }
+
+        /* Question Cards */
+        .q-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .q-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            padding: 1.5rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .q-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--primary);
+            transform: translateX(10px);
+        }
+
+        .q-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .q-txt {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            white-space: nowrap;
+        }
+
+        .badge-year {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .badge-mark {
+            background: rgba(168, 85, 247, 0.15);
+            color: #c084fc;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .q-bottom {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: var(--text-dim);
+        }
+
+        .unit-tag {
+            background: var(--surface-solid);
+            padding: 0.2rem 0.6rem;
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            padding: 4rem 0;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        main {
+            padding-bottom: 8rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1.25rem;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .filter-group {
+                justify-content: stretch;
+            }
+
+            select {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="reveal">
+        <div class="container">
+            <h1 class="hero-title">Network Security</h1>
+            <p class="hero-subtitle">QP Intelligence & Analysis</p>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- Quick Stats -->
+        <div class="stats-grid reveal" style="animation-delay: 0.2s;">
+            <div class="stat-card">
+                <div class="stat-label">Total Volume</div>
+                <div class="stat-value" id="totalQuestions">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Unique Topics</div>
+                <div class="stat-value" id="uniqueTopics">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Years Tracked</div>
+                <div class="stat-value" id="yearsAnalyzed">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Hot Unit</div>
+                <div class="stat-value" id="mostAskedUnit">-</div>
+            </div>
+        </div>
+
+        <!-- Master Controls -->
+        <div class="reveal" style="animation-delay: 0.4s;">
+            <div class="controls-wrapper">
+                <div class="search-container">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" class="search-input"
+                        placeholder="Search questions or topics...">
+                </div>
+                <div class="filter-group">
+                    <select id="unitFilter">
+                        <option value="all">All Units</option>
+                        <option value="1">Unit 1</option>
+                        <option value="2">Unit 2</option>
+                        <option value="3">Unit 3</option>
+                        <option value="4">Unit 4</option>
+                        <option value="5">Unit 5</option>
+                    </select>
+                    <select id="markFilter">
+                        <option value="all">Any Marks</option>
+                        <option value="2">2 Marks</option>
+                        <option value="6">6 Marks</option>
+                        <option value="10">10 Marks</option>
+                    </select>
+                    <select id="yearFilter">
+                        <option value="all">All Years</option>
+                    </select>
+                    <button class="btn" onclick="resetFilters()">Reset All</button>
+                    <button class="btn btn-outline" id="globalToggle" onclick="toggleAllSections()">Collapse
+                        All</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visual Analysis -->
+        <div class="section-box reveal" id="analysisSection" style="animation-delay: 0.6s;">
+            <div class="section-header" onclick="toggleSection('analysisSection')">
+                <h2 class="section-title">Analysis Matrix</h2>
+                <span class="collapse-toggle">▼</span>
+            </div>
+            <div class="section-content-wrapper">
+                <div class="section-content">
+                    <div id="topicGrid" class="topic-grid"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Archive -->
+        <div class="section-box reveal" id="archiveSection" style="animation-delay: 0.8s;">
+            <div class="section-header" onclick="toggleSection('archiveSection')">
+                <h2 class="section-title">Question Archive</h2>
+                <span class="collapse-toggle">▼</span>
+            </div>
+            <div class="section-content-wrapper">
+                <div class="section-content">
+                    <div id="qList" class="q-list"></div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Network Security Intelligence Portal</p>
+            <p style="margin-top: 0.5rem; opacity: 0.5;">Analyzing data from 2019 to 2024</p>
+        </div>
+    </footer>
+
+    <script>
+        const questionData = [
+            // DEC 2019
+            { year: "DEC 2019", question: "DAD", marks: 2, unit: 1, topic: "DAD" },
+            { year: "DEC 2019", question: "PEAP", marks: 2, unit: 1, topic: "PEAP" },
+            { year: "DEC 2019", question: "PPP", marks: 2, unit: 2, topic: "PPP" },
+            { year: "DEC 2019", question: "L2TP", marks: 2, unit: 2, topic: "L2TP" },
+            { year: "DEC 2019", question: "SQL Injection", marks: 2, unit: 3, topic: "SQL Injection" },
+            { year: "DEC 2019", question: "Brute Force Attack", marks: 2, unit: 3, topic: "Brute Force Attack" },
+            { year: "DEC 2019", question: "Replay attack", marks: 2, unit: 3, topic: "Replay Attack" },
+            { year: "DEC 2019", question: "WEP", marks: 2, unit: 4, topic: "WEP" },
+            { year: "DEC 2019", question: "CCMP", marks: 2, unit: 4, topic: "CCMP" },
+            { year: "DEC 2019", question: "Symmetric Key", marks: 2, unit: 5, topic: "Symmetric Key" },
+            { year: "DEC 2019", question: "PKI", marks: 2, unit: 5, topic: "PKI" },
+            { year: "DEC 2019", question: "DES-EDE2", marks: 2, unit: 5, topic: "DES Variants" },
+            { year: "DEC 2019", question: "Explain the process of IKE", marks: 6, unit: 1, topic: "IKE" },
+            { year: "DEC 2019", question: "Enumerate the functions of TACACS", marks: 6, unit: 2, topic: "TACACS+" },
+            { year: "DEC 2019", question: "What are Trojans? Explain ways to prevent it", marks: 6, unit: 3, topic: "Trojan" },
+            { year: "DEC 2019", question: "Discuss the goals of cryptography", marks: 6, unit: 4, topic: "Goals of Cryptography" },
+            { year: "DEC 2019", question: "Write a note on Wireless Network Security", marks: 6, unit: 4, topic: "Wireless Network Security" },
+            { year: "DEC 2019", question: "Write a note on Digital signature", marks: 6, unit: 5, topic: "Digital Signature" },
+            { year: "DEC 2019", question: "Expand and explain PGP", marks: 6, unit: 1, topic: "PGP" },
+            { year: "DEC 2019", question: "Write a detail note on CIA of data/information", marks: 10, unit: 1, topic: "CIA Triad" },
+            { year: "DEC 2019", question: "What is Protocol? How is it used in Network Security?", marks: 10, unit: 1, topic: "Network Security Protocols" },
+            { year: "DEC 2019", question: "Explain the technique of Honey Pots with an illustration", marks: 10, unit: 3, topic: "Honeypots" },
+            { year: "DEC 2019", question: "Discuss in detail the Data Encryption Standards", marks: 10, unit: 5, topic: "DES" },
+            { year: "DEC 2019", question: "Suggest ways to protect networks security (at least 10)", marks: 10, unit: 3, topic: "Network Security Protection" },
+            // DEC 2020
+            { year: "DEC 2020", question: "Header", marks: 2, unit: 1, topic: "IPSec Headers" },
+            { year: "DEC 2020", question: "SET", marks: 2, unit: 1, topic: "SET" },
+            { year: "DEC 2020", question: "PAP", marks: 2, unit: 2, topic: "PAP" },
+            { year: "DEC 2020", question: "L2F", marks: 2, unit: 2, topic: "L2F" },
+            { year: "DEC 2020", question: "Rootkits", marks: 2, unit: 3, topic: "Rootkits" },
+            { year: "DEC 2020", question: "Spoofing", marks: 2, unit: 3, topic: "Spoofing" },
+            { year: "DEC 2020", question: "Social Engineering", marks: 2, unit: 3, topic: "Social Engineering" },
+            { year: "DEC 2020", question: "WPA", marks: 2, unit: 4, topic: "WPA" },
+            { year: "DEC 2020", question: "Banner Grabbing", marks: 2, unit: 3, topic: "Banner Grabbing" },
+            { year: "DEC 2020", question: "Asymmetric Key", marks: 2, unit: 5, topic: "Asymmetric Key" },
+            { year: "DEC 2020", question: "CRL", marks: 2, unit: 5, topic: "CRL" },
+            { year: "DEC 2020", question: "DES-EEE2", marks: 2, unit: 5, topic: "DES Variants" },
+            { year: "DEC 2020", question: "Explain the Pretty Good Privacy", marks: 6, unit: 1, topic: "PGP" },
+            { year: "DEC 2020", question: "Enumerate the functions of HDLC", marks: 6, unit: 2, topic: "HDLC" },
+            { year: "DEC 2020", question: "Write a note on Man in the Middle Attack", marks: 6, unit: 3, topic: "Man in the Middle Attack" },
+            { year: "DEC 2020", question: "Elucidate the goals of cryptography", marks: 6, unit: 4, topic: "Goals of Cryptography" },
+            { year: "DEC 2020", question: "Explain the technique of Honey Pots", marks: 6, unit: 3, topic: "Honeypots" },
+            { year: "DEC 2020", question: "Discuss Data Encryption Standards", marks: 6, unit: 5, topic: "DES" },
+            { year: "DEC 2020", question: "Write a short note on wireless security", marks: 6, unit: 4, topic: "Wireless Network Security" },
+            { year: "DEC 2020", question: "Write a detail note on CIA of data/information in the network", marks: 10, unit: 1, topic: "CIA Triad" },
+            { year: "DEC 2020", question: "Write a note on security, threat and vulnerabilities in a network", marks: 10, unit: 3, topic: "Security Threats" },
+            { year: "DEC 2020", question: "Write a note on Wireless Network Security", marks: 10, unit: 4, topic: "Wireless Network Security" },
+            { year: "DEC 2020", question: "Write a detail note on Digital signature", marks: 10, unit: 5, topic: "Digital Signature" },
+            { year: "DEC 2020", question: "Write a detailed on IPSEC and IPSEC blocks", marks: 10, unit: 1, topic: "IPSec" },
+            // DEC 2021
+            { year: "DEC 2021", question: "AH Header", marks: 2, unit: 1, topic: "AH Header" },
+            { year: "DEC 2021", question: "Internet", marks: 2, unit: 1, topic: "Internet" },
+            { year: "DEC 2021", question: "L2F", marks: 2, unit: 2, topic: "L2F" },
+            { year: "DEC 2021", question: "EAP", marks: 2, unit: 1, topic: "EAP" },
+            { year: "DEC 2021", question: "Root kits", marks: 2, unit: 3, topic: "Rootkits" },
+            { year: "DEC 2021", question: "Enumerate form of DoS attack", marks: 2, unit: 3, topic: "DoS Attack" },
+            { year: "DEC 2021", question: "Zero day attack", marks: 2, unit: 3, topic: "Zero-day Attack" },
+            { year: "DEC 2021", question: "WPA2", marks: 2, unit: 4, topic: "WPA2" },
+            { year: "DEC 2021", question: "Hashing", marks: 2, unit: 4, topic: "Hashing" },
+            { year: "DEC 2021", question: "Symmetric Key", marks: 2, unit: 5, topic: "Symmetric Key" },
+            { year: "DEC 2021", question: "CRL", marks: 2, unit: 5, topic: "CRL" },
+            { year: "DEC 2021", question: "Diffie-Hellman", marks: 2, unit: 5, topic: "Diffie-Hellman" },
+            { year: "DEC 2021", question: "Privacy of information in a network is absolute - Comment", marks: 6, unit: 1, topic: "Network Privacy" },
+            { year: "DEC 2021", question: "Enumerate the functions of HDLC", marks: 6, unit: 2, topic: "HDLC" },
+            { year: "DEC 2021", question: "Write a note on security threat in a network", marks: 6, unit: 3, topic: "Security Threats" },
+            { year: "DEC 2021", question: "Cyber security is a challenge before the data security professionals - Do you agree", marks: 6, unit: 3, topic: "Cyber Security" },
+            { year: "DEC 2021", question: "How can we achieve the goals of cryptography in a network?", marks: 6, unit: 4, topic: "Goals of Cryptography" },
+            { year: "DEC 2021", question: "Explain the technique of Honey Pot", marks: 6, unit: 3, topic: "Honeypots" },
+            { year: "DEC 2021", question: "Discuss International Data Encryption Standards", marks: 6, unit: 5, topic: "DES" },
+            { year: "DEC 2021", question: "Write a detail note on CIA of information in the network", marks: 10, unit: 1, topic: "CIA Triad" },
+            { year: "DEC 2021", question: "Explain in detail the Cryptosystems", marks: 10, unit: 4, topic: "Cryptosystems" },
+            { year: "DEC 2021", question: "Write a note on Man in the Middle Attack. Use illustration to explain", marks: 10, unit: 3, topic: "Man in the Middle Attack" },
+            { year: "DEC 2021", question: "Explain Wireless Network Security", marks: 10, unit: 4, topic: "Wireless Network Security" },
+            { year: "DEC 2021", question: "Write a detail note on Digital signature", marks: 10, unit: 5, topic: "Digital Signature" },
+            // DEC 2022
+            { year: "DEC 2022", question: "DAD - Expand and give its uses", marks: 2, unit: 1, topic: "DAD" },
+            { year: "DEC 2022", question: "PGP - Expand and give its uses", marks: 2, unit: 1, topic: "PGP" },
+            { year: "DEC 2022", question: "Point to Point Protocol", marks: 2, unit: 2, topic: "PPP" },
+            { year: "DEC 2022", question: "Layer 2 Forwarding", marks: 2, unit: 2, topic: "L2F" },
+            { year: "DEC 2022", question: "Virus", marks: 2, unit: 3, topic: "Virus" },
+            { year: "DEC 2022", question: "Trojan", marks: 2, unit: 3, topic: "Trojan" },
+            { year: "DEC 2022", question: "Root kits", marks: 2, unit: 3, topic: "Rootkits" },
+            { year: "DEC 2022", question: "Cryptology", marks: 2, unit: 4, topic: "Cryptology" },
+            { year: "DEC 2022", question: "WPA - Expand and explain", marks: 2, unit: 4, topic: "WPA" },
+            { year: "DEC 2022", question: "DES Keys", marks: 2, unit: 5, topic: "DES Keys" },
+            { year: "DEC 2022", question: "Skipjack", marks: 2, unit: 5, topic: "Skipjack" },
+            { year: "DEC 2022", question: "RSA - Expand and give its merits", marks: 2, unit: 5, topic: "RSA" },
+            { year: "DEC 2022", question: "Explain Internet Key Exchange", marks: 6, unit: 1, topic: "IKE" },
+            { year: "DEC 2022", question: "Elucidate on High Level Data link control", marks: 6, unit: 2, topic: "HDLC" },
+            { year: "DEC 2022", question: "Describe SQL Injection", marks: 6, unit: 3, topic: "SQL Injection" },
+            { year: "DEC 2022", question: "Explain Zero Day attack", marks: 6, unit: 3, topic: "Zero-day Attack" },
+            { year: "DEC 2022", question: "Write a note on Symmetric vs. Asymmetric Cryptosystems", marks: 6, unit: 4, topic: "Symmetric vs Asymmetric" },
+            { year: "DEC 2022", question: "Explain DES Algorithm", marks: 6, unit: 5, topic: "DES" },
+            { year: "DEC 2022", question: "Elucidate Cipher Block Chaining Mode", marks: 6, unit: 5, topic: "Cipher Block Chaining" },
+            { year: "DEC 2022", question: "Explain lightweight Extensible Authentication Protocol", marks: 10, unit: 1, topic: "LEAP" },
+            { year: "DEC 2022", question: "Illustrate Challenge Handshake Authentication Protocol", marks: 10, unit: 2, topic: "CHAP" },
+            { year: "DEC 2022", question: "Elucidate Security threats and Vulnerabilities in network", marks: 10, unit: 3, topic: "Security Threats" },
+            { year: "DEC 2022", question: "Explain Cryptosystems", marks: 10, unit: 4, topic: "Cryptosystems" },
+            { year: "DEC 2022", question: "Explain in detail on Public Key Infrastructure", marks: 10, unit: 5, topic: "PKI" },
+            // DEC 2023
+            { year: "DEC 2023", question: "Transport Layer Security", marks: 2, unit: 1, topic: "TLS" },
+            { year: "DEC 2023", question: "Network Security", marks: 2, unit: 1, topic: "Network Security" },
+            { year: "DEC 2023", question: "PAP - Expand and give its importance (at least 2)", marks: 2, unit: 2, topic: "PAP" },
+            { year: "DEC 2023", question: "PPTP - Expand and give its importance (at least 2)", marks: 2, unit: 2, topic: "PPTP" },
+            { year: "DEC 2023", question: "Botnets", marks: 2, unit: 3, topic: "Botnets" },
+            { year: "DEC 2023", question: "Honeypots", marks: 2, unit: 3, topic: "Honeypots" },
+            { year: "DEC 2023", question: "Spam", marks: 2, unit: 3, topic: "Spam" },
+            { year: "DEC 2023", question: "Ciphers", marks: 2, unit: 4, topic: "Ciphers" },
+            { year: "DEC 2023", question: "TKIP - Expand", marks: 2, unit: 4, topic: "TKIP" },
+            { year: "DEC 2023", question: "ISAKMP - Expand", marks: 2, unit: 4, topic: "ISAKMP" },
+            { year: "DEC 2023", question: "Blowfish", marks: 2, unit: 5, topic: "Blowfish" },
+            { year: "DEC 2023", question: "Diffie Hellman", marks: 2, unit: 5, topic: "Diffie-Hellman" },
+            { year: "DEC 2023", question: "Explain Extensible Authentication Protocol", marks: 6, unit: 1, topic: "EAP" },
+            { year: "DEC 2023", question: "Elucidate on Terminal Access Controller Access-Control System (TACACS+)", marks: 6, unit: 2, topic: "TACACS+" },
+            { year: "DEC 2023", question: "Describe Cross site Scripting", marks: 6, unit: 3, topic: "Cross-site Scripting" },
+            { year: "DEC 2023", question: "Explain Banner Grabbing", marks: 6, unit: 3, topic: "Banner Grabbing" },
+            { year: "DEC 2023", question: "Write a note on Codes vs. Ciphers", marks: 6, unit: 4, topic: "Codes vs Ciphers" },
+            { year: "DEC 2023", question: "Explain Substitution Ciphers", marks: 6, unit: 4, topic: "Substitution Ciphers" },
+            { year: "DEC 2023", question: "Elucidate Asymmetric Key Algorithms", marks: 6, unit: 5, topic: "Asymmetric Key" },
+            { year: "DEC 2023", question: "Explain Protected Extensible Authentication Protocol", marks: 10, unit: 1, topic: "PEAP" },
+            { year: "DEC 2023", question: "Write a note on Remote Authentication Dial-In User Service", marks: 10, unit: 2, topic: "RADIUS" },
+            { year: "DEC 2023", question: "Elucidate Vulnerability Scanning vs. Port Scanning", marks: 10, unit: 3, topic: "Vulnerability Scanning" },
+            { year: "DEC 2023", question: "Explain the Goals of Cryptography (at least 10)", marks: 10, unit: 4, topic: "Goals of Cryptography" },
+            { year: "DEC 2023", question: "Explain International Data Encryption Algorithm", marks: 10, unit: 5, topic: "IDEA" },
+            // MAY 2022
+            { year: "MAY 2022", question: "ESP Header", marks: 2, unit: 1, topic: "ESP Header" },
+            { year: "MAY 2022", question: "Intranet", marks: 2, unit: 1, topic: "Intranet" },
+            { year: "MAY 2022", question: "MIME", marks: 2, unit: 1, topic: "MIME" },
+            { year: "MAY 2022", question: "CHAP", marks: 2, unit: 2, topic: "CHAP" },
+            { year: "MAY 2022", question: "Tunneling", marks: 2, unit: 2, topic: "Tunneling" },
+            { year: "MAY 2022", question: "DDoS attack", marks: 2, unit: 3, topic: "DDoS Attack" },
+            { year: "MAY 2022", question: "Site Scripting", marks: 2, unit: 3, topic: "Cross-site Scripting" },
+            { year: "MAY 2022", question: "CCMP", marks: 2, unit: 4, topic: "CCMP" },
+            { year: "MAY 2022", question: "Security Associations", marks: 2, unit: 1, topic: "Security Associations" },
+            { year: "MAY 2022", question: "Substitution Ciphers", marks: 2, unit: 4, topic: "Substitution Ciphers" },
+            { year: "MAY 2022", question: "CAST", marks: 2, unit: 5, topic: "CAST" },
+            { year: "MAY 2022", question: "DES-EEE3", marks: 2, unit: 5, topic: "DES Variants" },
+            { year: "MAY 2022", question: "Expand and explain PGP", marks: 6, unit: 1, topic: "PGP" },
+            { year: "MAY 2022", question: "Discuss on IKE", marks: 6, unit: 1, topic: "IKE" },
+            { year: "MAY 2022", question: "Write a note on security vulnerabilities in a network", marks: 6, unit: 3, topic: "Security Vulnerabilities" },
+            { year: "MAY 2022", question: "Information security is a challenge before the data security professionals - Do you agree", marks: 6, unit: 3, topic: "Information Security" },
+            { year: "MAY 2022", question: "Give an account cryptographic key", marks: 6, unit: 4, topic: "Cryptographic Keys" },
+            { year: "MAY 2022", question: "Write a note on salami attack. Use illustration to explain", marks: 6, unit: 3, topic: "Salami Attack" },
+            { year: "MAY 2022", question: "Discuss certificate revocation list", marks: 6, unit: 5, topic: "CRL" },
+            { year: "MAY 2022", question: "Write a detail note on CIA Triad of information", marks: 10, unit: 1, topic: "CIA Triad" },
+            { year: "MAY 2022", question: "Enlist the functions of TACACS+", marks: 10, unit: 2, topic: "TACACS+" },
+            { year: "MAY 2022", question: "Honey Pots is evidence based counter - Comment on the statement", marks: 10, unit: 3, topic: "Honeypots" },
+            { year: "MAY 2022", question: "Differentiate Codes and Cipher", marks: 10, unit: 4, topic: "Codes vs Ciphers" },
+            { year: "MAY 2022", question: "Write a detail note on Diffie-Hellman Private and Public Keys", marks: 10, unit: 5, topic: "Diffie-Hellman" },
+            // MAY 2023
+            { year: "MAY 2023", question: "CIA", marks: 2, unit: 1, topic: "CIA Triad" },
+            { year: "MAY 2023", question: "Internet Key Exchange", marks: 2, unit: 1, topic: "IKE" },
+            { year: "MAY 2023", question: "Point to Point Tunnelling Protocol", marks: 2, unit: 2, topic: "PPTP" },
+            { year: "MAY 2023", question: "Layer two Tunnelling Protocol", marks: 2, unit: 2, topic: "L2TP" },
+            { year: "MAY 2023", question: "Backdoors", marks: 2, unit: 3, topic: "Backdoors" },
+            { year: "MAY 2023", question: "Phishing", marks: 2, unit: 3, topic: "Phishing" },
+            { year: "MAY 2023", question: "WPA2 - Expand and Explain", marks: 2, unit: 4, topic: "WPA2" },
+            { year: "MAY 2023", question: "WEP - Expand and give its role", marks: 2, unit: 4, topic: "WEP" },
+            { year: "MAY 2023", question: "CCMP - Expand and give its role", marks: 2, unit: 4, topic: "CCMP" },
+            { year: "MAY 2023", question: "Digital Signature", marks: 2, unit: 5, topic: "Digital Signature" },
+            { year: "MAY 2023", question: "Data Encryption Standard", marks: 2, unit: 5, topic: "DES" },
+            { year: "MAY 2023", question: "Triple DES", marks: 2, unit: 5, topic: "Triple DES" },
+            { year: "MAY 2023", question: "Explain Secure Electronic Transaction", marks: 6, unit: 1, topic: "SET" },
+            { year: "MAY 2023", question: "Elucidate on Password Authentication Protocol", marks: 6, unit: 2, topic: "PAP" },
+            { year: "MAY 2023", question: "Describe DNS Poisoning", marks: 6, unit: 3, topic: "DNS Poisoning" },
+            { year: "MAY 2023", question: "Explain Social Engineering", marks: 6, unit: 3, topic: "Social Engineering" },
+            { year: "MAY 2023", question: "Write a note on AH and ESP", marks: 6, unit: 1, topic: "AH and ESP" },
+            { year: "MAY 2023", question: "Explain Output Feedback Mode", marks: 6, unit: 5, topic: "Output Feedback Mode" },
+            { year: "MAY 2023", question: "Elucidate Cipher Feedback Mode", marks: 6, unit: 5, topic: "Cipher Feedback Mode" },
+            { year: "MAY 2023", question: "Explain Internet Protocol Security", marks: 10, unit: 1, topic: "IPSec" },
+            { year: "MAY 2023", question: "Elucidate Tunnelling Protocols in the Data Link Layer", marks: 10, unit: 2, topic: "Tunneling Protocols" },
+            { year: "MAY 2023", question: "Compare DoS and DDoS attack", marks: 10, unit: 3, topic: "DoS vs DDoS" },
+            { year: "MAY 2023", question: "Explain Wireless Network Security", marks: 10, unit: 4, topic: "Wireless Network Security" },
+            { year: "MAY 2023", question: "Explain in detail the Certification Revocation list", marks: 10, unit: 5, topic: "CRL" },
+            // MAY 2024
+            { year: "MAY 2024", question: "Secure Electronic Transaction", marks: 2, unit: 1, topic: "SET" },
+            { year: "MAY 2024", question: "Transport Layer Security", marks: 2, unit: 1, topic: "TLS" },
+            { year: "MAY 2024", question: "Terminal Access Controller", marks: 2, unit: 2, topic: "TACACS+" },
+            { year: "MAY 2024", question: "Password Authentication Protocol", marks: 2, unit: 2, topic: "PAP" },
+            { year: "MAY 2024", question: "Security Threats", marks: 2, unit: 3, topic: "Security Threats" },
+            { year: "MAY 2024", question: "Spoofing", marks: 2, unit: 3, topic: "Spoofing" },
+            { year: "MAY 2024", question: "Goals of Cryptography", marks: 2, unit: 4, topic: "Goals of Cryptography" },
+            { year: "MAY 2024", question: "Block Ciphers", marks: 2, unit: 4, topic: "Block Ciphers" },
+            { year: "MAY 2024", question: "Data Encryption Standards", marks: 2, unit: 5, topic: "DES" },
+            { year: "MAY 2024", question: "Digital Signature", marks: 2, unit: 5, topic: "Digital Signature" },
+            { year: "MAY 2024", question: "Honeypots", marks: 2, unit: 3, topic: "Honeypots" },
+            { year: "MAY 2024", question: "Transposition techniques", marks: 2, unit: 4, topic: "Transposition Ciphers" },
+            { year: "MAY 2024", question: "What are the content types provided by S/MIME? Explain", marks: 6, unit: 1, topic: "S/MIME" },
+            { year: "MAY 2024", question: "Why does PGP compress the message? What are the reasons for compressing the signature but before encryption?", marks: 6, unit: 1, topic: "PGP" },
+            { year: "MAY 2024", question: "Discuss about the challenge Handshake Authentication Protocol", marks: 6, unit: 2, topic: "CHAP" },
+            { year: "MAY 2024", question: "Describe SQL injection techniques", marks: 6, unit: 3, topic: "SQL Injection" },
+            { year: "MAY 2024", question: "What is the relation between security mechanisms and attacks? Explain", marks: 6, unit: 3, topic: "Security Mechanisms" },
+            { year: "MAY 2024", question: "What are the services provided by IPSec? Where can be the IPSec located on a network?", marks: 6, unit: 1, topic: "IPSec" },
+            { year: "MAY 2024", question: "Explain the key scheduling of IDEA", marks: 6, unit: 5, topic: "IDEA" },
+            { year: "MAY 2024", question: "How does Protected Extensible Authentication Protocol (PEAP) Works?", marks: 10, unit: 1, topic: "PEAP" },
+            { year: "MAY 2024", question: "What is HDLC Frame? List the types of HDLC frames. Explain", marks: 10, unit: 2, topic: "HDLC" },
+            { year: "MAY 2024", question: "Differentiate DoS and DDoS", marks: 10, unit: 3, topic: "DoS vs DDoS" },
+            { year: "MAY 2024", question: "Discuss in detail about Secure Hash algorithm with example", marks: 10, unit: 4, topic: "Secure Hash Algorithm" },
+            { year: "MAY 2024", question: "Give the structure of AES. Explain how Encryption/Decryption is done in AES", marks: 10, unit: 5, topic: "AES" },
+            // MAY 2021
+            { year: "MAY 2021", question: "PGP", marks: 2, unit: 1, topic: "PGP" },
+            { year: "MAY 2021", question: "IP Sec", marks: 2, unit: 1, topic: "IPSec" },
+            { year: "MAY 2021", question: "TLS", marks: 2, unit: 1, topic: "TLS" },
+            { year: "MAY 2021", question: "HDLC", marks: 2, unit: 2, topic: "HDLC" },
+            { year: "MAY 2021", question: "SQL Injection", marks: 2, unit: 3, topic: "SQL Injection" },
+            { year: "MAY 2021", question: "Brute Force Attack", marks: 2, unit: 3, topic: "Brute Force Attack" },
+            { year: "MAY 2021", question: "Trojan", marks: 2, unit: 3, topic: "Trojan" },
+            { year: "MAY 2021", question: "CCMP", marks: 2, unit: 4, topic: "CCMP" },
+            { year: "MAY 2021", question: "Ciphers", marks: 2, unit: 4, topic: "Ciphers" },
+            { year: "MAY 2021", question: "Asymmetric Key", marks: 2, unit: 5, topic: "Asymmetric Key" },
+            { year: "MAY 2021", question: "PKI", marks: 2, unit: 5, topic: "PKI" },
+            { year: "MAY 2021", question: "CRL", marks: 2, unit: 5, topic: "CRL" },
+            { year: "MAY 2021", question: "Explain SET", marks: 6, unit: 1, topic: "SET" },
+            { year: "MAY 2021", question: "Enumerate the functions of PPP", marks: 6, unit: 2, topic: "PPP" },
+            { year: "MAY 2021", question: "Discuss Session Hijacking", marks: 6, unit: 3, topic: "Session Hijacking" },
+            { year: "MAY 2021", question: "What is Banner Grabbing?", marks: 6, unit: 3, topic: "Banner Grabbing" },
+            { year: "MAY 2021", question: "Discuss the aims of cryptography", marks: 6, unit: 4, topic: "Goals of Cryptography" },
+            { year: "MAY 2021", question: "Write a note on Wireless Network Security", marks: 6, unit: 4, topic: "Wireless Network Security" },
+            { year: "MAY 2021", question: "Write a note on DES Algorithm", marks: 6, unit: 5, topic: "DES" },
+            { year: "MAY 2021", question: "Write a detail note on CIA of information", marks: 10, unit: 1, topic: "CIA Triad" },
+            { year: "MAY 2021", question: "Enumerate the Challenges in Handshake Authentication Protocol (at least 10)", marks: 10, unit: 2, topic: "CHAP" },
+            { year: "MAY 2021", question: "How is social engineering a threat to your data? Explain using a decided case", marks: 10, unit: 3, topic: "Social Engineering" },
+            { year: "MAY 2021", question: "Explain the technique of Honey Pot with an illustration", marks: 10, unit: 3, topic: "Honeypots" },
+            { year: "MAY 2021", question: "Discuss in detail the Symmetric Key Algorithm", marks: 10, unit: 5, topic: "Symmetric Key" }
+        ];
+
+        let filtered = [...questionData];
+        let allCollapsed = false;
+
+        function init() {
+            renderStats();
+            renderTopics();
+            renderArchive();
+            populateYears();
+
+            document.getElementById('searchInput').addEventListener('input', runFilters);
+            document.getElementById('unitFilter').addEventListener('change', runFilters);
+            document.getElementById('markFilter').addEventListener('change', runFilters);
+            document.getElementById('yearFilter').addEventListener('change', runFilters);
+        }
+
+        function renderStats() {
+            const stats = {
+                total: questionData.length,
+                topics: new Set(questionData.map(q => q.topic)).size,
+                years: new Set(questionData.map(q => q.year)).size,
+                units: {}
+            };
+            questionData.forEach(q => stats.units[q.unit] = (stats.units[q.unit] || 0) + 1);
+            const hotUnit = Object.entries(stats.units).sort((a, b) => b[1] - a[1])[0][0];
+
+            document.getElementById('totalQuestions').innerText = stats.total;
+            document.getElementById('uniqueTopics').innerText = stats.topics;
+            document.getElementById('yearsAnalyzed').innerText = stats.years;
+            document.getElementById('mostAskedUnit').innerText = `Unit ${hotUnit}`;
+        }
+
+        function renderTopics() {
+            const freq = {};
+            questionData.forEach(q => freq[q.topic] = (freq[q.topic] || 0) + 1);
+            const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 12);
+
+            const container = document.getElementById('topicGrid');
+            container.innerHTML = sorted.map(([name, count]) => `
+                <div class="topic-pill">
+                    <span class="topic-count">${count}x</span>
+                    <span class="topic-label">${name}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderArchive() {
+            const container = document.getElementById('qList');
+            if (filtered.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding: 4rem; color: var(--text-muted)">No intelligence matches these filters.</div>`;
+                return;
+            }
+            container.innerHTML = filtered.map(q => `
+                <div class="q-card">
+                    <div class="q-top">
+                        <span class="q-txt">${q.question}</span>
+                        <div style="display:flex; gap: 0.5rem">
+                            <span class="badge badge-year">${q.year}</span>
+                            <span class="badge badge-mark">${q.marks}M</span>
+                        </div>
+                    </div>
+                    <div class="q-bottom">
+                        <span class="unit-tag">Unit ${q.unit}</span>
+                        <span>•</span>
+                        <span>${q.topic}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function runFilters() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const unit = document.getElementById('unitFilter').value;
+            const marks = document.getElementById('markFilter').value;
+            const year = document.getElementById('yearFilter').value;
+
+            filtered = questionData.filter(q => {
+                const searchMatch = q.question.toLowerCase().includes(search) || q.topic.toLowerCase().includes(search);
+                const unitMatch = unit === 'all' || q.unit == unit;
+                const marksMatch = marks === 'all' || q.marks == marks;
+                const yearMatch = year === 'all' || q.year == year;
+                return searchMatch && unitMatch && marksMatch && yearMatch;
+            });
+            renderArchive();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('unitFilter').value = 'all';
+            document.getElementById('markFilter').value = 'all';
+            document.getElementById('yearFilter').value = 'all';
+            filtered = [...questionData];
+            renderArchive();
+        }
+
+        function populateYears() {
+            const years = [...new Set(questionData.map(q => q.year))].sort().reverse();
+            const el = document.getElementById('yearFilter');
+            years.forEach(y => {
+                const opt = document.createElement('option');
+                opt.value = y;
+                opt.textContent = y;
+                el.appendChild(opt);
+            });
+        }
+
+        /* Collapsible Logic */
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.classList.toggle('collapsed');
+            updateGlobalToggleState();
+        }
+
+        function toggleAllSections() {
+            const sections = ['analysisSection', 'archiveSection'];
+            const btn = document.getElementById('globalToggle');
+
+            allCollapsed = !allCollapsed;
+
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (allCollapsed) {
+                    el.classList.add('collapsed');
+                } else {
+                    el.classList.remove('collapsed');
+                }
+            });
+
+            btn.innerText = allCollapsed ? 'Expand All' : 'Collapse All';
+        }
+
+        function updateGlobalToggleState() {
+            const sections = ['analysisSection', 'archiveSection'];
+            const btn = document.getElementById('globalToggle');
+            const allMatch = sections.every(id => document.getElementById(id).classList.contains('collapsed'));
+            const noneMatch = sections.every(id => !document.getElementById(id).classList.contains('collapsed'));
+
+            if (allMatch) {
+                allCollapsed = true;
+                btn.innerText = 'Expand All';
+            } else if (noneMatch) {
+                allCollapsed = false;
+                btn.innerText = 'Collapse All';
+            }
+        }
+
+        init();
+    </script>
+</body>
+
+</html>
