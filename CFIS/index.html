@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CFIS | College Notes Archive</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/TextPlugin.min.js"></script>
+</head>
+
+<body>
+    <div class="noise-overlay"></div>
+
+    <div class="toast-container" id="toast-container">
+        <!-- Toasts will be injected here -->
+        <div class="glass-panel toast" id="welcome-toast">
+            <div class="toast-content">
+                <span class="toast-icon">✨</span>
+                <div class="toast-text">
+                    <span class="toast-title">Welcome Back</span>
+                    <span class="toast-msg">Latest notes updated.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Command Palette -->
+    <div class="cmd-overlay" id="cmd-overlay">
+        <div class="glass-panel cmd-palette">
+            <div class="cmd-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path
+                        d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" />
+                </svg>
+                <input type="text" id="cmd-input" placeholder="Type a command or search..." autocomplete="off">
+                <span class="cmd-badge">ESC</span>
+            </div>
+            <div class="cmd-content" id="cmd-items">
+                <!-- Items injected via JS -->
+            </div>
+            <div class="cmd-footer">
+                <span><kbd>↑</kbd> <kbd>↓</kbd> to navigate</span>
+                <span><kbd>↵</kbd> to select</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Focus Mode Overlay -->
+    <div id="focus-overlay"
+        style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:50; transition: background 0.5s;">
+    </div>
+
+    <div id="focus-controls"
+        style="position:fixed; bottom:2rem; right:2rem; z-index:100; display:none; flex-direction:column; align-items:flex-end;">
+        <div class="glass-panel" style="margin-bottom:1rem; padding:1rem; display:flex; gap:1rem; align-items:center;">
+            <span style="font-size:2rem; font-family:var(--font-mono);" id="focus-timer">25:00</span>
+            <button onclick="toggleTimer()" class="icon-btn"
+                style="background:var(--accent-color); color:white;">▶</button>
+        </div>
+        <button onclick="toggleFocusMode()"
+            style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:white; padding:0.5rem 1rem; border-radius:30px; cursor:pointer;">Exit
+            Focus Mode</button>
+    </div>
+
+    <!-- PDF Preview Modal -->
+    <div class="modal-search-overlay" id="pdf-modal">
+        <div class="glass-panel modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="preview-title">Preview</h3>
+                <div class="modal-actions">
+                    <a href="#" id="open-new-tab" target="_blank" class="icon-btn" title="Open in New Tab"
+                        style="color: white">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
+                        </svg>
+                    </a>
+                    <button class="icon-btn close-btn" onclick="closePreview()">✕</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <iframe id="pdf-frame" src="" frameborder="0"></iframe>
+            </div>
+
+            <!-- Comments Section -->
+            <div id="giscus-container"
+                style="background:#0d1117; padding:1rem; border-top:1px solid var(--glass-border); max-height: 200px; overflow-y: auto;">
+                <script src="https://giscus.app/client.js" data-repo="SrirammananS/SrirammananS.github.io"
+                    data-repo-id="R_kgDONX_0hQ" data-category="Announcements" data-category-id="DIC_kwDONX_0hc4ClA6p"
+                    data-mapping="title" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0"
+                    data-input-position="bottom" data-theme="dark" data-lang="en" crossorigin="anonymous" async>
+                    </script>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Elements -->
+    <div class="gradient-sphere sphere-1"></div>
+    <div class="gradient-sphere sphere-2"></div>
+
+    <main class="container">
+        <header class="hero-section">
+            <nav class="top-nav">
+                <div class="logo">CFIS<span class="dot">.</span></div>
+                <div class="visitor-counter glass-panel" style="padding: 0.2rem 0.5rem;">
+                    <img src="https://visitor-badge.laobi.icu/badge?page_id=sriram.github.io.notes"
+                        alt="Visitor count badge" loading="lazy" style="height: 20px;">
+                </div>
+            </nav>
+
+            <div class="hero-content">
+                <div class="badge glass-panel">
+                    <span class="status-dot"></span>
+                    <span>Systems Updated</span>
+                </div>
+                <h1 class="hero-title" id="scramble-text">ACADEMIC_ARCHIVE</h1>
+                <p class="hero-subtitle">Curated resources for the modern scholar. A collection of notes, papers, and
+                    references.</p>
+            </div>
+        </header>
+
+        <!-- DASHBOARD (News & Links) -->
+        <section class="dashboard-grid">
+            <!-- News Feed -->
+            <div class="glass-panel dashboard-card">
+                <div class="dash-header">
+                    <h3>⚡ Live Feed</h3>
+                    <span class="pulse-dot"></span>
+                </div>
+                <div class="news-list" id="news-feed">
+                    <!-- Injected JS -->
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="glass-panel dashboard-card">
+                <div class="dash-header">
+                    <h3>🔗 Important Links</h3>
+                </div>
+                <div class="links-grid" id="quick-links">
+                    <!-- Injected JS -->
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="controls-container">
+                <div class="search-container glass-panel">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="search-icon">
+                        <path
+                            d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <input type="text" id="search-input" placeholder="Search notes, subjects..." autocomplete="off">
+                </div>
+
+                <div class="filter-bar glass-panel">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="Sem 1">Sem 1</button>
+                    <button class="filter-btn" data-filter="Sem 2">Sem 2</button>
+                    <button class="filter-btn" data-filter="Sem 3">Sem 3</button>
+                    <button class="filter-btn" data-filter="favorites" style="color: #f472b6;">❤️ Saved</button>
+                </div>
+            </div>
+
+            <div class="bento-grid" id="notes-grid">
+                <!-- Grid items injected via JS -->
+            </div>
+        </section>
+
+        <footer class="site-footer">
+            <p>© 2026 CFIS Archive. <span class="mono">v2.1.0</span></p>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

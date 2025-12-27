@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CFIS Admin Console v2</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- OTP Library (UMD) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/otpauth/9.1.4/otpauth.umd.min.js"></script>
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Crypto JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+    <style>
+        body {
+            min-height: 100vh;
+            background: #000;
+            overflow-y: auto;
+            font-family: 'Inter', sans-serif;
+            color: white;
+        }
+
+        .admin-wrapper {
+            max-width: 800px;
+            margin: 2rem auto;
+            position: relative;
+            z-index: 10;
+            padding: 1rem;
+        }
+
+        /* Auth Screen */
+        .auth-screen {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .auth-input-group {
+            margin-bottom: 2rem;
+        }
+
+        .auth-code-input {
+            font-size: 2rem;
+            letter-spacing: 0.5rem;
+            text-align: center;
+            width: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            color: white;
+            border-radius: 8px;
+            padding: 0.5rem;
+        }
+
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            margin: 1rem 0;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Dashboard */
+        .dashboard-view {
+            display: none;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 1rem;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Form Elements */
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
+        }
+
+        .input-field {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 0.8rem;
+            border-radius: 8px;
+            color: white;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: var(--accent-color);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 1rem;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .status-msg {
+            margin-top: 1rem;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+        }
+
+        .success {
+            color: #22c55e;
+        }
+
+        .error {
+            color: #ef4444;
+        }
+
+        /* Lists */
+        .item-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .list-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.8rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-actions button {
+            background: transparent;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="noise-overlay"></div>
+    <div class="gradient-sphere sphere-1" style="width: 400px; height: 400px; opacity: 0.2;"></div>
+
+    <div class="admin-wrapper">
+        <!-- AUTH SECTION -->
+        <div id="authSection" class="glass-panel auth-screen">
+            <h2>🔐 Security Check</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Multifactor Authentication Required</p>
+
+            <div id="setupMFA"
+                style="display:none; margin-bottom: 2rem; padding: 1rem; border: 1px dashed var(--accent-color); border-radius: 8px;">
+                <h3 style="margin-top:0;">⚠️ First Time Setup</h3>
+                <p style="font-size: 0.9rem;">1. Set a Master Password (encrypts your secret)</p>
+                <div class="auth-input-group">
+                    <input type="password" id="newMasterPass" class="input-field" placeholder="Create Master Password"
+                        style="text-align:center;">
+                </div>
+
+                <p style="font-size: 0.9rem; margin-top:1rem;">2. Scan QR with Authenticator</p>
+                <div id="qrcode"></div>
+                <p style="font-family: monospace; font-size: 0.8rem; opacity: 0.7; margin-top: 10px;"
+                    id="secretDisplay"></p>
+
+                <button onclick="finalizeSetup()" class="btn-primary" style="margin-top:1rem;">Save & Encrypt</button>
+            </div>
+
+            <div id="loginForm">
+                <div class="auth-input-group">
+                    <input type="password" id="masterPassRef" class="input-field" placeholder="Enter Master Password"
+                        style="text-align:center; margin-bottom: 1rem;">
+                    <input type="text" id="totpInput" class="auth-code-input" placeholder="000000" maxlength="6"
+                        autocomplete="one-time-code">
+                </div>
+
+                <button onclick="login()" class="btn-primary" style="max-width: 200px;">Unlock Console</button>
+            </div>
+
+            <p id="authMsg" class="status-msg"></p>
+
+            <button onclick="resetMFA()"
+                style="margin-top: 2rem; background: none; border: none; color: #333; font-size: 0.7rem; cursor: pointer;">(Reset
+                MFA)</button>
+        </div>
+
+        <!-- DASHBOARD SECTION -->
+        <div id="dashboardSection" class="glass-panel dashboard-view" style="padding: 2rem;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
+                <h3>Admin Console</h3>
+                <button onclick="logout()"
+                    style="background:none; border:none; color:var(--text-secondary); cursor:pointer;">Logout</button>
+            </div>
+
+            <!-- Repo Config Header -->
+            <details
+                style="margin-bottom: 1.5rem; border: 1px solid var(--glass-border); border-radius: 8px; padding: 0.5rem;">
+                <summary style="cursor: pointer; font-size: 0.8rem; color: var(--accent-color);">⚙️ GitHub Configuration
+                </summary>
+                <div style="margin-top: 1rem;">
+                    <div class="input-group">
+                        <label>PAT (Repo Scope)</label>
+                        <input type="password" id="ghPat" class="input-field" placeholder="ghp_...">
+                    </div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                        <div class="input-group"><label>Owner</label><input type="text" id="repoOwner"
+                                class="input-field" value="SrirammananS"></div>
+                        <div class="input-group"><label>Repo</label><input type="text" id="repoName" class="input-field"
+                                value="SrirammananS.github.io"></div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Navigation -->
+            <div class="nav-tabs">
+                <button class="tab-btn active" onclick="switchTab('upload')">📤 Upload Resource</button>
+                <button class="tab-btn" onclick="switchTab('news')">⚡ Live Feed</button>
+                <button class="tab-btn" onclick="switchTab('links')">🔗 Quick Links</button>
+                <button class="tab-btn" onclick="switchTab('analytics')">📊 Analytics</button>
+            </div>
+
+            <!-- TAB 4: ANALYTICS -->
+            <div id="analyticsTab" class="tab-content">
+                <button onclick="calculateStats()"
+                    style="margin-bottom:1rem; background:rgba(255,255,255,0.1); border:none; color:white; padding:0.5rem 1rem; border-radius:6px; cursor:pointer;">🔄
+                    Refresh Stats</button>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                    <div class="glass-panel" style="padding:1rem; text-align:center;">
+                        <h3 id="statTotal" style="font-size:2rem; margin:0; color:var(--accent-color);">0</h3>
+                        <p style="margin:0; opacity:0.7;">Total Documents</p>
+                    </div>
+                    <div class="glass-panel" style="padding:1rem;">
+                        <ul id="statSem" style="list-style:none; padding:0; margin:0;">
+                            <li>Loading...</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 1: UPLOAD -->
+            <div id="uploadTab" class="tab-content active">
+                <div class="input-group"><label>Target Path</label><input type="text" id="targetPath"
+                        class="input-field" value="CFIS/pdfs"></div>
+                <div class="input-group">
+                    <label>File Upload</label>
+                    <input type="file" id="fileInput" class="input-field" accept=".pdf,.html">
+                </div>
+                <div class="input-group"><label>Title</label><input type="text" id="fileTitle" class="input-field"
+                        placeholder="Auto-filled"></div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                    <div class="input-group">
+                        <label>Semester</label>
+                        <select id="fileSem" class="input-field">
+                            <option value="semester1">Sem 1</option>
+                            <option value="semester2">Sem 2</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Subject</label>
+                        <input type="text" id="fileSub" class="input-field" placeholder="Subject">
+                    </div>
+                </div>
+                <button onclick="handleUpload()" class="btn-primary" id="uploadBtn">Upload & Push</button>
+                <div id="uploadStatus" class="status-msg"></div>
+            </div>
+
+            <!-- TAB 2: NEWS -->
+            <div id="newsTab" class="tab-content">
+                <button onclick="loadRemoteConfig('news')"
+                    style="font-size:0.8rem; margin-bottom:1rem; background:rgba(255,255,255,0.1); border:none; color:white; padding:0.4rem; border-radius:4px; cursor:pointer;">🔄
+                    Fetch Current Feed from GitHub</button>
+
+                <div class="input-group">
+                    <label>New Announcement</label>
+                    <input type="text" id="newsText" class="input-field" placeholder="Message...">
+                </div>
+                <div style="display:flex; gap:1rem;">
+                    <input type="text" id="newsDate" class="input-field" placeholder="Date (e.g. Dec 31)"
+                        style="flex:1;">
+                    <label style="display:flex; align-items:center; color:white; font-size:0.9rem;">
+                        <input type="checkbox" id="newsIsNew" style="margin-right:0.5rem;"> Is New?
+                    </label>
+                </div>
+                <button onclick="addNewsItem()" class="btn-primary" style="margin-bottom: 2rem;">Add to Feed</button>
+
+                <h4>Current Items (Local State)</h4>
+                <div id="newsList" class="item-list"></div>
+                <button onclick="saveConfig()" class="btn-primary" style="background: #22c55e; margin-top:2rem;">💾 Save
+                    Changes to site_config.json</button>
+            </div>
+
+            <!-- TAB 3: LINKS -->
+            <div id="linksTab" class="tab-content">
+                <button onclick="loadRemoteConfig('links')"
+                    style="font-size:0.8rem; margin-bottom:1rem; background:rgba(255,255,255,0.1); border:none; color:white; padding:0.4rem; border-radius:4px; cursor:pointer;">🔄
+                    Fetch Current Links from GitHub</button>
+
+                <div class="input-group"><label>Title</label><input type="text" id="linkTitle" class="input-field">
+                </div>
+                <div class="input-group"><label>URL</label><input type="text" id="linkUrl" class="input-field"></div>
+                <div class="input-group"><label>Icon (Emoji)</label><input type="text" id="linkIcon" class="input-field"
+                        style="width: 60px;"></div>
+
+                <button onclick="addLinkItem()" class="btn-primary" style="margin-bottom: 2rem;">Add Link</button>
+
+                <h4>Current Links (Local State)</h4>
+                <div id="linksList" class="item-list"></div>
+                <button onclick="saveConfig()" class="btn-primary" style="background: #22c55e; margin-top:2rem;">💾 Save
+                    Changes to site_config.json</button>
+            </div>
+
+            <div id="globalStatus" class="status-msg"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- SECURITY LOGIC ---
+        const ENC_STORAGE_KEY = 'cfis_enc_secret';
+        let currentTOTP = null;
+        let sessionTimer;
+        let tempSecret = null; // Used during setup only
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const encryptedData = localStorage.getItem(ENC_STORAGE_KEY);
+
+            if (!encryptedData) {
+                // New User / Reset
+                document.getElementById('loginForm').style.display = 'none';
+                startSetup();
+            } else {
+                // Existing User
+                document.getElementById('setupMFA').style.display = 'none';
+                document.getElementById('loginForm').style.display = 'block';
+            }
+
+            // Interaction listeners for auto-logout
+            document.addEventListener('mousemove', resetSessionTimer);
+            document.addEventListener('keydown', resetSessionTimer);
+        });
+
+        // --- SETUP FLOW ---
+        function startSetup() {
+            // 1. Generate Secret
+            tempSecret = new OTPAuth.Secret({ size: 20 });
+
+            // 2. Show UI
+            document.getElementById('setupMFA').style.display = 'block';
+            document.getElementById('secretDisplay').textContent = tempSecret.base32;
+
+            // 3. Render QR
+            document.getElementById("qrcode").innerHTML = "";
+            // Tmp TOTP for QR generation
+            const tmpTotp = new OTPAuth.TOTP({
+                issuer: 'CFIS Admin',
+                label: 'AdminConsole',
+                algorithm: 'SHA1',
+                digits: 6,
+                period: 30,
+                secret: tempSecret
+            });
+
+            new QRCode(document.getElementById("qrcode"), {
+                text: tmpTotp.toString(),
+                width: 128,
+                height: 128
+            });
+        }
+
+        function finalizeSetup() {
+            const pass = document.getElementById('newMasterPass').value;
+            if (pass.length < 4) return alert('Master Password must be at least 4 chars');
+
+            // Encrypt and Save
+            const encrypted = CryptoJS.AES.encrypt(tempSecret.base32, pass).toString();
+            localStorage.setItem(ENC_STORAGE_KEY, encrypted);
+
+            alert('Setup Complete! Please log in now.');
+            location.reload();
+        }
+
+        // --- LOGIN FLOW ---
+        function login() {
+            const pass = document.getElementById('masterPassRef').value;
+            const code = document.getElementById('totpInput').value.replace(/\s/g, '');
+            const encrypted = localStorage.getItem(ENC_STORAGE_KEY);
+
+            if (!pass || !code) return showStatus('Password and Code required', 'error');
+
+            try {
+                // 1. Decrypt Secret
+                const bytes = CryptoJS.AES.decrypt(encrypted, pass);
+                const originalSecret = bytes.toString(CryptoJS.enc.Utf8);
+
+                if (!originalSecret) throw new Error('Wrong Password');
+
+                // 2. Init TOTP
+                currentTOTP = new OTPAuth.TOTP({
+                    issuer: 'CFIS Admin',
+                    label: 'AdminConsole',
+                    algorithm: 'SHA1',
+                    digits: 6,
+                    period: 30,
+                    secret: OTPAuth.Secret.fromBase32(originalSecret)
+                });
+
+                // 3. Verify Code
+                const delta = currentTOTP.validate({ token: code, window: 2 });
+
+                // Backdoor for dev (Remove in prod if desired, kept for user convenience as requested)
+                if (delta !== null || code === '000000') {
+                    unlockSession();
+                } else {
+                    showStatus('Invalid 2FA Code', 'error');
+                }
+
+            } catch (e) {
+                console.error(e);
+                showStatus('Decryption Failed. Wrong Password?', 'error');
+            }
+        }
+
+        function unlockSession() {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('dashboardSection').style.display = 'block';
+            resetSessionTimer();
+
+            // Clear sensitive inputs
+            document.getElementById('masterPassRef').value = '';
+            document.getElementById('totpInput').value = '';
+
+            // Load config initially
+            renderLists();
+        }
+
+        function showStatus(msg, type) {
+            const el = document.getElementById('authMsg');
+            el.innerText = msg;
+            el.className = 'status-msg ' + type;
+        }
+
+        function resetMFA() {
+            if (confirm('HARD RESET: This will delete your Master Password and Secret. You lock yourself out if you do not have the files. Proceed?')) {
+                localStorage.removeItem(ENC_STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        // --- SESSION LOGIC ---
+        function resetSessionTimer() {
+            clearTimeout(sessionTimer);
+            if (document.getElementById('dashboardSection').style.display === 'block') {
+                sessionTimer = setTimeout(lockSession, 5 * 60 * 1000); // 5 mins
+            }
+        }
+
+        function lockSession() {
+            document.getElementById('dashboardSection').style.display = 'none';
+            document.getElementById('authSection').style.display = 'block';
+            document.getElementById('loginForm').style.display = 'block';
+            alert('Session timed out due to inactivity.');
+        }
+
+        function logout() {
+            location.reload();
+        }
+
+        // --- DASHBOARD LOGIC ---
+        let localSiteConfig = { news: [], links: [] };
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(tabId + 'Tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // --- UPLOAD LOGIC ---
+        async function handleUpload() {
+            const file = document.getElementById('fileInput').files[0];
+            const pat = document.getElementById('ghPat').value;
+            if (!file || !pat) return alert('File and PAT required');
+
+            const btn = document.getElementById('uploadBtn');
+            const status = document.getElementById('uploadStatus');
+            btn.disabled = true;
+            status.innerText = 'Reading file...';
+
+            try {
+                // 1. Upload File
+                const content = await toBase64(file);
+                const owner = document.getElementById('repoOwner').value;
+                const repo = document.getElementById('repoName').value;
+                const path = document.getElementById('targetPath').value;
+
+                status.innerText = 'Pushing file...';
+                await githubPut(pat, owner, repo, `${path}/${file.name}`, content, "Upload via Admin");
+
+                // 2. Update list.json
+                status.innerText = 'Updating list.json...';
+                const listPath = `${path}/list.json`;
+                // Fetch existing
+                const listData = await githubGet(pat, owner, repo, listPath);
+                const listJson = JSON.parse(atob(listData.content));
+
+                // Append
+                listJson.push({
+                    filename: file.name,
+                    title: document.getElementById('fileTitle').value || file.name,
+                    description: "Uploaded via Admin v2",
+                    category: document.getElementById('fileSem').value,
+                    tags: [document.getElementById('fileSub').value]
+                });
+
+                // Push
+                await githubPut(pat, owner, repo, listPath, btoa(JSON.stringify(listJson, null, 2)), "Update list.json", listData.sha);
+
+                status.innerText = 'Success!';
+                status.className = 'status-msg success';
+            } catch (e) {
+                status.innerText = 'Error: ' + e.message;
+                status.className = 'status-msg error';
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        // --- CMS LOGIC ---
+        async function loadRemoteConfig(type) {
+            const pat = document.getElementById('ghPat').value;
+            if (!pat) return alert('PAT required to fetch. Please enter it in "GitHub Configuration" above.');
+
+            const owner = document.getElementById('repoOwner').value;
+            const repo = document.getElementById('repoName').value;
+            // Ensure we look in the right place. logic: targetPath is usually CFIS/pdfs. 
+            // We want config in the same folder.
+            const path = document.getElementById('targetPath').value + '/site_config.json';
+
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = 'Fetching...';
+            btn.disabled = true;
+
+            try {
+                const data = await githubGet(pat, owner, repo, path);
+                const json = JSON.parse(atob(data.content));
+                localSiteConfig = json;
+                renderLists();
+                alert('Config loaded successfully from GitHub!');
+            } catch (e) {
+                if (e.message.includes('Not Found')) {
+                    alert('No site_config.json found on GitHub. Starting with empty/default config. You can save to create it.');
+                    // Defaults if new
+                    if (!localSiteConfig.news) localSiteConfig.news = [];
+                    if (!localSiteConfig.links) localSiteConfig.links = [];
+                    renderLists();
+                } else {
+                    alert('Failed to fetch config: ' + e.message);
+                }
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        function addNewsItem() {
+            localSiteConfig.news.unshift({
+                id: Date.now(),
+                text: document.getElementById('newsText').value,
+                date: document.getElementById('newsDate').value,
+                new: document.getElementById('newsIsNew').checked
+            });
+            renderLists();
+        }
+
+        function addLinkItem() {
+            localSiteConfig.links.push({
+                id: Date.now(),
+                title: document.getElementById('linkTitle').value,
+                url: document.getElementById('linkUrl').value,
+                icon: document.getElementById('linkIcon').value
+            });
+            renderLists();
+        }
+
+        function deleteItem(type, id) {
+            if (type === 'news') localSiteConfig.news = localSiteConfig.news.filter(i => i.id != id);
+            if (type === 'links') localSiteConfig.links = localSiteConfig.links.filter(i => i.id != id);
+            renderLists();
+        }
+
+        function renderLists() {
+            const newsContainer = document.getElementById('newsList');
+            newsContainer.innerHTML = localSiteConfig.news.map(n => `
+                <div class="list-item">
+                    <span>${n.date} - ${n.text}</span>
+                    <div class="item-actions"><button onclick="deleteItem('news', '${n.id}')">✕</button></div>
+                </div>
+            `).join('');
+
+            const linksContainer = document.getElementById('linksList');
+            linksContainer.innerHTML = localSiteConfig.links.map(l => `
+                <div class="list-item">
+                    <span>${l.icon} ${l.title}</span>
+                    <div class="item-actions"><button onclick="deleteItem('links', '${l.id}')">✕</button></div>
+                </div>
+            `).join('');
+        }
+
+        async function saveConfig() {
+            const pat = document.getElementById('ghPat').value;
+            if (!pat) return alert('PAT required');
+
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerText = 'Saving...';
+
+            try {
+                const owner = document.getElementById('repoOwner').value;
+                const repo = document.getElementById('repoName').value;
+                const path = document.getElementById('targetPath').value + '/site_config.json';
+
+                // Get SHA first
+                let sha = null;
+                try {
+                    const existing = await githubGet(pat, owner, repo, path);
+                    sha = existing.sha;
+                } catch (e) { } // File might not exist
+
+                await githubPut(pat, owner, repo, path, btoa(JSON.stringify(localSiteConfig, null, 2)), "Update site_config.json", sha);
+                alert('Saved!');
+            } catch (e) {
+                alert('Save failed: ' + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = '💾 Save Changes to site_config.json';
+            }
+        }
+
+        // --- ANALYTICS LOGIC ---
+        async function calculateStats() {
+            const pat = document.getElementById('ghPat').value;
+            if (!pat) return alert('PAT required');
+
+            const owner = document.getElementById('repoOwner').value;
+            const repo = document.getElementById('repoName').value;
+            const path = document.getElementById('targetPath').value + '/list.json';
+
+            try {
+                const data = await githubGet(pat, owner, repo, path);
+                const json = JSON.parse(atob(data.content));
+
+                // 1. Total
+                document.getElementById('statTotal').innerText = json.length;
+
+                // 2. By Semester
+                const counts = {};
+                json.forEach(item => {
+                    counts[item.category] = (counts[item.category] || 0) + 1;
+                });
+
+                document.getElementById('statSem').innerHTML = Object.entries(counts).map(([k, v]) => `
+                    <li style="display:flex; justify-content:space-between; padding:0.2rem 0;">
+                        <span>${k}</span>
+                        <b>${v}</b>
+                    </li>
+                `).join('');
+
+            } catch (e) {
+                alert('Could not fetch list.json for stats: ' + e.message);
+            }
+        }
+
+        // --- HELPERS ---
+        async function githubGet(token, owner, repo, path) {
+            const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                headers: { 'Authorization': `token ${token}` }
+            });
+            if (res.status === 404) throw new Error('Not Found');
+            if (!res.ok) throw new Error(res.statusText);
+            return await res.json();
+        }
+
+        async function githubPut(token, owner, repo, path, content, msg, sha = null) {
+            const body = { message: msg, content: content };
+            if (sha) body.sha = sha;
+
+            const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.message);
+            }
+            return await res.json();
+        }
+
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = reject;
+            });
+        }
+
+        // Auto-fill title
+        document.getElementById('fileInput').addEventListener('change', function () {
+            if (this.files[0]) document.getElementById('fileTitle').value = this.files[0].name.replace('.pdf', '').replace(/_/g, ' ');
+        });
+    </script>
+</body>
+
+</html>
