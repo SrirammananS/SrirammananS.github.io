@@ -199,7 +199,7 @@
                 style="display:none; margin-bottom: 2rem; padding: 1rem; border: 1px dashed var(--accent-color); border-radius: 8px;">
                 <h3 style="margin-top:0;">⚠️ First Time Setup</h3>
                 <p>Welcome, Admin. To secure your console, please set up Multi-Factor Authentication (MFA).</p>
-                <!-- Removed explicit Password field. We will use the Master Key as the encryption secret implicitly. -->
+
                 <div style="margin-top:1rem;">
                     <button onclick="generateMFA()" class="btn-primary">Generate QR Code</button>
                 </div>
@@ -362,6 +362,7 @@
 
     <script>
         // --- SECURITY LOGIC ---
+        const MASTER_HASH = "75f5533dc390341bf3f4787008a88ba404dff36fb4e04b21b55ccfc3e00b6d1a";
         const ENC_STORAGE_KEY = 'cfis_enc_secret';
         let currentTOTP = null;
         let sessionTimer;
@@ -423,8 +424,6 @@
             const secret = tempSecret.base32;
             // We use a fixed string or the master key hash itself as encryption key, 
             // since user wants to rely solely on Master Key + MFA.
-            // CAUTION: Hardcoding encryption key simplifies UX but reduces security if local storage is dumped.
-            // Given the requirement: "we soley on the master key which we hashed and the mfa"
             const encryptionKey = "MASTER_KEY_FIXED_SALT";
 
             const encryptedSecret = CryptoJS.AES.encrypt(secret, encryptionKey).toString();
@@ -446,7 +445,7 @@
             if (!keyInput || !code) return showStatus('Master Key and Code required', 'error');
 
             // 1. Verify Master Key Hash
-            // hash("02091431@Sriram") = "75f5533dc390341bf3f4787008a88ba404dff36fb4e04b21b55ccfc3e00b6d1a"
+            // hash() = "75f5533dc390341bf3f4787008a88ba404dff36fb4e04b21b55ccfc3e00b6d1a"
             const inputHash = CryptoJS.SHA256(keyInput).toString(CryptoJS.enc.Hex);
             if (inputHash !== MASTER_HASH) {
                 return showStatus('Invalid Master Key', 'error');
@@ -476,8 +475,7 @@
                 // 3. Verify Code
                 const delta = currentTOTP.validate({ token: code, window: 2 });
 
-                // Backdoor for dev (Remove in prod if desired, kept for user convenience as requested)
-                if (delta !== null || code === '000000') {
+                if (delta !== null) {
                     unlockSession();
                 } else {
                     showStatus('Invalid 2FA Code', 'error');
@@ -546,70 +544,8 @@
             event.target.classList.add('active');
         }
 
-        // Precompute SHA-256 for "02091431@Sriram"
-        const MASTER_HASH = "75f5533dc390341bf3f4787008a88ba404dff36fb4e04b21b55ccfc3e00b6d1a";
 
-        // Admin Access Check
-        async function checkAccess() {
-            const tokenInput = document.getElementById('tokenInput').value;
-            const status = document.getElementById('status');
 
-            if (!tokenInput) {
-                status.innerText = 'Please enter Key / Token';
-                return;
-            }
-
-            // 1. Check if Master Key (Hash Check)
-            const inputHash = CryptoJS.SHA256(tokenInput).toString(CryptoJS.enc.Hex);
-
-            if (inputHash === MASTER_HASH) {
-                // Determine user for commit purposes - using a "system" user context or prompts
-                // For simplicity, we ask for PAT if they want to write, OR we store a default PAT if available?
-                // Actually, the user likely wants to use this key TO login. 
-                // Since we need a PAT to talk to GitHub API, we might need to store the PAT *encrypted* with this key?
-                // OR, the user just wants to bypass the check? 
-
-                // If it's a master key, we might need a stored PAT to actually work. 
-                // For now, let's assume if they provide this key, we prompt for the PAT *once* or use a stored one.
-
-                // User Request: "login with admin to improve security"
-                // Let's assume this key grants access. But we still need a PAT for API operations.
-                // WE WILL PROMPT FOR PAT if not in local storage, but Verify against this Hash first.
-
-                status.innerText = 'Master Key Verified. Access Granted.';
-                status.style.color = '#4ade80';
-
-                // In a real app we'd decode an encrypted PAT here. 
-                // For this static site, we'll treat this as "Login Successful" and ask for PAT if needed for operations,
-                // OR we assume the input IS the PAT if it doesn't match the hash.
-
-                // Let's refine: The user wants to login WITH this key.
-                // We'll set a session flag.
-                sessionStorage.setItem('cfis_admin_session', 'true');
-
-                // Check if we have a saved PAT
-                const savedPat = localStorage.getItem('cfis_pat');
-                if (savedPat) {
-                    showAdminUI(savedPat);
-                } else {
-                    // If no PAT, we might still need it for GitHub ops. 
-                    // Let's ask for it inside or handle it. 
-                    // The prompt implies we log in "with admin". 
-                    // I'll show the UI.
-                    showAdminUI('Enter-PAT-For-Operations-If-Needed');
-                }
-                return;
-            }
-
-            // 2. Normal PAT Login (Legacy)
-            if (tokenInput.startsWith('ghp_') || tokenInput.startsWith('github_pat_')) {
-                verifyGitHubToken(tokenInput);
-                return;
-            }
-
-            status.innerText = 'Invalid Key';
-            status.style.color = '#ef4444';
-        }
         // --- UPLOAD LOGIC ---
         async function handleUpload() {
             const file = document.getElementById('fileInput').files[0];

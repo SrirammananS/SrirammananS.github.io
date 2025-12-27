@@ -3,9 +3,7 @@
 const REPO_BASE = 'https://github.com/SrirammananS/SrirammananS.github.io/raw/main/CFIS/pdfs/';
 const LIST_JSON_URL = 'https://raw.githubusercontent.com/SrirammananS/SrirammananS.github.io/main/CFIS/pdfs/list.json';
 const SITE_CONFIG_URL = 'https://raw.githubusercontent.com/SrirammananS/SrirammananS.github.io/main/CFIS/pdfs/site_config.json';
-// Note: We assume site_config.json is in the same folder as list.json for simplicity in this demo,
-// or we can put it in root. Let's assume user uploads it to the same pdfs folder via admin for now,
-// or we can fetch a local fallback if remote fails during dev.
+
 
 // State
 let notesConfig = [];
@@ -53,7 +51,6 @@ async function initApp() {
 }
 
 function initChatWidget() {
-    // Debug check
     const tooltip = document.querySelector('#chat-tooltip');
     if (!tooltip) return;
 
@@ -83,7 +80,7 @@ async function fetchSiteConfig() {
         renderNews();
         renderQuickLinks();
     } catch (e) {
-        console.warn('Using local/fallback config. (Could not fetch site_config.json)');
+
         // In local dev without python server, this might fail on CORS or file:// protocol
         // We can fallback to fetching local file relative path if hosting via VS Code Live Server
         try {
