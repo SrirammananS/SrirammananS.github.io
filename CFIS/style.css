@@ -2222,5 +2222,57 @@ kbd {
     border-radius: 50%;
     opacity: 0.5;
     display: none;
-    /* Maybe too cluttered */
+}
+
+/* Skeleton Loading */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.skeleton {
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.03) 25%,
+            rgba(255, 255, 255, 0.08) 50%,
+            rgba(255, 255, 255, 0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-md);
+    min-height: 20px;
+}
+
+.skeleton-card {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--glass-border);
+    height: 400px;
+    background: var(--glass-bg);
+}
+
+.skeleton-text {
+    width: 60%;
+    height: 16px;
+    margin-bottom: 0.5rem;
+}
+
+/* Red Close Button */
+.close-btn,
+.zone-close-btn,
+.gallery-close {
+    color: #ef4444 !important;
+    /* Red Icon */
+    background: rgba(239, 68, 68, 0.1) !important;
+    border: 1px solid rgba(239, 68, 68, 0.2) !important;
+    transition: all 0.2s;
+}
+
+.close-btn:hover,
+.zone-close-btn:hover,
+.gallery-close:hover {
+    background: #ef4444 !important;
+    color: white !important;
 }

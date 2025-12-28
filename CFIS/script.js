@@ -26,8 +26,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function initApp() {
     // Initial Render with dummy/loading data
-    renderNews();
-    renderQuickLinks();
+    // Initial Render with Skeletons
+    renderSkeletons();
 
     // UI Setup
     setupFilters();
@@ -181,7 +181,28 @@ async function fetchNotes() {
     }
 }
 
-// Render News
+// Skeleton Loader
+function renderSkeletons() {
+    const newsFeed = document.getElementById('news-feed');
+    const quickLinks = document.getElementById('quick-links');
+
+    if (newsFeed) {
+        newsFeed.innerHTML = Array(3).fill(0).map(() => `
+            <div class="skeleton news-item" style="height: 100px; margin-bottom: 1rem;">
+                <div class="skeleton skeleton-text" style="width: 40%; height: 20px;"></div>
+                <div class="skeleton skeleton-text" style="width: 80%;"></div>
+            </div>
+        `).join('');
+    }
+
+    if (quickLinks) {
+        quickLinks.innerHTML = Array(12).fill(0).map(() => `
+            <div class="skeleton" style="height: 100px; border-radius: 12px;"></div>
+        `).join('');
+    }
+}
+
+// 6. News Feed Render
 function renderNews() {
     const container = document.getElementById('news-feed');
     // Removal of duplicate loop for manual scroll requirement
