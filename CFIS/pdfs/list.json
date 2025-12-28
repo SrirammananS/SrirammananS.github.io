@@ -32,22 +32,23 @@
     "title": "IT Infrastructure and Cloud Computing",
     "description": "Important Questions",
     "filename": "PCI1D IT infra and Cloud Computing.pdf",
-    "category": "semester1",
+    "category": "quickaccess",
     "tags": [
-      "IT Infrastructure and Cloud Computing"
-    ],
-    "type": "Mam Edition",
-    "emoji": "👩🏻‍🏫",
-    "color": "#8b5cf6"
+      "cloud",
+      "infrastructure"
+    ]
   },
   {
     "title": "Introduction to Information Security",
     "description": "Important Questions",
     "filename": "PCI1C Information Security.pdf",
-    "category": "quickaccess",
+    "category": "semester1",
     "tags": [
-      "security"
-    ]
+      "Introduction to Information Security"
+    ],
+    "type": "Mam Notes",
+    "emoji": "👩🏻‍🏫",
+    "color": "#8b5cf6"
   },
   {
     "title": "Network and Communication Protocols - Keywords",
