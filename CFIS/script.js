@@ -33,6 +33,7 @@ async function initApp() {
     setupFilters();
     setupSearch();
     setupCmdPalette(); // [NEW] Command Palette
+    if (typeof lucide !== 'undefined') lucide.createIcons();
     initAnimations();
     setupMagneticHover();
 
@@ -68,6 +69,7 @@ async function initApp() {
     }
 
     initChatWidget();
+    renderReadingNow(); // Initial call
 }
 
 function initChatWidget() {
@@ -155,25 +157,30 @@ function renderNews() {
     const itemsHtml = loopData.map(item => createNewsItemHtml(item)).join('');
 
     container.innerHTML = `<div class="news-track">${itemsHtml}</div>`;
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 // Render Helper for News Item
-// Render Helper for News Item
 function createNewsItemHtml(item) {
-    // Generate ID for anchor if missing (fallback based on text hash/slug?)
-    // But better to rely on ID if we added it.
-    // Use item.id if exists, else skip anchor.
     const anchorId = item.id ? `news-${item.id}` : '';
+    const hasLink = item.url && item.url.trim() !== '';
 
     return `
         <div class="news-item" ${anchorId ? `id="${anchorId}"` : ''}>
             <div class="news-content">
-                <span>${item.text}</span>
+                ${hasLink ? `<a href="${item.url}" target="_blank" style="color:inherit; text-decoration:none; display:flex; gap:0.5rem; align-items:center;">` : '<span>'}
+                    ${item.text}
+                    ${hasLink ? '<i data-lucide="external-link" style="width:12px; height:12px; opacity:0.6;"></i>' : ''}
+                ${hasLink ? '</a>' : '</span>'}
+                
                 ${item.new ? '<span class="news-badge">NEW</span>' : ''}
-                ${item.enableShare && item.id ? `
-                    <button onclick="copyAnchorLink('news-${item.id}')" class="share-icon-btn" title="Share Update">
-                        🔗
-                    </button>` : ''}
+                
+                <div style="display:flex; gap:0.5rem; margin-left:auto;">
+                    ${item.enableShare && item.id ? `
+                        <button onclick="copyAnchorLink('news-${item.id}')" class="share-icon-btn" title="Share Update">
+                            🔗
+                        </button>` : ''}
+                </div>
             </div>
         </div>
     `;
@@ -209,17 +216,19 @@ function renderQuickLinks() { // 4. Quick Links (Vertical Ticker - Restored Styl
                 </div>
             </div>
         `;
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     } else {
         container.innerHTML = '<p class="text-secondary">No quick links available.</p>';
     }
 }
 
+// Render Skeleton State
 function renderSkeletons() {
     const grid = document.getElementById('notes-grid');
     grid.innerHTML = '';
     for (let i = 0; i < 6; i++) {
         const skeleton = document.createElement('div');
-        skeleton.className = 'glass-panel card skeleton';
+        skeleton.className = 'skeleton';
         skeleton.innerHTML = `
             <div class="card-header">
                 <div class="tags-group">
@@ -229,11 +238,9 @@ function renderSkeletons() {
             </div>
             <div class="card-content">
                 <div class="skeleton-label skeleton-text"></div>
-                <div class="skeleton-title skeleton-text" style="width:80%; height:20px;"></div>
-                <div class="skeleton-text" style="width:60%;"></div>
-            </div>
-            <div class="card-footer" style="padding-top:1rem; border-top:1px solid rgba(255,255,255,0.05);">
-                <div class="skeleton-text" style="width:100px; margin:0;"></div>
+                <div class="skeleton-title skeleton-text"></div>
+                <div class="skeleton-text" style="width:100%;"></div>
+                <div class="skeleton-text" style="width:100%;"></div>
             </div>
         `;
         grid.appendChild(skeleton);
@@ -245,15 +252,43 @@ function trackReadingProgress(id) {
     let recent = JSON.parse(localStorage.getItem('cfis_recent') || '[]');
     recent = recent.filter(i => i !== id);
     recent.unshift(id);
-    recent = recent.slice(0, 10);
+    recent = recent.slice(0, 3); // Roadmap V1: Store top 3
     localStorage.setItem('cfis_recent', JSON.stringify(recent));
 
-    // Optional: Re-render to show badges if currently filtered by 'all'
-    const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
-    if (activeFilter === 'all') {
-        const searchInput = document.getElementById('search-input');
-        renderNotes(activeFilter, searchInput.value);
+    renderReadingNow();
+}
+
+function renderReadingNow() {
+    const section = document.getElementById('reading-now-section');
+    const grid = document.getElementById('reading-now-grid');
+    if (!section || !grid) return;
+
+    const recentIds = JSON.parse(localStorage.getItem('cfis_recent') || '[]');
+    if (recentIds.length === 0) {
+        section.style.display = 'none';
+        return;
     }
+
+    section.style.display = 'block';
+    grid.innerHTML = '';
+
+    recentIds.forEach(id => {
+        const note = notesConfig.find(n => n.id === id);
+        if (note) {
+            renderCard(note, grid);
+        }
+    });
+
+    // Animate entrance
+    gsap.from('#reading-now-section .card', {
+        x: -20,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 0.6,
+        ease: 'power2.out'
+    });
+
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 // Render Notes (with Filter & Search)
@@ -325,6 +360,10 @@ function renderNotes(filter, searchQuery = '') {
         ease: 'power3.out',
         clearProps: 'all'
     });
+
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
 }
 
 function renderCard(note, container, isStackItem = false) {
@@ -340,34 +379,37 @@ function renderCard(note, container, isStackItem = false) {
 
     card.innerHTML = `
         <div class="card-header">
-            <div class="tags-group">
-                <div class="subject-icon-pill" title="${note.subject}" style="--accent-glow: ${note.color}44;">
-                    ${note.emoji || '📁'}
-                </div>
-                <div class="sem-pill">${note.semester}</div>
-                ${isRecent ? '<div class="sem-pill" style="background:rgba(255,255,255,0.05); color:var(--accent-color); border-color:var(--accent-color); font-weight:700;">RECENT</div>' : ''}
-            </div>
             <div class="card-actions-top">
                 <button class="action-btn preview" onclick="openPreview(event, '${note.pdfUrl}', '${note.title.replace(/'/g, "\\'")}', '${note.type}', '${note.id}')" title="Preview">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <i data-lucide="eye"></i>
                 </button>
                 <button class="action-btn fav ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${note.id}')" title="Favorite">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    <i data-lucide="heart" ${isFav ? 'fill="currentColor"' : ''}></i>
                 </button>
                 <button class="action-btn share" onclick="copyLink(event, '${note.id}')" title="Share Link">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    <i data-lucide="share-2"></i>
                 </button>
             </div>
         </div>
         <div class="card-content">
-            <div class="subject-admin-label" style="--label-color: ${note.color || '#8b5cf6'};">
-                ${note.subject}
-            </div>
             <h3 class="card-title">${note.title}</h3>
         </div>
         <div class="card-footer">
-            <span class="card-meta-info">REF: ${note.id.split('-')[0].toUpperCase()}</span>
-            <span class="type-indicator">${typeLabel}</span>
+            <div class="footer-indicators">
+                <div class="subject-icon-pill" title="${note.subject}" style="--accent-glow: ${note.color}44;">
+                    ${note.emoji || '📁'}
+                </div>
+                <div class="indicator-group">
+                    <div class="subject-admin-label" style="--label-color: ${note.color || '#8b5cf6'};">
+                        ${note.subject}
+                    </div>
+                    <div class="tags-row">
+                        <span class="sem-pill">SEM ${note.semester}</span>
+                        <span class="type-indicator">${typeLabel}</span>
+                        ${isRecent ? '<span class="status-pill reading">READING NOW</span>' : ''}
+                    </div>
+                </div>
+            </div>
         </div>
     `;
 
@@ -400,22 +442,28 @@ function renderZone(subject, notes, container) {
         dummy.style.setProperty('--card-index', i);
         dummy.innerHTML = `
             <div class="card-header">
-                <div class="tags-group">
-                    <div class="subject-icon-pill" style="--accent-glow: rgba(139, 92, 246, 0.4);">
-                        📁
-                    </div>
-                    <div class="sem-pill">${note.semester || 'Sem 2'}</div>
+                <div class="card-actions-top">
+                     <i data-lucide="layers" style="opacity:0.6; color:var(--text-secondary);"></i>
                 </div>
             </div>
             <div class="card-content">
-                <div class="subject-admin-label" style="--label-color: #8b5cf6;">
-                    ${subject}
-                </div>
                 <h3 class="card-title">${note.title}</h3>
             </div>
             <div class="card-footer">
-                <span class="card-meta-info">ZONE PREVIEW</span>
-                <span class="type-indicator">${note.type || 'PDF'}</span>
+                <div class="footer-indicators">
+                    <div class="subject-icon-pill" style="--accent-glow: rgba(139, 92, 246, 0.4);">
+                        📁
+                    </div>
+                    <div class="indicator-group" style="text-align: left;">
+                         <div class="subject-admin-label" style="--label-color: #8b5cf6;">
+                            ${subject}
+                        </div>
+                        <div class="tags-row">
+                            <span class="sem-pill">PREVIEW</span>
+                            <span class="type-indicator">${note.type || 'PDF'}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         `;
         stackArea.appendChild(dummy);
@@ -603,6 +651,9 @@ function setupFilters() {
             // Add active class
             btn.classList.add('active');
 
+            // Liquid Transition (Subtle scale pop)
+            gsap.fromTo(btn, { scale: 0.95 }, { scale: 1, duration: 0.4, ease: 'back.out(2)' });
+
             const filter = btn.getAttribute('data-filter');
             renderNotes(filter, searchInput.value);
         });
@@ -611,7 +662,15 @@ function setupFilters() {
 
 function setupSearch() {
     const searchInput = document.getElementById('search-input');
+    const readingSection = document.getElementById('reading-now-section');
     searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.trim();
+        if (query.length > 0) {
+            if (readingSection) readingSection.style.display = 'none';
+        } else {
+            // Re-render to show if it should be visible
+            renderReadingNow();
+        }
         const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
         renderNotes(activeFilter, e.target.value);
     });
@@ -919,14 +978,27 @@ function toggleFocusMode() {
         body.classList.remove('focus-active');
         overlay.style.background = 'transparent';
         controls.style.display = 'none';
+
+        if (isFocusRunning) toggleTimer();
+
         document.querySelector('.top-nav').style.opacity = '1';
         document.querySelector('.site-footer').style.opacity = '1';
         document.querySelector('.dashboard-grid').style.opacity = '1';
     } else {
         // Enable
         body.classList.add('focus-active');
-        overlay.style.background = '#000'; // Dim out everything
+        overlay.style.background = 'rgba(0,0,0,0.95)';
         controls.style.display = 'flex';
+
+        // Persistence: Load focus note
+        const savedNote = localStorage.getItem('cfis_focus_note');
+        if (savedNote) document.getElementById('focus-note').value = savedNote;
+
+        // Save note on change
+        document.getElementById('focus-note').oninput = (e) => {
+            localStorage.setItem('cfis_focus_note', e.target.value);
+        };
+
         // Hide distractions
         document.querySelector('.top-nav').style.opacity = '0.1';
         document.querySelector('.site-footer').style.opacity = '0';
@@ -1087,18 +1159,18 @@ function openGalleryModal(url, title, type) {
     if (!modal) {
         modal = document.createElement('div');
         modal.id = 'gallery-modal';
-        modal.className = 'modal-search-overlay';
+        modal.className = 'modal-search-overlay lightbox';
         modal.innerHTML = `
-            <div class="glass-panel modal-content" style="max-width:90vw; height:90vh; background:rgba(0,0,0,0.9);">
+            <div class="glass-panel modal-content lightbox">
                 <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; width:100%; box-sizing:border-box;">
-                    <h3 id="gallery-modal-title" style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-right:1rem; font-size:1.1rem;"></h3>
+                    <h3 id="gallery-modal-title" style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-right:1rem; font-size:1.1rem; color:rgba(255,255,255,0.5);"></h3>
                      <div style="display:flex; gap:0.5rem; flex-shrink:0;">
                         <button class="btn-primary" id="gallery-share-btn" style="padding:0.3rem 0.8rem; font-size:0.8rem;">🔗 Share</button>
-                        <button class="icon-btn" onclick="document.getElementById('gallery-modal').classList.remove('active')">✕</button>
+                        <button class="icon-btn" onclick="closeGalleryModal()">✕</button>
                     </div>
                 </div>
                 <!-- Action Bar injected via JS -->
-                <div class="modal-body" id="gallery-modal-body" style="display:flex; align-items:center; justify-content:center; height:100%; padding:0;">
+                <div class="modal-body lightbox" id="gallery-modal-body" style="display:flex; align-items:center; justify-content:center; height:100%; padding:0;">
                 </div>
             </div>
         `;
@@ -1123,7 +1195,14 @@ function openGalleryModal(url, title, type) {
     }
 
     modal.classList.add('active');
+    document.body.classList.add('lightbox-active');
 }
+
+window.closeGalleryModal = function () {
+    const modal = document.getElementById('gallery-modal');
+    if (modal) modal.classList.remove('active');
+    document.body.classList.remove('lightbox-active');
+};
 
 // Share Function
 async function shareItem(url, title) {
@@ -1174,4 +1253,18 @@ function animateValue(obj, start, end, duration) {
         }
     };
     window.requestAnimationFrame(step);
+}
+
+// 12. Manual Scroll Control
+function toggleMarquee(id) {
+    const list = document.getElementById(id);
+    const container = id === 'quick-links' ? list.querySelector('.quick-links-container') : list;
+
+    if (container.classList.contains('manual-scroll')) {
+        container.classList.remove('manual-scroll');
+        showToast('🔄 Auto-scroll enabled');
+    } else {
+        container.classList.add('manual-scroll');
+        showToast('🖱️ Manual scroll enabled');
+    }
 }

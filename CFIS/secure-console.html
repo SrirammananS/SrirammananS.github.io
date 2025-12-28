@@ -475,13 +475,15 @@
                 <div style="display:flex; gap:1rem; margin-bottom: 1rem;">
                     <input type="text" id="newsText" placeholder="Headline / Update Text" class="input-field"
                         style="flex:2">
+                    <input type="text" id="newsUrl" placeholder="Link URL (Optional)" class="input-field"
+                        style="flex:1">
                     <label class="checkbox-container"
-                        style="display:flex; align-items:center; color:white; font-size:0.9rem; flex:1;">
+                        style="display:flex; align-items:center; color:white; font-size:0.9rem; flex:0.5;">
                         <input type="checkbox" id="newsNew" style="margin-right:0.5rem;"> Is New?
                     </label>
                     <label class="checkbox-container"
-                        style="display:flex; align-items:center; color:white; font-size:0.9rem; flex:1;">
-                        <input type="checkbox" id="newsShare" style="margin-right:0.5rem;"> Enable Share?
+                        style="display:flex; align-items:center; color:white; font-size:0.9rem; flex:0.5;">
+                        <input type="checkbox" id="newsShare" style="margin-right:0.5rem;"> Share?
                     </label>
                 </div>
                 <div style="display:flex; gap:1rem;">
@@ -946,6 +948,7 @@
 
         function addNewsItem() {
             const text = document.getElementById('newsText').value;
+            const url = document.getElementById('newsUrl').value;
             const isNew = document.getElementById('newsNew').checked;
             const enableShare = document.getElementById('newsShare').checked;
 
@@ -958,6 +961,7 @@
                 id: id,
                 date: "",
                 text: text,
+                url: url,
                 new: isNew,
                 enableShare: enableShare
             });
@@ -965,6 +969,7 @@
 
             // Clear inputs
             document.getElementById('newsText').value = '';
+            document.getElementById('newsUrl').value = '';
             document.getElementById('newsNew').checked = false;
             document.getElementById('newsShare').checked = false;
         }
@@ -972,6 +977,7 @@
         function editNews(index) {
             const item = localSiteConfig.news[index];
             document.getElementById('newsText').value = item.text;
+            document.getElementById('newsUrl').value = item.url || '';
             document.getElementById('newsNew').checked = item.new || false;
             document.getElementById('newsShare').checked = item.enableShare || false;
 
@@ -984,6 +990,7 @@
         function updateNewsItem() {
             if (editIndexNews === -1) return;
             localSiteConfig.news[editIndexNews].text = document.getElementById('newsText').value;
+            localSiteConfig.news[editIndexNews].url = document.getElementById('newsUrl').value;
             localSiteConfig.news[editIndexNews].new = document.getElementById('newsNew').checked;
             localSiteConfig.news[editIndexNews].enableShare = document.getElementById('newsShare').checked;
 
@@ -1037,6 +1044,7 @@
             if (type === 'news') {
                 editIndexNews = -1;
                 document.getElementById('newsText').value = '';
+                document.getElementById('newsUrl').value = '';
                 document.getElementById('newsNew').checked = false;
                 document.getElementById('newsShare').checked = false;
                 document.querySelector('#newsTab button[onclick="addNewsItem()"]').style.display = 'inline-block';
@@ -1116,7 +1124,10 @@
             const newsContainer = document.getElementById('newsList');
             newsContainer.innerHTML = localSiteConfig.news.map((item, index) => `
                 <div class="list-item">
-                    <span>${item.text} ${item.new ? '🔥' : ''}</span>
+                    <div style="display:flex; flex-direction:column; flex:1; overflow:hidden;">
+                        <span style="font-weight:600; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;">${item.text} ${item.new ? '🔥' : ''}</span>
+                        ${item.url ? `<span style="font-size:0.75rem; opacity:0.5; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;">${item.url}</span>` : ''}
+                    </div>
                     <div class="item-actions">
                         <button onclick="editNews(${index})" style="color:var(--text-secondary);">✏️</button>
                         <button onclick="deleteNews(${index})">✕</button>
