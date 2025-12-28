@@ -3,20 +3,21 @@
     "title": "Network and Communication Protocols",
     "description": "Important Questions",
     "filename": "PCI1B Network and Communication Protocols.pdf",
-    "category": "semester1",
+    "category": "quickaccess",
     "tags": [
-      "Network and Communication Protocols"
-    ],
-    "type": "Mam Edition"
+      "network",
+      "protocols"
+    ]
   },
   {
     "title": "Forms of Cyber Crimes",
     "description": "Important Questions",
     "filename": "PCI1E Cyber Crimes.pdf",
-    "category": "quickaccess",
+    "category": "semester1",
     "tags": [
-      "cybercrime"
-    ]
+      "Forms of Cyber Crime"
+    ],
+    "type": "Mam Edition"
   },
   {
     "title": "Introduction to Cyber Criminology",
