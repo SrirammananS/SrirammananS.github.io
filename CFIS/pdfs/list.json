@@ -8,7 +8,7 @@
       "Network and Communication Protocols"
     ],
     "type": "MAM EDITION",
-    "emoji": "ð©âð«",
+    "emoji": "👩‍🏫",
     "color": "#eab308"
   },
   {
@@ -20,7 +20,7 @@
       "Forms of Cyber Crime"
     ],
     "type": "Mam Edition",
-    "emoji": "ð©âð«",
+    "emoji": "👩‍🏫",
     "color": "#0ae448"
   },
   {
@@ -32,7 +32,7 @@
       "criminology"
     ],
     "type": "Mam Edition",
-    "emoji": "ð©âð«",
+    "emoji": "👩‍🏫",
     "color": "#0ae448"
   },
   {
@@ -45,7 +45,7 @@
       "infrastructure"
     ],
     "type": "Mam Edition",
-    "emoji": "ð©âð«",
+    "emoji": "👩‍🏫",
     "color": "#0ae448"
   },
   {
@@ -57,8 +57,21 @@
       "Introduction to Information Security"
     ],
     "type": "Mam Notes",
-    "emoji": "ð©ð»âð«",
-    "color": "#eab308"
+    "emoji": "👩🏻‍🏫",
+    "color": "#8b5cf6"
+  },
+  {
+    "title": "Network and Communication Protocols - Keywords",
+    "description": "Important questions with keys",
+    "filename": "Networking.html",
+    "category": "quickaccess",
+    "tags": [
+      "network",
+      "keywords"
+    ],
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   },
   {
     "filename": "A24_Semester_II_and_III_REcordings_link.pdf",
@@ -67,7 +80,10 @@
     "category": "semester2",
     "tags": [
       "General"
-    ]
+    ],
+    "type": "Video",
+    "emoji": "🎥",
+    "color": "#3b82f6"
   },
   {
     "filename": "PCI2F_-_NETWORK_SECURITY_AND_CRYPTOGRAPHY_FinalNotes.pdf",
@@ -78,7 +94,7 @@
       "NETWORK SECURITY AND CRYPTOGRAPHY"
     ],
     "type": "Mam Edition",
-    "emoji": "ð©âð«",
+    "emoji": "👩‍🏫",
     "color": "#0ae448"
   },
   {
@@ -90,7 +106,7 @@
       "BASICS OF CYBER FORENSICS"
     ],
     "type": "Mam Edition",
-    "emoji": "ð©âð«",
+    "emoji": "👩‍🏫",
     "color": "#0ae448"
   },
   {
@@ -111,7 +127,7 @@
       "BFSI FRAUD COUNTERMEASURES"
     ],
     "type": "Mam Edition",
-    "emoji": "ð©âð«",
+    "emoji": "👩‍🏫",
     "color": "#0ae448"
   },
   {
@@ -123,7 +139,7 @@
       "Network Security and Cryptography"
     ],
     "type": "Mam Edition",
-    "emoji": "ð©âð«",
+    "emoji": "👩‍🏫",
     "color": "#0ae448"
   },
   {
@@ -135,7 +151,7 @@
       "Basics of Cyber Forensics"
     ],
     "type": "Mam Edition",
-    "emoji": "ð©âð«",
+    "emoji": "👩‍🏫",
     "color": "#0ae448"
   },
   {
@@ -156,7 +172,7 @@
       "Basics of Cyber Forensics"
     ],
     "type": "Mam Edition",
-    "emoji": "ð©âð«",
+    "emoji": "👩‍🏫",
     "color": "#0ae448"
   },
   {
@@ -168,7 +184,7 @@
       "Basics of Cyber Forensics"
     ],
     "type": "Mam Edition",
-    "emoji": "ð©âð«",
+    "emoji": "👩‍🏫",
     "color": "#0ae448"
   },
   {
@@ -189,7 +205,7 @@
       "Frauds in IT and Telecom Sector"
     ],
     "type": "Mam Edition",
-    "emoji": "ð©âð«",
+    "emoji": "👩‍🏫",
     "color": "#0ae448"
   },
   {
@@ -210,7 +226,7 @@
       "BFSI Fraud"
     ],
     "type": "Mam Edition",
-    "emoji": "ð©âð«",
+    "emoji": "👩‍🏫",
     "color": "#0ae448"
   },
   {
@@ -222,7 +238,7 @@
       "BFSI Fraud"
     ],
     "type": "Mam Edition",
-    "emoji": "ð©âð«",
+    "emoji": "👩‍🏫",
     "color": "#0ae448"
   },
   {
@@ -252,7 +268,7 @@
       "BFSI Fraud"
     ],
     "type": "Mam Edition",
-    "emoji": "ð©âð«",
+    "emoji": "👩‍🏫",
     "color": "#0ae448"
   },
   {
@@ -264,7 +280,7 @@
       "BFSI Fraud"
     ],
     "type": "Mam Edition",
-    "emoji": "ð©âð«",
+    "emoji": "👩‍🏫",
     "color": "#0ae448"
   },
   {
@@ -276,7 +292,7 @@
       "BFSI Fraud"
     ],
     "type": "Mam Edition",
-    "emoji": "ð©âð«",
+    "emoji": "👩‍🏫",
     "color": "#0ae448"
   }
 ]
