@@ -23,21 +23,20 @@
     "title": "Introduction to Cyber Criminology",
     "description": "Important Questions",
     "filename": "PCI1A Cyber Criminology.pdf",
-    "category": "semester1",
+    "category": "quickaccess",
     "tags": [
-      "Introduction to Cyber Criminology"
-    ],
-    "type": "Mam Edition"
+      "criminology"
+    ]
   },
   {
     "title": "IT Infrastructure and Cloud Computing",
     "description": "Important Questions",
     "filename": "PCI1D IT infra and Cloud Computing.pdf",
-    "category": "quickaccess",
+    "category": "semester1",
     "tags": [
-      "cloud",
-      "infrastructure"
-    ]
+      "IT Infrastructure and Cloud Computing"
+    ],
+    "type": "Mam Edition"
   },
   {
     "title": "Introduction to Information Security",
