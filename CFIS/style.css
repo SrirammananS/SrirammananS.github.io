@@ -1999,70 +1999,381 @@ kbd {
     /* More grain in focus */
 }
 
+/* --- THUMBNAIL CARD (Global) --- */
+.thumbnail-card {
+    position: relative;
+    background: transparent;
+    /* No box on desktop */
+    border: none;
+    border-radius: var(--radius-md);
+    overflow: visible;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0.5rem;
+    aspect-ratio: 1/1;
+    opacity: 1 !important;
+    /* Full opacity */
+}
+
+.thumbnail-card:hover {
+    transform: translateY(-2px);
+    opacity: 1 !important;
+}
+
+.thumbnail-card .icon-wrapper {
+    width: 48px;
+    /* Larger icon for desktop */
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    background: transparent;
+    /* No background circle */
+    border-radius: 0;
+    opacity: 1 !important;
+}
+
+.thumbnail-card .icon-wrapper img {
+    opacity: 1 !important;
+    width: 32px !important;
+    height: 32px !important;
+}
+
+.thumbnail-card h3 {
+    font-size: 0.85rem;
+    opacity: 1 !important;
+    /* Full opacity */
+    margin: 0;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.3s ease;
+}
+
+/* Show full text on hover */
+.thumbnail-card:hover h3 {
+    white-space: normal;
+    word-wrap: break-word;
+    overflow: visible;
+}
+
+/* Desktop Grid Layout for Continue Learning */
+#reading-now-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 2rem;
+    padding-bottom: 0;
+}
+
+/* Hide Burger Button on Desktop */
+#burger-btn {
+    display: none;
+}
+
+/* Hide Mobile Menu Overlay on Desktop */
+.mobile-menu-overlay {
+    display: none;
+}
+
 /* --- MOBILE REFINEMENTS --- */
+/* --- MOBILE EXTREME MINIMALISM --- */
 @media (max-width: 768px) {
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+    html {
+        font-size: 13px;
+        /* Optimized for mobile */
     }
 
-    .hero-title {
-        font-size: clamp(2.2rem, 10vw, 3.8rem);
-        line-height: 1;
-        letter-spacing: -0.05em;
-        word-break: keep-all;
-        overflow-wrap: break-word;
+    /* === MOBILE ICON OPTIMIZATION === */
+
+    /* Top Navigation Icons */
+    .top-nav .icon-btn {
+        width: 36px !important;
+        height: 36px !important;
+        padding: 0.4rem !important;
+    }
+
+    .top-nav .icon-btn i,
+    .top-nav .icon-btn img {
+        width: 18px !important;
+        height: 18px !important;
+    }
+
+    /* Logo Size */
+    .logo {
+        font-size: 1.1rem !important;
+    }
+
+    /* Fix Hero Badge & Status Visibility */
+    .top-nav {
+        position: relative;
+        z-index: 5;
+        /* Lower than hero content */
+    }
+
+    .hero-section {
+        position: relative;
+        z-index: 10;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 10;
+    }
+
+    .badge {
+        position: relative;
+        z-index: 10;
+    }
+
+    /* Show Mobile Menu Overlay */
+    .mobile-menu-overlay {
+        display: flex !important;
+    }
+
+    /* Hide Desktop Elements & Dashboard Grid */
+    #news-feed,
+    #quick-links,
+    .hero-subtitle,
+    .desktop-controls,
+    .dashboard-grid {
+        display: none !important;
+    }
+
+    /* Show Burger on Mobile Only */
+    #burger-btn {
+        display: flex !important;
+    }
+
+    /* Card Icons - Properly Sized */
+    .note-card .icon-wrapper {
+        width: 24px !important;
+        height: 24px !important;
+        padding: 0 !important;
+    }
+
+    .note-card .icon-wrapper img {
+        width: 18px !important;
+        height: 18px !important;
+    }
+
+    /* Card Action Icons */
+    .note-card .card-actions-top .icon-btn {
+        width: 28px !important;
+        height: 28px !important;
+        padding: 0.3rem !important;
+    }
+
+    .note-card .card-actions-top .icon-btn img {
+        width: 14px !important;
+        height: 14px !important;
+    }
+
+    /* Minimal Footer Info */
+    .note-card .card-footer {
+        font-size: 0.7rem !important;
+        gap: 0.3rem !important;
+        padding: 0.6rem 0.8rem !important;
+    }
+
+    .note-card .card-footer>* {
+        display: none;
+    }
+
+    .note-card .card-footer .tags-group {
+        display: flex !important;
+    }
+
+    /* Card Content Optimization */
+    .note-card .card-content {
+        padding: 0.8rem !important;
+        min-height: 70px !important;
+    }
+
+    .note-card h3 {
+        font-size: 0.85rem !important;
+        line-height: 1.3 !important;
+        margin-bottom: 0.3rem !important;
+    }
+
+    .note-card {
+        min-height: auto !important;
+    }
+
+    /* Hide Card Actions, Subject, Semester on Mobile */
+    .note-card .card-actions-top,
+    .note-card .card-emoji-topleft,
+    .note-card .card-date,
+    .card-footer .subject-badge,
+    .card-footer .semester-badge {
+        display: none !important;
+    }
+
+    /* Full Width Grid */
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    /* Mobile Menu Overlay Styles */
+    .mobile-menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        z-index: 9999;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        transform: translateY(-100%);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        opacity: 0;
+    }
+
+    .mobile-menu-overlay.active {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .mobile-menu-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         margin-bottom: 2rem;
     }
 
-    .hero-subtitle {
-        font-size: 1.1rem;
-        max-width: 100%;
-        opacity: 0.8;
+    .mobile-menu-content {
+        overflow-y: auto;
+        flex: 1;
     }
 
-    .container {
-        padding: 1.25rem;
+    /* --- MINIMALIST CARDS --- */
+    /* Hide everything except Title and Tag/Footer */
+    .note-card .card-emoji-topleft,
+    .note-card .card-actions-top,
+    .note-card .icon-wrapper,
+    .note-card .card-date {
+        display: none !important;
+    }
+
+    /* Adjust Card Layout for Title Only */
+    .note-card .card-content {
+        padding: 0.8rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 80px;
+        /* Minimal height */
+    }
+
+    .note-card h3 {
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
+        line-height: 1.3;
+    }
+
+    /* Ensure Grid is Dense 2-Column */
+    #notes-grid,
+    .notes-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.5rem !important;
+    }
+
+    /* Dense 2-Column Grid for Notes */
+    #notes-grid,
+    .notes-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.6rem !important;
+    }
+
+    /* --- "Continue Learning" (Recently Viewed) Grid --- */
+    #reading-now-section {
+        margin-bottom: 2rem !important;
+    }
+
+    /* Mobile: Grid Layout */
+    #reading-now-grid {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)) !important;
+        gap: 1.2rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+
+    /* Continue Learning Icons */
+    .thumbnail-card .icon-wrapper {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .thumbnail-card .icon-wrapper img {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    /* Mobile Menu: Stop Tickers */
+    .mobile-menu-overlay .news-track,
+    .mobile-menu-overlay .links-ticker-track {
+        animation: none !important;
+        transform: none !important;
+    }
+
+    /* Hero Text Adjustment */
+    .hero-title {
+        font-size: clamp(1.8rem, 8vw, 2.5rem) !important;
+        margin-bottom: 1rem !important;
     }
 
     .top-nav {
-        flex-direction: row;
-        justify-content: space-between;
-        margin-bottom: 3.5rem;
+        margin-bottom: 2rem !important;
+        padding: 0 0.8rem !important;
     }
 
-    .links-ticker-track {
-        grid-template-columns: repeat(2, 1fr);
+    /* Search & Filter Optimization */
+    .search-container {
+        min-width: 100% !important;
+        padding: 0.6rem 1rem !important;
+        margin-bottom: 0.8rem !important;
     }
 
-    .card {
-        min-height: 350px !important;
-        padding: 1.5rem;
+    .search-container img {
+        width: 16px !important;
+        height: 16px !important;
     }
 
-    .dash-header {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .dash-header h3 {
-        font-size: 0.85rem;
+    #search-input {
+        font-size: 0.9rem !important;
     }
 
     .filter-bar {
-        display: flex;
-        overflow-x: auto;
-        width: 100vw;
-        margin-left: -1.25rem;
-        padding: 0.5rem 1.25rem;
-        scrollbar-width: none;
+        gap: 0.5rem !important;
+        padding: 0.6rem !important;
+        margin-bottom: 1.5rem !important;
     }
 
-    .filter-bar::-webkit-scrollbar {
-        display: none;
+    .filter-btn {
+        padding: 0.4rem 0.8rem !important;
+        font-size: 0.8rem !important;
+        white-space: nowrap !important;
+    }
+
+    .hero-subtitle {
+        display: none !important;
+        /* redundant but ensures */
+    }
+
+    .container {
+        padding: 1rem 0.8rem !important;
     }
 }
+
 
 /* --- Skeleton Loading (Glassmorphic Glow) --- */
 .skeleton {

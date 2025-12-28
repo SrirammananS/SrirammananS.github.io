@@ -1,0 +1,12 @@
+{
+  "name": "msc-cfis",
+  "version": "1.0.0",
+  "description": "Academic Archive for MSC CFIS",
+  "scripts": {
+    "build": "node build-obfuscate.js",
+    "obfuscate": "node build-obfuscate.js"
+  },
+  "devDependencies": {
+    "javascript-obfuscator": "^5.1.0"
+  }
+}

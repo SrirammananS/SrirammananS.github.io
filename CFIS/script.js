@@ -218,27 +218,28 @@ function renderNews() {
 function createNewsItemHtml(item) {
     const anchorId = item.id ? `news-${item.id}` : '';
     const hasLink = item.url && item.url.trim() !== '';
+    const clickAttr = hasLink ? `onclick="window.open('${item.url}', '_blank')"` : '';
+    const cursorStyle = hasLink ? 'cursor: pointer; transition: transform 0.2s;' : '';
 
     return `
-        <div class="news-item" ${anchorId ? `id="${anchorId}"` : ''}>
+        <div class="news-item" ${anchorId ? `id="${anchorId}"` : ''} ${clickAttr} style="${cursorStyle}">
             <div class="news-content">
-                ${hasLink ? `<a href="${item.url}" target="_blank" style="color:inherit; text-decoration:none; display:flex; gap:0.5rem; align-items:center;">` : '<span>'}
+                <span style="display:flex; align-items:center; gap:0.5rem;">
                     ${item.text}
-                    ${hasLink ? '<i data-lucide="external-link" style="width:12px; height:12px; opacity:0.6;"></i>' : ''}
-                ${hasLink ? '</a>' : '</span>'}
+                    ${hasLink ? '<i data-lucide="external-link" style="width:14px; height:14px; color:var(--accent-color);"></i>' : ''}
+                </span>
                 
                 ${item.new ? '<span class="news-badge">New</span>' : ''}
-                
-                <div style="display:flex; gap:0.5rem; margin-left:auto;">
-                    ${item.enableShare && item.id ? `
-                        <button onclick="copyAnchorLink('news-${item.id}')" class="share-icon-btn" title="Share Update">
-                            🔗
-                        </button>` : ''}
-                </div>
             </div>
+            ${item.enableShare ? `
+                <button onclick="shareNews('${item.id}', event)" class="icon-btn" aria-label="Share update">
+                    <i data-lucide="share-2"></i>
+                </button>
+            ` : ''}
         </div>
     `;
 }
+
 
 // Render Links
 function renderQuickLinks() { // 4. Quick Links (Vertical Ticker - Restored Style)
@@ -328,12 +329,13 @@ function renderReadingNow() {
     recentIds.forEach(id => {
         const note = notesConfig.find(n => n.id === id);
         if (note) {
-            renderCard(note, grid);
+            const card = createThumbnailCard(note);
+            grid.appendChild(card);
         }
     });
 
     // Animate entrance
-    gsap.from('#reading-now-section .card', {
+    gsap.from('#reading-now-section .thumbnail-card', {
         x: -20,
         opacity: 0,
         stagger: 0.1,
@@ -342,6 +344,25 @@ function renderReadingNow() {
     });
 
     if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+// Helper: Create Minimal Thumbnail Card
+function createThumbnailCard(note) {
+    const card = document.createElement('div');
+    card.className = 'thumbnail-card';
+    card.onclick = (e) => openPreview(e, note.pdfUrl, note.title, note.type, note.id);
+
+    // Icon
+    const iconUrl = note.type === 'pdf' ? 'https://unpkg.com/lucide-static@latest/icons/file-text.svg' : 'https://unpkg.com/lucide-static@latest/icons/link.svg';
+
+    card.innerHTML = `
+        <div class="icon-wrapper">
+            <img src="${iconUrl}" width="24" height="24" alt="Icon" style="filter: invert(1);">
+        </div>
+        <h3 title="${note.title}">${note.title}</h3>
+    `;
+
+    return card;
 }
 
 // Render Notes (with Filter & Search)
@@ -439,7 +460,7 @@ function renderCard(note, container, isStackItem = false) {
     const typeLabel = note.type === 'pdf' ? 'Document' : 'Resource';
 
     card.innerHTML = `
-        <div class="card-bg"></div>
+            <div class="card-bg"></div>
         <div class="card-emoji-topleft" style="position: absolute; top: 1rem; left: 1rem; font-size: 1.2rem; z-index: 10;">${emoji}</div>
         <div class="card-header">
             <div class="card-actions-top">
@@ -538,7 +559,7 @@ function renderZone(subject, notes, container) {
 
         dummy.innerHTML = `
             <div class="card-bg"></div>
-            <div class="card-content" style="padding: 1rem; display: flex; align-items: center; justify-content: center; text-align: center; height: 100%; opacity: ${isTop ? 1 : 0}; pointer-events: ${isTop ? 'auto' : 'none'}; transition: opacity 0.3s;">
+                <div class="card-content" style="padding: 1rem; display: flex; align-items: center; justify-content: center; text-align: center; height: 100%; opacity: ${isTop ? 1 : 0}; pointer-events: ${isTop ? 'auto' : 'none'}; transition: opacity 0.3s;">
                     <h3 class="card-title" style="font-size: 0.8rem; opacity: 0.8; margin: 0;">${notes[i].title}</h3>
                 </div>
         `;
@@ -1419,6 +1440,59 @@ function updateGlassBtnState(isSimple) {
         btn.querySelector('span:last-child').innerText = 'Glass';
         btn.style.opacity = '1';
         showToast('✨ Glass Effect Enabled');
+    }
+}
+
+// Mobile Menu Logic
+function toggleMobileMenu() {
+    const overlay = document.getElementById('mobile-menu-overlay');
+    overlay.classList.toggle('active');
+
+    if (overlay.classList.contains('active')) {
+        // Populate if empty
+        const newsContainer = document.getElementById('mobile-news-container');
+        const linksContainer = document.getElementById('mobile-links-container');
+
+        if (newsContainer.innerHTML.trim() === '') {
+            // Clone News
+            const newsSource = document.getElementById('news-feed');
+            if (newsSource) {
+                newsContainer.innerHTML = '<h4>Latest Updates</h4>' + newsSource.innerHTML;
+            }
+
+            // Render Links Specific for Mobile (No Duplicates)
+            if (typeof linksData !== 'undefined' && linksData.length > 0) {
+                const mobileLinksHtml = linksData.map(l => `
+                    <a href="${l.url}" target="_blank" class="quick-link" style="padding: 0.8rem; margin-bottom: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 8px; display: flex; align-items: center; gap: 0.8rem; text-decoration: none; color: inherit;">
+                        <span style="font-size: 1.2rem;">${l.icon}</span>
+                        <span style="font-weight: 500; font-size: 0.9rem;">${l.title}</span>
+                    </a>
+                 `).join('');
+                linksContainer.innerHTML = '<h4>Quick Links</h4><div style="display:flex; flex-direction:column;">' + mobileLinksHtml + '</div>';
+            }
+
+            // Add Focus & Discussion Controls
+            const controlsContainer = document.getElementById('mobile-controls-container');
+            if (controlsContainer) {
+                controlsContainer.innerHTML = `
+                    <button onclick="toggleFocusMode(); toggleMobileMenu();" class="glass-panel" style="padding: 0.8rem 1.2rem; border-radius: 12px; display: flex; align-items: center; gap: 0.8rem; cursor: pointer; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); color: var(--text-secondary); font-size: 0.95rem; font-weight: 500; width: 100%;">
+                        <span>🧘</span>
+                        <span>Focus Mode</span>
+                    </button>
+                    <button onclick="openCommentsModal(); toggleMobileMenu();" class="glass-panel" style="padding: 0.8rem 1.2rem; border-radius: 12px; display: flex; align-items: center; gap: 0.8rem; cursor: pointer; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); color: var(--text-secondary); font-size: 0.95rem; font-weight: 500; width: 100%;">
+                        <span>💬</span>
+                        <span>Community Discussions</span>
+                    </button>
+                    <button onclick="toggleGlassEffect();" class="glass-panel" style="padding: 0.8rem 1.2rem; border-radius: 12px; display: flex; align-items: center; gap: 0.8rem; cursor: pointer; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); color: var(--text-secondary); font-size: 0.95rem; font-weight: 500; width: 100%;">
+                        <span>💧</span>
+                        <span>Glass Effect</span>
+                    </button>
+                `;
+            }
+
+            // Re-run icons
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
     }
 }
 
