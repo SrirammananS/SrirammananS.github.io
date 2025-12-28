@@ -221,21 +221,21 @@
   },
   {
     "filename": "BFSI_Fraud-III.pptx",
-    "title": "PPT | BFSI Fraud-III",
-    "description": "Uploaded via Admin v2",
-    "category": "semester2",
-    "tags": [
-      "BFSI Fraud"
-    ]
-  },
-  {
-    "filename": "BFSI_-_Unit_IV.pptx",
-    "title": "BFSI - Unit IV",
+    "title": "BFSI Fraud-III",
     "description": "Uploaded via Admin v2",
     "category": "semester2",
     "tags": [
       "BFSI Fraud"
     ],
     "type": "PPT"
+  },
+  {
+    "filename": "BFSI_-_Unit_IV.pptx",
+    "title": "PPT | BFSI - Unit IV",
+    "description": "Uploaded via Admin v2",
+    "category": "semester2",
+    "tags": [
+      "BFSI Fraud"
+    ]
   }
 ]
