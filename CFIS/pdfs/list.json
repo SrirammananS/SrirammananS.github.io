@@ -58,7 +58,7 @@
     ],
     "type": "Mam Notes",
     "emoji": "👩🏻‍🏫",
-    "color": "#8b5cf6"
+    "color": "#eab308"
   },
   {
     "title": "Network and Communication Protocols - Keywords",
@@ -80,10 +80,7 @@
     "category": "semester2",
     "tags": [
       "General"
-    ],
-    "type": "Video",
-    "emoji": "🎥",
-    "color": "#3b82f6"
+    ]
   },
   {
     "filename": "PCI2F_-_NETWORK_SECURITY_AND_CRYPTOGRAPHY_FinalNotes.pdf",
