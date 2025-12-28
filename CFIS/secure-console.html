@@ -286,8 +286,54 @@
                 <button class="tab-btn active" onclick="switchTab('upload')">📤 Upload Resource</button>
                 <button class="tab-btn" onclick="switchTab('news')">⚡ Live Feed</button>
                 <button class="tab-btn" onclick="switchTab('links')">🔗 Quick Links</button>
+                <button class="tab-btn" onclick="switchTab('presets')">🏷️ Label Presets</button>
                 <button class="tab-btn" onclick="switchTab('analytics')">📊 Analytics</button>
                 <button class="tab-btn" onclick="switchTab('assets')">🖼️ Admin Assets</button>
+            </div>
+
+            <!-- TAB: LABEL PRESETS -->
+            <div id="presetsTab" class="tab-content">
+                <button onclick="loadRemoteConfig('presets')"
+                    style="font-size:0.8rem; margin-bottom:1rem; background:rgba(255,255,255,0.1); border:none; color:white; padding:0.4rem; border-radius:4px; cursor:pointer;">🔄
+                    Fetch Presets from GitHub</button>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-bottom: 1rem;">
+                    <div class="input-group">
+                        <label>Preset Name (e.g. Mam Notes)</label>
+                        <input type="text" id="presetName" class="input-field">
+                    </div>
+                    <div class="input-group">
+                        <label>Emoji</label>
+                        <input type="text" id="presetEmoji" class="input-field" placeholder="📕">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Label Color</label>
+                    <select id="presetColor" class="input-field">
+                        <option value="#0ae448">GSAP Green</option>
+                        <option value="#8b5cf6">Violet</option>
+                        <option value="#3b82f6">Blue</option>
+                        <option value="#eab308">Gold</option>
+                        <option value="#ef4444">Red</option>
+                        <option value="#ffffff">White</option>
+                    </select>
+                </div>
+
+                <div style="display:flex; gap:1rem;">
+                    <button onclick="addPreset()" class="btn-primary" style="margin-bottom: 2rem; flex:1;">Add
+                        Preset</button>
+                    <button onclick="updatePreset()" class="btn-primary" id="updatePresetBtn"
+                        style="margin-bottom: 2rem; display:none; background:#eab308; color:black; flex:1;">Update
+                        Preset</button>
+                    <button onclick="cancelEdit('presets')" id="cancelPresetBtn"
+                        style="margin-bottom: 2rem; display:none; background:transparent; border:1px solid white; color:white; flex:0.5;">Cancel</button>
+                </div>
+
+                <h4>Current Presets</h4>
+                <div id="presetsList" class="item-list"></div>
+
+                <button onclick="saveConfig()" class="btn-primary" style="background: #22c55e; margin-top:2rem;">💾 Save
+                    Changes to site_config.json</button>
             </div>
 
             <!-- TAB 4: ANALYTICS -->
@@ -331,6 +377,13 @@
                         <label>Subject</label>
                         <input type="text" id="fileSub" class="input-field" placeholder="Subject">
                     </div>
+                </div>
+                <div class="input-group">
+                    <label>Quick Apply Preset</label>
+                    <select id="applyPreset" class="input-field" onchange="applyPresetToForm('upload')"
+                        style="background:rgba(255,255,255,0.05); color:var(--accent-color); border:1px dashed var(--accent-color);">
+                        <option value="">-- No Presets Found (Fetch Config) --</option>
+                    </select>
                 </div>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
                     <div class="input-group">
@@ -511,6 +564,13 @@
                     <label>Subject</label>
                     <input type="text" id="editFileSub" class="input-field">
                 </div>
+            </div>
+            <div class="input-group">
+                <label>Quick Apply Preset</label>
+                <select id="editApplyPreset" class="input-field" onchange="applyPresetToForm('edit')"
+                    style="background:rgba(255,255,255,0.05); color:var(--accent-color); border:1px dashed var(--accent-color);">
+                    <option value="">-- No Presets Found --</option>
+                </select>
             </div>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
                 <div class="input-group">
@@ -722,7 +782,7 @@
         }
 
         // --- DASHBOARD LOGIC ---
-        let localSiteConfig = { news: [], links: [] };
+        let localSiteConfig = { news: [], links: [], labelPresets: [] };
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -840,6 +900,7 @@
                 const data = await githubGet(pat, owner, repo, path);
                 const json = JSON.parse(decodeURIComponent(escape(atob(data.content))));
                 localSiteConfig = json;
+                if (!localSiteConfig.labelPresets) localSiteConfig.labelPresets = [];
                 renderLists();
                 alert('Config loaded successfully from GitHub!');
             } catch (e) {
@@ -848,6 +909,7 @@
                     // Defaults if new
                     if (!localSiteConfig.news) localSiteConfig.news = [];
                     if (!localSiteConfig.links) localSiteConfig.links = [];
+                    if (!localSiteConfig.labelPresets) localSiteConfig.labelPresets = [];
                     renderLists();
                 } else {
                     alert('Failed to fetch config: ' + e.message);
@@ -965,7 +1027,54 @@
                 document.querySelector('#linksTab button[onclick="addLinkItem()"]').style.display = 'inline-block';
                 document.getElementById('updateLinkBtn').style.display = 'none';
                 document.getElementById('cancelLinkBtn').style.display = 'none';
+            } else if (type === 'presets') {
+                editIndexPresets = -1;
+                document.getElementById('presetName').value = '';
+                document.getElementById('presetEmoji').value = '';
+                document.getElementById('presetColor').value = '#0ae448';
+                document.querySelector('#presetsTab button[onclick="addPreset()"]').style.display = 'inline-block';
+                document.getElementById('updatePresetBtn').style.display = 'none';
+                document.getElementById('cancelPresetBtn').style.display = 'none';
             }
+        }
+
+        let editIndexPresets = -1;
+        function addPreset() {
+            const name = document.getElementById('presetName').value.trim();
+            const emoji = document.getElementById('presetEmoji').value.trim();
+            const color = document.getElementById('presetColor').value;
+            if (!name) return alert("Preset name required");
+            if (!localSiteConfig.labelPresets) localSiteConfig.labelPresets = [];
+            localSiteConfig.labelPresets.push({ name, emoji: emoji || "📄", color });
+            renderLists();
+            cancelEdit('presets');
+        }
+
+        function editPreset(index) {
+            const item = localSiteConfig.labelPresets[index];
+            document.getElementById('presetName').value = item.name;
+            document.getElementById('presetEmoji').value = item.emoji;
+            document.getElementById('presetColor').value = item.color;
+            editIndexPresets = index;
+            document.querySelector('#presetsTab button[onclick="addPreset()"]').style.display = 'none';
+            document.getElementById('updatePresetBtn').style.display = 'inline-block';
+            document.getElementById('cancelPresetBtn').style.display = 'inline-block';
+        }
+
+        function updatePreset() {
+            if (editIndexPresets === -1) return;
+            localSiteConfig.labelPresets[editIndexPresets] = {
+                name: document.getElementById('presetName').value.trim(),
+                emoji: document.getElementById('presetEmoji').value.trim(),
+                color: document.getElementById('presetColor').value
+            };
+            cancelEdit('presets');
+            renderLists();
+        }
+
+        function deletePreset(index) {
+            localSiteConfig.labelPresets.splice(index, 1);
+            renderLists();
         }
 
         function deleteItem(type, id) {
@@ -1001,12 +1110,64 @@
                     </div>
                 </div>
             `).join('');
+
+            const presetsContainer = document.getElementById('presetsList');
+            if (presetsContainer) {
+                presetsContainer.innerHTML = (localSiteConfig.labelPresets || []).map((p, index) => `
+                    <div class="list-item">
+                        <span style="display:flex; align-items:center; gap:0.5rem;">
+                             <span style="background:${p.color}; color:black; padding:2px 8px; border-radius:100px; font-weight:bold; font-size:0.7rem;">
+                                ${p.emoji} ${p.name}
+                             </span>
+                        </span>
+                        <div class="item-actions">
+                            <button onclick="editPreset(${index})" style="color:var(--text-secondary);">✏️</button>
+                            <button onclick="deletePreset(${index})">✕</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Also update any preset selectors in Upload/Edit forms
+            updatePresetSelectors();
+        }
+
+        function updatePresetSelectors() {
+            const uploadSelector = document.getElementById('applyPreset');
+            const editSelector = document.getElementById('editApplyPreset');
+            const options = `<option value="">-- Apply a Preset --</option>` +
+                (localSiteConfig.labelPresets || []).map((p, idx) => `<option value="${idx}">${p.emoji} ${p.name}</option>`).join('');
+
+            if (uploadSelector) uploadSelector.innerHTML = options;
+            if (editSelector) editSelector.innerHTML = options;
+        }
+
+        function applyPresetToForm(formType) {
+            const selector = document.getElementById(formType === 'upload' ? 'applyPreset' : 'editApplyPreset');
+            const index = selector.value;
+            if (index === "") return;
+            const p = localSiteConfig.labelPresets[index];
+
+            if (formType === 'upload') {
+                document.getElementById('fileType').value = p.name;
+                document.getElementById('fileEmoji').value = p.emoji;
+                document.getElementById('fileColor').value = p.color;
+            } else {
+                document.getElementById('editFileType').value = p.name;
+                document.getElementById('editFileEmoji').value = p.emoji;
+                document.getElementById('editFileColor').value = p.color;
+            }
         }
 
         async function saveConfig() {
             const pat = document.getElementById('ghPat').value;
             const vtKey = document.getElementById('vtKey').value;
             if (!pat) return alert('PAT required');
+
+            // Safety check: Don't save if it looks like we haven't fetched current data
+            if (localSiteConfig.news.length === 0 && localSiteConfig.links.length === 0 && localSiteConfig.labelPresets.length === 0) {
+                if (!confirm("Your local config is currently empty (0 items). Saving will OVERWRITE your remote file with this empty state. Did you fetch first? Proceed anyway?")) return;
+            }
 
             if (vtKey) localStorage.setItem('cfis_vt_key', vtKey);
 
