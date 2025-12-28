@@ -52,6 +52,11 @@
       "name": "MAM EDITION",
       "emoji": "👩‍🏫",
       "color": "#eab308"
+    },
+    {
+      "name": "Video",
+      "emoji": "🎥",
+      "color": "#3b82f6"
     }
   ]
 }
