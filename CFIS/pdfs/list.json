@@ -21,19 +21,19 @@
     ],
     "type": "Mam Edition",
     "emoji": "👩‍🏫",
-    "color": "#eab308"
+    "color": "#0ae448"
   },
   {
     "title": "Introduction to Cyber Criminology",
     "description": "Important Questions",
     "filename": "PCI1A Cyber Criminology.pdf",
-    "category": "quickaccess",
+    "category": "",
     "tags": [
       "criminology"
     ],
     "type": "Mam Edition",
     "emoji": "👩‍🏫",
-    "color": "#0ae448"
+    "color": "#eab308"
   },
   {
     "title": "IT Infrastructure and Cloud Computing",
