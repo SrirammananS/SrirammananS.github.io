@@ -57,6 +57,11 @@
       "name": "Video",
       "emoji": "🎥",
       "color": "#3b82f6"
+    },
+    {
+      "name": "PPT",
+      "emoji": "🪧",
+      "color": "#ffffff"
     }
   ]
 }
