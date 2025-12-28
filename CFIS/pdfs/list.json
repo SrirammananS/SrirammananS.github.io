@@ -276,9 +276,9 @@
     "tags": [
       "BFSI Fraud"
     ],
-    "type": "Mam Edition",
-    "emoji": "👩‍🏫",
-    "color": "#0ae448"
+    "type": "PPT",
+    "emoji": "🪧",
+    "color": "#ffffff"
   },
   {
     "filename": "BFSI_-_Unit_IV.pptx",
@@ -288,8 +288,8 @@
     "tags": [
       "BFSI Fraud"
     ],
-    "type": "PPT",
-    "emoji": "🪧",
-    "color": "#ffffff"
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   }
 ]
