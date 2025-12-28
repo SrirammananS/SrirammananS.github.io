@@ -20,7 +20,7 @@
       "Forms of Cyber Crime"
     ],
     "type": "Mam Edition",
-    "emoji": "",
+    "emoji": "👩‍🏫",
     "color": "#0ae448"
   },
   {
@@ -30,7 +30,10 @@
     "category": "quickaccess",
     "tags": [
       "criminology"
-    ]
+    ],
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   },
   {
     "title": "IT Infrastructure and Cloud Computing",
@@ -40,7 +43,10 @@
     "tags": [
       "cloud",
       "infrastructure"
-    ]
+    ],
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   },
   {
     "title": "Introduction to Information Security",
@@ -62,7 +68,10 @@
     "tags": [
       "network",
       "keywords"
-    ]
+    ],
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   },
   {
     "filename": "A24_Semester_II_and_III_REcordings_link.pdf",
@@ -80,7 +89,10 @@
     "category": "semester2",
     "tags": [
       "NETWORK SECURITY AND CRYPTOGRAPHY"
-    ]
+    ],
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   },
   {
     "filename": "PCI2G_-_BASICS_OF_CYBER_FORENSICS.pdf",
@@ -89,7 +101,10 @@
     "category": "semester2",
     "tags": [
       "BASICS OF CYBER FORENSICS"
-    ]
+    ],
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   },
   {
     "filename": "PCI2H_-_IT_AND_TELECOM_FRAUD_AND_COUNTERMEASURES.pdf",
@@ -107,7 +122,10 @@
     "category": "semester2",
     "tags": [
       "BFSI FRAUD COUNTERMEASURES"
-    ]
+    ],
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   },
   {
     "filename": "Network_Security_and_Cryptography.pptx",
@@ -116,7 +134,10 @@
     "category": "semester2",
     "tags": [
       "Network Security and Cryptography"
-    ]
+    ],
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   },
   {
     "filename": "Basics_of_Cyber_Forensics_-_Unit_1.ppt",
@@ -125,7 +146,10 @@
     "category": "semester2",
     "tags": [
       "Basics of Cyber Forensics"
-    ]
+    ],
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   },
   {
     "filename": "Basics_of_Cyber_Forensics_-_Unit_2.ppt",
@@ -143,7 +167,10 @@
     "category": "semester2",
     "tags": [
       "Basics of Cyber Forensics"
-    ]
+    ],
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   },
   {
     "filename": "Basics_of_Cyber_Forensics_-_Unit_4.ppt",
@@ -152,7 +179,10 @@
     "category": "semester2",
     "tags": [
       "Basics of Cyber Forensics"
-    ]
+    ],
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   },
   {
     "filename": "Frauds_in_IT_and_Telecom_Sector_-_Day_1__1_.pdf",
@@ -170,7 +200,10 @@
     "category": "semester2",
     "tags": [
       "Frauds in IT and Telecom Sector"
-    ]
+    ],
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   },
   {
     "filename": "Frauds_in_IT_and_Telecom_Sector_-_Day_3__1_.pdf",
@@ -188,7 +221,10 @@
     "category": "semester2",
     "tags": [
       "BFSI Fraud"
-    ]
+    ],
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   },
   {
     "filename": "BFSI_Fraud__2_.pptx",
@@ -197,7 +233,10 @@
     "category": "semester2",
     "tags": [
       "BFSI Fraud"
-    ]
+    ],
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   },
   {
     "filename": "BFSI_Fraud__3_.pptx",
@@ -224,7 +263,10 @@
     "category": "semester2",
     "tags": [
       "BFSI Fraud"
-    ]
+    ],
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   },
   {
     "filename": "BFSI_Fraud-III.pptx",
@@ -234,7 +276,9 @@
     "tags": [
       "BFSI Fraud"
     ],
-    "type": "PPT"
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   },
   {
     "filename": "BFSI_-_Unit_IV.pptx",
@@ -243,6 +287,9 @@
     "category": "semester2",
     "tags": [
       "BFSI Fraud"
-    ]
+    ],
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   }
 ]
