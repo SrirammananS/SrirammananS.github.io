@@ -1,34 +1,12 @@
 {
-  "news": [
-    {
-      "date": "",
-      "text": "Semester 2 Exam commence on JAN 03 2026",
-      "new": true
-    },
-    {
-      "date": "",
-      "text": "Internal Assessment - SEM II | Last Date - 31/12/2025",
-      "new": true
-    }
-  ],
+  "news": [],
   "links": [
     {
-      "id": 1766835481288,
-      "title": "Internal Assessment Sem 2",
-      "url": "http://www.ideunom.ac.in/mcq/",
-      "icon": "📝"
-    },
-    {
-      "id": 1766835525379,
-      "title": "Question paper Portal",
-      "url": "https://egovernance.unom.ac.in/qpregular/FrmStudDownloadQP.aspx?IDE_REG=IDE",
-      "icon": "🗞"
-    },
-    {
-      "id": 1766835560207,
-      "title": "PDF Book",
-      "url": "http://ideunom.ac.in/Book/book_view.php",
-      "icon": "📕"
+      "id": "1766906980170",
+      "title": "Hall Ticket ",
+      "url": "https://exam.unom.ac.in/hallticket/login_Pg.asp",
+      "icon": "🎟",
+      "enableShare": true
     }
   ]
 }
