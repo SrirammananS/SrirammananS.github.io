@@ -7,7 +7,7 @@
     "tags": [
       "Network and Communication Protocols"
     ],
-    "type": "Q.Bank"
+    "type": "Mam Edition"
   },
   {
     "title": "Forms of Cyber Crimes",
@@ -44,6 +44,16 @@
     "category": "quickaccess",
     "tags": [
       "security"
+    ]
+  },
+  {
+    "title": "Network and Communication Protocols - Keywords",
+    "description": "Important questions with keys",
+    "filename": "Networking.html",
+    "category": "quickaccess",
+    "tags": [
+      "network",
+      "keywords"
     ]
   },
   {
