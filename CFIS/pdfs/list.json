@@ -1,13 +1,15 @@
 [
   {
-    "title": "Network and Communication Protocols",
-    "description": "Important Questions",
+    "title": "Network and Communication Protocols - Notes",
+    "description": "Important Questions Notes",
     "filename": "PCI1B Network and Communication Protocols.pdf",
-    "category": "quickaccess",
+    "category": "semester1",
     "tags": [
-      "network",
-      "protocols"
-    ]
+      "Network and Communication Protocols"
+    ],
+    "type": "MAM EDITION",
+    "emoji": "👩‍🏫",
+    "color": "#eab308"
   },
   {
     "title": "Forms of Cyber Crimes",
