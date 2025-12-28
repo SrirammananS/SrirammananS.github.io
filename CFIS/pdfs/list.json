@@ -39,13 +39,14 @@
     "title": "IT Infrastructure and Cloud Computing",
     "description": "Important Questions",
     "filename": "PCI1D IT infra and Cloud Computing.pdf",
-    "category": "",
+    "category": "quickaccess",
     "tags": [
-      "cloud"
+      "cloud",
+      "infrastructure"
     ],
     "type": "Mam Edition",
     "emoji": "👩‍🏫",
-    "color": "#eab308"
+    "color": "#0ae448"
   },
   {
     "title": "Introduction to Information Security",
@@ -79,7 +80,10 @@
     "category": "semester2",
     "tags": [
       "General"
-    ]
+    ],
+    "type": "Video",
+    "emoji": "🎥",
+    "color": "#3b82f6"
   },
   {
     "filename": "PCI2F_-_NETWORK_SECURITY_AND_CRYPTOGRAPHY_FinalNotes.pdf",
