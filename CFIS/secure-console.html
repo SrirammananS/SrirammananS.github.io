@@ -332,18 +332,35 @@
                         <input type="text" id="fileSub" class="input-field" placeholder="Subject">
                     </div>
                 </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                    <div class="input-group">
+                        <label>Resource Type (e.g. Note)</label>
+                        <input type="text" id="fileType" class="input-field" list="typeSuggestions" placeholder="Note">
+                        <datalist id="typeSuggestions">
+                            <option value="Note">
+                            <option value="Guide">
+                            <option value="Syllabus">
+                            <option value="Video">
+                            <option value="Q&A">
+                            <option value="PPT">
+                            <option value="Mam Notes">
+                        </datalist>
+                    </div>
+                    <div class="input-group">
+                        <label>Label Emoji</label>
+                        <input type="text" id="fileEmoji" class="input-field" placeholder="📄 or 📕">
+                    </div>
+                </div>
                 <div class="input-group">
-                    <label>Resource Type (e.g. Note, Guide, Video)</label>
-                    <input type="text" id="fileType" class="input-field" list="typeSuggestions" placeholder="Note">
-                    <datalist id="typeSuggestions">
-                        <option value="Note">
-                        <option value="Guide">
-                        <option value="Syllabus">
-                        <option value="Video">
-                        <option value="Q&A">
-                        <option value="PPT">
-                        <option value="Mam Notes">
-                    </datalist>
+                    <label>Label Color</label>
+                    <select id="fileColor" class="input-field" style="background:#222; color:white;">
+                        <option value="#0ae448" style="color:#0ae448;">GSAP Green</option>
+                        <option value="#8b5cf6" style="color:#8b5cf6;">Violet</option>
+                        <option value="#3b82f6" style="color:#3b82f6;">Blue</option>
+                        <option value="#eab308" style="color:#eab308;">Gold</option>
+                        <option value="#ef4444" style="color:#ef4444;">Red</option>
+                        <option value="#ffffff" style="color:#ffffff;">White</option>
+                    </select>
                 </div>
                 <button onclick="handleUpload()" class="btn-primary" id="uploadBtn">Upload & Push</button>
                 <div id="uploadStatus" class="status-msg"></div>
@@ -495,9 +512,26 @@
                     <input type="text" id="editFileSub" class="input-field">
                 </div>
             </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                <div class="input-group">
+                    <label>Resource Type</label>
+                    <input type="text" id="editFileType" class="input-field" list="typeSuggestions">
+                </div>
+                <div class="input-group">
+                    <label>Label Emoji</label>
+                    <input type="text" id="editFileEmoji" class="input-field">
+                </div>
+            </div>
             <div class="input-group">
-                <label>Resource Type</label>
-                <input type="text" id="editFileType" class="input-field" list="typeSuggestions">
+                <label>Label Color</label>
+                <select id="editFileColor" class="input-field">
+                    <option value="#0ae448">GSAP Green</option>
+                    <option value="#8b5cf6">Violet</option>
+                    <option value="#3b82f6">Blue</option>
+                    <option value="#eab308">Gold</option>
+                    <option value="#ef4444">Red</option>
+                    <option value="#ffffff">White</option>
+                </select>
             </div>
             <div style="display:flex; gap:1rem; margin-top: 1rem;">
                 <button onclick="saveResourceEdit()" class="btn-primary" style="margin-top:0; background:#22c55e;">Save
@@ -760,6 +794,8 @@
                     filename: safeFileName,
                     category: document.getElementById('fileSem').value,
                     type: document.getElementById('fileType').value || "Note",
+                    emoji: document.getElementById('fileEmoji').value || "📄",
+                    color: document.getElementById('fileColor').value || "#0ae448",
                     tags: [document.getElementById('fileSub').value || "General"]
                 };
 
@@ -1112,7 +1148,10 @@
                         <div style="display:flex; flex-direction:column; overflow: hidden; margin-right: 1rem; flex: 1;">
                             <div style="display:flex; align-items:center; gap:0.5rem;">
                                 <span style="font-weight:600; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${item.title}</span>
-                                <span style="font-size:0.7rem; background:var(--accent-color); color:black; padding:0.1rem 0.4rem; border-radius:4px; font-weight:bold; white-space:nowrap;">${item.type || 'Note'}</span>
+                                <span style="font-size:0.75rem; background:${item.color || '#0ae448'}; color:black; padding:0.15rem 0.5rem; border-radius:100px; font-weight:bold; white-space:nowrap; display:flex; align-items:center; gap:0.3rem;">
+                                    <span>${item.emoji || '📄'}</span>
+                                    <span>${item.type || 'Note'}</span>
+                                </span>
                             </div>
                             <span style="font-size:0.8rem; opacity:0.6">${item.filename}</span>
                         </div>
@@ -1496,6 +1535,8 @@
                 document.getElementById('editFileSem').value = item.category || 'semester1';
                 document.getElementById('editFileSub').value = (item.tags && item.tags[0]) ? item.tags[0] : '';
                 document.getElementById('editFileType').value = item.type || '';
+                document.getElementById('editFileEmoji').value = item.emoji || '';
+                document.getElementById('editFileColor').value = item.color || '#0ae448';
 
                 document.getElementById('editResourceModal').classList.add('active');
             } catch (e) {
@@ -1524,6 +1565,8 @@
             item.category = document.getElementById('editFileSem').value;
             item.tags = [document.getElementById('editFileSub').value];
             item.type = document.getElementById('editFileType').value;
+            item.emoji = document.getElementById('editFileEmoji').value;
+            item.color = document.getElementById('editFileColor').value;
 
             const btn = event.target;
             btn.disabled = true;

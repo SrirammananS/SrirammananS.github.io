@@ -88,8 +88,8 @@ function initChatWidget() {
 
 async function fetchSiteConfig() {
     try {
-        // Try getting remote config first
-        const response = await fetch(SITE_CONFIG_URL);
+        // Try getting remote config first with cache-busting
+        const response = await fetch(`${SITE_CONFIG_URL}?t=${Date.now()}`);
         if (!response.ok) throw new Error('Remote config not found');
         const data = await response.json();
 
@@ -123,7 +123,7 @@ async function fetchNotes() {
     grid.innerHTML = '<p style="color:var(--text-secondary); text-align:center;">Syncing with Archive...</p>';
 
     try {
-        const response = await fetch(LIST_JSON_URL);
+        const response = await fetch(`${LIST_JSON_URL}?t=${Date.now()}`);
         const data = await response.json();
 
         // Transform list.json to our config format
@@ -134,7 +134,9 @@ async function fetchNotes() {
             title: item.title,
             description: item.description,
             pdfUrl: REPO_BASE + encodeURIComponent(item.filename),
-            type: item.filename.endsWith('.html') ? 'link' : 'pdf'
+            type: item.type || (item.filename.endsWith('.html') ? 'link' : 'pdf'),
+            emoji: item.emoji || '',
+            color: item.color || ''
         }));
 
         renderNotes('all');
@@ -262,7 +264,10 @@ function renderNotes(filter, searchQuery = '') {
                     <span class="sem-tag">${note.semester}</span>
                 </div>
                 <div style="margin-bottom: 0.5rem;">
-                     <span class="type-tag">${typeLabel}</span>
+                     <span class="type-tag" style="${note.color ? `background:${note.color}; color:black; font-weight:700;` : ''}">
+                        ${note.emoji ? `<span style="margin-right:0.3rem;">${note.emoji}</span>` : ''}
+                        ${typeLabel}
+                     </span>
                 </div>
                 <h3 class="card-title">${note.title}</h3>
                 <p class="card-desc">${note.description}</p>
@@ -724,7 +729,7 @@ async function fetchGallery() {
     const IMAGES_JSON_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/CFIS/images/images.json`;
 
     try {
-        const response = await fetch(IMAGES_JSON_URL);
+        const response = await fetch(`${IMAGES_JSON_URL}?t=${Date.now()}`);
         if (!response.ok) throw new Error('No gallery config');
         let assets = await response.json();
         assets = assets.reverse(); // Newest first
