@@ -1,14 +1,23 @@
 {
   "news": [
     {
+      "id": "mjphdfj7rooon",
+      "date": "",
+      "text": "Hall Ticket - Released ",
+      "new": true,
+      "enableShare": false
+    },
+    {
       "date": "",
       "text": "Semester 2 Exam commence on JAN 03 2026",
-      "new": true
+      "new": false,
+      "enableShare": false
     },
     {
       "date": "",
       "text": "Internal Assessment - SEM II | Last Date - 31/12/2025",
-      "new": true
+      "new": false,
+      "enableShare": false
     }
   ],
   "links": [
