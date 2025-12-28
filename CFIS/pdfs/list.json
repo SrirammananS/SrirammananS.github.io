@@ -27,26 +27,25 @@
     "title": "Introduction to Cyber Criminology",
     "description": "Important Questions",
     "filename": "PCI1A Cyber Criminology.pdf",
-    "category": "",
+    "category": "quickaccess",
     "tags": [
       "criminology"
     ],
     "type": "Mam Edition",
     "emoji": "👩‍🏫",
-    "color": "#eab308"
+    "color": "#0ae448"
   },
   {
     "title": "IT Infrastructure and Cloud Computing",
     "description": "Important Questions",
     "filename": "PCI1D IT infra and Cloud Computing.pdf",
-    "category": "quickaccess",
+    "category": "",
     "tags": [
-      "cloud",
-      "infrastructure"
+      "cloud"
     ],
     "type": "Mam Edition",
     "emoji": "👩‍🏫",
-    "color": "#0ae448"
+    "color": "#eab308"
   },
   {
     "title": "Introduction to Information Security",
