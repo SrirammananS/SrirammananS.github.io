@@ -3,13 +3,11 @@
     "title": "Network and Communication Protocols",
     "description": "Important Questions",
     "filename": "PCI1B Network and Communication Protocols.pdf",
-    "category": "semester1",
+    "category": "quickaccess",
     "tags": [
-      "Network and Communication Protocols"
-    ],
-    "type": "Mam Notes",
-    "emoji": "👩🏻‍🏫",
-    "color": "#8b5cf6"
+      "network",
+      "protocols"
+    ]
   },
   {
     "title": "Forms of Cyber Crimes",
@@ -25,10 +23,13 @@
     "title": "Introduction to Cyber Criminology",
     "description": "Important Questions",
     "filename": "PCI1A Cyber Criminology.pdf",
-    "category": "quickaccess",
+    "category": "semester1",
     "tags": [
-      "criminology"
-    ]
+      "Introduction to Cyber Criminology"
+    ],
+    "type": "Mam Notes",
+    "emoji": "👩🏻‍🏫",
+    "color": "#8b5cf6"
   },
   {
     "title": "IT Infrastructure and Cloud Computing",
