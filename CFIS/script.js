@@ -36,6 +36,8 @@ async function initApp() {
     if (typeof lucide !== 'undefined') lucide.createIcons();
     initAnimations();
     setupMagneticHover();
+    setupNavbarScroll(); // [NEW] Navbar Scroll Logic
+    checkGlassPref(); // [NEW] Check Glass Preference
 
     // Parallel Data Fetch
     await Promise.all([
@@ -64,7 +66,8 @@ async function initApp() {
 
 
     // Register PWA Service Worker
-    if ('serviceWorker' in navigator) {
+    // Wrap in a protocol check to prevent errors on file://
+    if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
         navigator.serviceWorker.register('./sw.js');
     }
 
@@ -86,6 +89,36 @@ function initChatWidget() {
             tooltip.classList.remove('visible');
         }, 7000);
     }, 2000);
+}
+
+// Navbar Scroll Logic (Pin on Scroll Up)
+function setupNavbarScroll() {
+    const nav = document.querySelector('.top-nav');
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                const currentScrollY = window.scrollY;
+
+                // Show if scrolling up OR at the very top
+                if (currentScrollY < lastScrollY || currentScrollY < 50) {
+                    nav.classList.add('visible');
+                } else if (currentScrollY > lastScrollY && currentScrollY > 50) {
+                    // Hide if scrolling down and not at top
+                    nav.classList.remove('visible');
+                }
+
+                lastScrollY = currentScrollY;
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    // Initial check
+    nav.classList.add('visible');
 }
 
 async function fetchSiteConfig() {
@@ -132,7 +165,7 @@ async function fetchNotes() {
         notesConfig = data.map(item => ({
             id: item.filename.replace(/\.pdf$/i, '').replace(/[^a-z0-9]/gi, '_').toLowerCase(),
             semester: item.category === 'semester2' ? 'Sem 2' : 'Sem 1', // Simple inferred mapping
-            subject: (item.tags && item.tags[0]) ? item.tags[0].toUpperCase() : 'General',
+            subject: (item.tags && item.tags[0]) ? item.tags[0].charAt(0).toUpperCase() + item.tags[0].slice(1).toLowerCase() : 'General',
             title: item.title,
             description: item.description,
             pdfUrl: REPO_BASE + encodeURIComponent(item.filename),
@@ -151,13 +184,13 @@ async function fetchNotes() {
 // Render News
 function renderNews() {
     const container = document.getElementById('news-feed');
-    // Duplicate data for seamless marquee loop
-    const loopData = [...newsData, ...newsData]; // A + A
-
-    const itemsHtml = loopData.map(item => createNewsItemHtml(item)).join('');
+    // Removal of duplicate loop for manual scroll requirement
+    const itemsHtml = newsData.map(item => createNewsItemHtml(item)).join('');
 
     container.innerHTML = `<div class="news-track">${itemsHtml}</div>`;
     if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    // GSAP ScrollTrigger Animation
 }
 
 // Render Helper for News Item
@@ -173,7 +206,7 @@ function createNewsItemHtml(item) {
                     ${hasLink ? '<i data-lucide="external-link" style="width:12px; height:12px; opacity:0.6;"></i>' : ''}
                 ${hasLink ? '</a>' : '</span>'}
                 
-                ${item.new ? '<span class="news-badge">NEW</span>' : ''}
+                ${item.new ? '<span class="news-badge">New</span>' : ''}
                 
                 <div style="display:flex; gap:0.5rem; margin-left:auto;">
                     ${item.enableShare && item.id ? `
@@ -216,7 +249,6 @@ function renderQuickLinks() { // 4. Quick Links (Vertical Ticker - Restored Styl
                 </div>
             </div>
         `;
-        if (typeof lucide !== 'undefined') lucide.createIcons();
     } else {
         container.innerHTML = '<p class="text-secondary">No quick links available.</p>';
     }
@@ -235,7 +267,7 @@ function renderSkeletons() {
                     <div class="skeleton-icon"></div>
                     <div class="skeleton-pill"></div>
                 </div>
-            </div>
+            </div >
             <div class="card-content">
                 <div class="skeleton-label skeleton-text"></div>
                 <div class="skeleton-title skeleton-text"></div>
@@ -315,7 +347,7 @@ function renderNotes(filter, searchQuery = '') {
     });
 
     if (filteredNotes.length === 0) {
-        grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1/-1; text-align: center; padding: 2rem;">No visible particles found.</p>';
+        grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1/-1; text-align: center; padding: 2rem;">No results found.</p>';
         return;
     }
 
@@ -367,9 +399,8 @@ function renderNotes(filter, searchQuery = '') {
 }
 
 function renderCard(note, container, isStackItem = false) {
-    const typeLabel = note.type || 'Note';
-    const card = document.createElement('div');
-    card.className = `glass-panel card ${isStackItem ? 'zone-item' : ''}`;
+    const card = document.createElement('article'); // Semantic HTML
+    card.className = `card ${isStackItem ? 'stack-item' : ''} `;
     card.id = note.id;
 
     const favs = JSON.parse(localStorage.getItem('cfis_favorites') || '[]');
@@ -377,41 +408,62 @@ function renderCard(note, container, isStackItem = false) {
     const recents = JSON.parse(localStorage.getItem('cfis_recent') || '[]');
     const isRecent = recents.includes(note.id);
 
+    // Map emoji and color from list.json
+    const emoji = note.emoji || (note.type === 'pdf' ? '📄' : '🔗');
+    const labelColor = note.color || (note.type === 'pdf' ? '#3b82f6' : '#10b981');
+
+    // Using Lucide icons for high reliability
+    const lucideBase = 'https://unpkg.com/lucide-static@latest/icons/';
+    const iconUrl = note.type === 'pdf' ? `${lucideBase}file-text.svg` : `${lucideBase}link.svg`;
+    const typeLabel = note.type === 'pdf' ? 'Document' : 'Resource';
+
     card.innerHTML = `
+        <div class="card-bg"></div>
+        <div class="card-emoji-topleft" style="position: absolute; top: 1rem; left: 1rem; font-size: 1.2rem; z-index: 10;">${emoji}</div>
         <div class="card-header">
             <div class="card-actions-top">
-                <button class="action-btn preview" onclick="openPreview(event, '${note.pdfUrl}', '${note.title.replace(/'/g, "\\'")}', '${note.type}', '${note.id}')" title="Preview">
-                    <i data-lucide="eye"></i>
+                <button class="action-btn preview" onclick="openPreview(event, '${note.pdfUrl}', '${note.title.replace(/'/g, "\\'")}', '${note.type}', '${note.id}')" aria-label="Preview">
+                    <img src="${lucideBase}eye.svg" width="20" height="20" alt="Preview icon" style="filter: invert(1);">
                 </button>
-                <button class="action-btn fav ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${note.id}')" title="Favorite">
-                    <i data-lucide="heart" ${isFav ? 'fill="currentColor"' : ''}></i>
+                <button class="action-btn fav ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${note.id}')" aria-label="Favorite">
+                    <img src="${lucideBase}heart.svg" width="20" height="20" alt="Favorite icon" style="filter: ${isFav ? 'none' : 'invert(1)'};">
                 </button>
-                <button class="action-btn share" onclick="copyLink(event, '${note.id}')" title="Share Link">
-                    <i data-lucide="share-2"></i>
+                <button class="action-btn share" onclick="shareNote(event, '${note.id}', '${note.title.replace(/'/g, "\\'")}')" aria-label="Share">
+                    <img src="${lucideBase}share-2.svg" width="20" height="20" alt="Share icon" style="filter: invert(1);">
                 </button>
             </div>
         </div>
         <div class="card-content">
+            <div class="icon-wrapper" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                 <img src="${iconUrl}" width="20" height="20" alt="${typeLabel}" class="icon-3d" style="filter: invert(1); opacity: 0.8;">
+            </div>
             <h3 class="card-title">${note.title}</h3>
         </div>
         <div class="card-footer">
-            <div class="footer-indicators">
-                <div class="subject-icon-pill" title="${note.subject}" style="--accent-glow: ${note.color}44;">
-                    ${note.emoji || '📁'}
+            <div class="card-metadata">
+                <div class="meta-item">
+                    <span class="meta-label">Subject:</span>
+                    <span class="meta-value">${note.subject}</span>
                 </div>
-                <div class="indicator-group">
-                    <div class="subject-admin-label" style="--label-color: ${note.color || '#8b5cf6'};">
-                        ${note.subject}
-                    </div>
-                    <div class="tags-row">
-                        <span class="sem-pill">SEM ${note.semester}</span>
-                        <span class="type-indicator">${typeLabel}</span>
-                        ${isRecent ? '<span class="status-pill reading">READING NOW</span>' : ''}
-                    </div>
+                <div class="meta-item">
+                    <span class="meta-label">Semester:</span>
+                    <span class="meta-value">${note.semester}</span>
                 </div>
+                <div class="meta-item tags" style="margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px;">
+                    <span class="meta-label">Tags:</span>
+                    <span class="meta-value" style="display: flex; gap: 4px; flex-wrap: wrap;">
+                        <span class="tag-pill" style="background: ${labelColor}20; color: ${labelColor}; border: 1px solid ${labelColor}40;">${typeLabel}</span>
+                        ${note.type && note.type.toLowerCase().includes('mam') ? `<span class="tag-pill" style="background: #eab30820; color: #eab308; border: 1px solid #eab30840;">Mam notes</span>` : ''}
+                    </span>
+                </div>
+                ${isRecent ? `
+                <div class="meta-item status">
+                    <span class="meta-label">Status:</span>
+                    <span class="meta-value highlight" style="color: var(--accent-color);">Reading</span>
+                </div>` : ''}
             </div>
         </div>
-    `;
+        `;
 
     card.onclick = () => openPreview(null, note.pdfUrl, note.title.replace(/'/g, "\\'"), note.type, note.id);
 
@@ -419,74 +471,85 @@ function renderCard(note, container, isStackItem = false) {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
+        card.style.setProperty('--mouse-x', `${x} px`);
+        card.style.setProperty('--mouse-y', `${y} px`);
     });
 
     container.appendChild(card);
 }
 
+// Global state for Zone management
+let activeZoneView = null;
+const zoneExpansionMap = new WeakMap();
+
 function renderZone(subject, notes, container) {
     const zone = document.createElement('div');
     zone.className = 'zone-container';
 
+    // 3D Tilt Effect
+    zone.addEventListener('mousemove', (e) => {
+        const rect = zone.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -10;
+        const rotateY = ((x - centerX) / centerX) * 10;
+        zone.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    zone.addEventListener('mouseleave', () => {
+        zone.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+    });
+
     const stackArea = document.createElement('div');
     stackArea.className = 'zone-stack-area';
 
-    // Render up to 7 cards for depth (as many as there are files)
+    // Simplified cards for the stack
     const cardLimit = Math.min(7, notes.length);
     for (let i = 0; i < cardLimit; i++) {
-        const note = notes[i];
         const dummy = document.createElement('div');
-        dummy.className = 'glass-panel card zone-card';
-        dummy.style.setProperty('--card-index', i);
+        dummy.className = 'card zone-card';
+        const isTop = (i === 0);
+
+        // [NEW] Max 3 visible
+        if (i >= 3) dummy.style.opacity = '0';
+
         dummy.innerHTML = `
-            <div class="card-header">
-                <div class="card-actions-top">
-                     <i data-lucide="layers" style="opacity:0.6; color:var(--text-secondary);"></i>
+            <div class="card-bg"></div>
+            <div class="card-content" style="padding: 1rem; display: flex; align-items: center; justify-content: center; text-align: center; height: 100%; opacity: ${isTop ? 1 : 0}; pointer-events: ${isTop ? 'auto' : 'none'}; transition: opacity 0.3s;">
+                    <h3 class="card-title" style="font-size: 0.8rem; opacity: 0.8; margin: 0;">${notes[i].title}</h3>
                 </div>
-            </div>
-            <div class="card-content">
-                <h3 class="card-title">${note.title}</h3>
-            </div>
-            <div class="card-footer">
-                <div class="footer-indicators">
-                    <div class="subject-icon-pill" style="--accent-glow: rgba(139, 92, 246, 0.4);">
-                        📁
-                    </div>
-                    <div class="indicator-group" style="text-align: left;">
-                         <div class="subject-admin-label" style="--label-color: #8b5cf6;">
-                            ${subject}
-                        </div>
-                        <div class="tags-row">
-                            <span class="sem-pill">PREVIEW</span>
-                            <span class="type-indicator">${note.type || 'PDF'}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
         `;
         stackArea.appendChild(dummy);
     }
     zone.appendChild(stackArea);
 
-    // Zone Label Info (Physically placed AFTER stack-area in the flex column)
-    const info = document.createElement('div');
-    info.className = 'zone-header-info';
-    info.innerHTML = `
-        <div class="zone-label">
-            <span style="font-size:0.9rem;">📁</span>
-            <span>${subject}</span>
-            <span class="zone-count">${notes.length} Files</span>
-        </div>
-    `;
-    zone.appendChild(info);
+    // Footer
+    const zoneFooter = document.createElement('div');
+    zoneFooter.className = 'zone-footer';
+    zoneFooter.innerHTML = `
+            <span class="zone-subject">${subject}</span>
+                <div style="display:flex; align-items:center; gap:0.5rem; background:rgba(255,255,255,0.05); padding:0.2rem 0.6rem; border-radius:12px;">
+                    <span class="zone-count">${notes.length} Files</span>
+                    <i data-lucide="chevron-down" class="zone-chevron" style="transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);"></i>
+                </div>
+        `;
+    zone.appendChild(zoneFooter);
 
-    // High-Fidelity physical shuffle logic
-    let shuffleInterval = null;
+    // Click to Expand
+    zone.onclick = (e) => {
+        e.stopPropagation();
+        expandZone(subject, notes, zone);
+    };
+
+    // Shuffle Logic
     let cardOrder = Array.from({ length: cardLimit }, (_, i) => i);
+    let shuffleInterval = null;
 
     const performShuffle = () => {
+        if (zone.classList.contains('active')) return;
+
         const cards = stackArea.querySelectorAll('.zone-card');
         if (cards.length < 2) return;
 
@@ -494,43 +557,59 @@ function renderZone(subject, notes, container) {
         cardOrder.unshift(bottomCardIdx);
 
         cards.forEach((card, i) => {
-            const pos = cardOrder.indexOf(i);
+            const pos = cardOrder.indexOf(i); // 0 is top
+            const content = card.querySelector('.card-content');
 
             if (i === bottomCardIdx) {
-                const tl = gsap.timeline();
-                tl.to(card, {
-                    x: 100,
-                    rotation: 20,
-                    duration: 0.3,
-                    ease: "power2.in"
-                });
-                tl.set(card, { zIndex: 12 });
-                tl.to(card, {
-                    x: 0,
-                    rotation: 0,
-                    yPercent: -50, // Matches CSS centering
-                    y: 0,
-                    scale: 1,
-                    duration: 0.4,
-                    ease: "power2.out"
-                });
+                // Animation for card moving to top
+                gsap.timeline()
+                    .to(card, { x: 100, rotation: 20, duration: 0.3, ease: "power2.in" })
+                    .set(card, { zIndex: 12 })
+                    .to(card, {
+                        x: 0, rotation: 0, y: 0, scale: 1, opacity: 1, // [FIX] Ensure visible
+                        startAt: { yPercent: -150, scale: 1.1 }, yPercent: -50,
+                        duration: 0.5, ease: "back.out(1.7)",
+                        onStart: () => {
+                            if (content) {
+                                gsap.to(content, { opacity: 1, duration: 0.3, delay: 0.1 });
+                                content.style.pointerEvents = 'auto';
+                            }
+                        }
+                    });
+                if (content) content.style.opacity = 0; // Hide initially
             } else {
+                // Stack shuffle
                 gsap.to(card, {
-                    yPercent: -50,
-                    y: - (pos * 8), // Tighter macOS offset
-                    scale: 1 - (pos * 0.03),
-                    duration: 0.5,
                     zIndex: 10 - pos,
-                    ease: "power2.inOut"
+                    yPercent: -50,
+                    y: -(pos * 12),
+                    scale: 1 - (pos * 0.04),
+                    opacity: pos < 3 ? 1 : 0, // [NEW] visual max 3
+                    duration: 0.4,
+                    ease: "power2.out",
+                    onUpdate: () => {
+                        if (content) content.style.opacity = (pos === 0) ? 1 : 0;
+                    }
                 });
+                if (content && pos !== 0) content.style.pointerEvents = 'none';
             }
         });
     };
 
+    let hasHovered = false;
     zone.addEventListener('mouseenter', () => {
-        if (cardLimit < 2) return;
-        performShuffle();
-        shuffleInterval = setInterval(performShuffle, 1400);
+        if (!hasHovered) {
+            hasHovered = true;
+            // First-time "Peek" animation
+            gsap.to(stackArea.querySelectorAll('.zone-card'), {
+                y: (i) => -10 - (i * 5),
+                duration: 0.2, yoyo: true, repeat: 1, stagger: 0.05
+            });
+        }
+        if (cardLimit >= 2) {
+            performShuffle();
+            shuffleInterval = setInterval(performShuffle, 1200);
+        }
     });
 
     zone.addEventListener('mouseleave', () => {
@@ -538,106 +617,98 @@ function renderZone(subject, notes, container) {
             clearInterval(shuffleInterval);
             shuffleInterval = null;
         }
-        cardOrder = Array.from({ length: cardLimit }, (_, i) => i);
-        const cards = stackArea.querySelectorAll('.zone-card');
-        gsap.to(cards, {
-            x: 0,
-            yPercent: -50,
-            y: (i) => - (i * 8), // Reset to tighter offset
-            rotation: 0,
-            scale: (i) => 1 - (i * 0.03),
-            zIndex: (i) => 10 - i,
-            duration: 0.5,
-            ease: "back.out(1.2)"
-        });
     });
-
-    zone.onclick = (e) => {
-        e.stopPropagation();
-        expandZone(subject, notes, zone);
-    };
 
     container.appendChild(zone);
 }
 
-let activeZoneView = null;
-let zoneKeyHandler = null;
-
 function expandZone(subject, notes, zoneEl) {
-    if (activeZoneView) closeZoneView();
+    if (zoneEl.classList.contains('active')) {
+        // --- COLLAPSE ---
+        const injectedCards = zoneExpansionMap.get(zoneEl) || [];
+        const zoneRect = zoneEl.getBoundingClientRect();
 
-    zoneEl.classList.add('active');
+        // Animate cards back to stack
+        injectedCards.forEach((card, i) => {
+            const rect = card.getBoundingClientRect();
+            gsap.to(card, {
+                x: zoneRect.left - rect.left,
+                y: zoneRect.top - rect.top,
+                scale: 0.5, opacity: 0,
+                duration: 0.4,
+                delay: (injectedCards.length - 1 - i) * 0.03, // Reverse stagger
+                ease: "power2.in",
+                onComplete: () => card.remove()
+            });
+        });
 
-    const view = document.createElement('div');
-    view.className = 'zone-expanded-view';
-    view.innerHTML = `
-        <div class="zone-expanded-header">
-            <h2 style="margin:0; font-size:1.5rem; letter-spacing:1px;">📂 ${subject} <span style="font-size:0.9rem; opacity:0.5; font-weight:normal; margin-left:10px;">(${notes.length} File${notes.length > 1 ? 's' : ''})</span></h2>
-            <button class="zone-close-btn" onclick="closeZoneView()">Close Zone ✕</button>
-        </div>
-        <div class="bento-grid" id="expanded-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
-        </div>
-    `;
+        // Restore Stack
+        gsap.to(zoneEl.querySelectorAll('.zone-card'), {
+            scale: 1, opacity: 1, duration: 0.4, stagger: 0.05, ease: "back.out(1.2)"
+        });
 
-    const grid = view.querySelector('#expanded-grid');
-    notes.forEach(note => renderCard(note, grid, true));
+        // UI Updates
+        const chevron = zoneEl.querySelector('.zone-chevron');
+        if (chevron) chevron.style.transform = 'rotate(0deg)';
+        const count = zoneEl.querySelector('.zone-count');
+        if (count) count.textContent = `${notes.length} Files`;
 
-    // Keyboard navigation
-    let currentIndex = -1;
-    const items = view.querySelectorAll('.card');
-
-    zoneKeyHandler = (e) => {
-        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-            e.preventDefault();
-            currentIndex = Math.min(currentIndex + 1, items.length - 1);
-            items[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
-            items[currentIndex].classList.add('highlight');
-            setTimeout(() => items[currentIndex].classList.remove('highlight'), 1000);
-        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-            e.preventDefault();
-            currentIndex = Math.max(currentIndex - 1, 0);
-            items[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
-            items[currentIndex].classList.add('highlight');
-            setTimeout(() => items[currentIndex].classList.remove('highlight'), 1000);
-        } else if (e.key === 'Enter' && currentIndex >= 0) {
-            items[currentIndex].querySelector('.card-content').click();
-        } else if (e.key === 'Escape') {
-            closeZoneView();
-        }
-    };
-
-    document.addEventListener('keydown', zoneKeyHandler);
-    activeZoneView = view;
-
-    // Insert after zone
-    zoneEl.after(view);
-    view.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-    // Animate items
-    gsap.from(items, {
-        scale: 0.9,
-        opacity: 0,
-        y: 20,
-        duration: 0.4,
-        stagger: 0.05,
-        ease: "power2.out"
-    });
-}
-
-window.closeZoneView = function () {
-    if (!activeZoneView) return;
-
-    const zone = activeZoneView.previousElementSibling;
-    if (zone) zone.classList.remove('active');
-
-    if (zoneKeyHandler) {
-        document.removeEventListener('keydown', zoneKeyHandler);
-        zoneKeyHandler = null;
+        zoneEl.classList.remove('active');
+        zoneExpansionMap.delete(zoneEl);
+        return;
     }
 
-    activeZoneView.remove();
-    activeZoneView = null;
-};
+    // --- EXPAND ---
+    zoneEl.classList.add('active');
+
+    // Empty Stack Animation
+    gsap.to(zoneEl.querySelectorAll('.zone-card'), {
+        scale: 0.5, opacity: 0, duration: 0.3, stagger: 0.02, ease: "power2.in"
+    });
+
+    // UI Updates
+    const chevron = zoneEl.querySelector('.zone-chevron');
+    if (chevron) chevron.style.transform = 'rotate(180deg)';
+    const count = zoneEl.querySelector('.zone-count');
+    if (count) count.textContent = `Close`;
+
+    // Inject Cards ("Deal" Animation)
+    const parentGrid = zoneEl.parentElement;
+    const nextSibling = zoneEl.nextSibling;
+    const newCards = [];
+    const zoneRect = zoneEl.getBoundingClientRect();
+
+    notes.forEach((note, index) => {
+        const temp = document.createElement('div');
+        renderCard(note, temp, true); // true = skip append
+        const card = temp.firstElementChild;
+        card.classList.add('zone-injected-card');
+
+        // Insert into DOM to get layout
+        if (nextSibling) parentGrid.insertBefore(card, nextSibling);
+        else parentGrid.appendChild(card);
+
+        newCards.push(card);
+
+        // FLIP Animation: From Stack to Grid
+        const cardRect = card.getBoundingClientRect();
+        gsap.from(card, {
+            x: zoneRect.left - cardRect.left,
+            y: zoneRect.top - cardRect.top,
+            scale: 0.5,
+            opacity: 0,
+            rotation: -10 + (Math.random() * 20),
+            duration: 0.6,
+            delay: index * 0.05,
+            ease: "power3.out",
+            clearProps: "all"
+        });
+    });
+
+    zoneExpansionMap.set(zoneEl, newCards);
+}
+
+
 
 // Filter Setup
 function setupFilters() {
@@ -663,16 +734,22 @@ function setupFilters() {
 function setupSearch() {
     const searchInput = document.getElementById('search-input');
     const readingSection = document.getElementById('reading-now-section');
+
+    let debounceTimer;
+
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value.trim();
-        if (query.length > 0) {
-            if (readingSection) readingSection.style.display = 'none';
-        } else {
-            // Re-render to show if it should be visible
-            renderReadingNow();
-        }
-        const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
-        renderNotes(activeFilter, e.target.value);
+
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            if (query.length > 0) {
+                if (readingSection) readingSection.style.display = 'none';
+            } else {
+                renderReadingNow();
+            }
+            const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+            renderNotes(activeFilter, query);
+        }, 200); // Approximately 200ms as per requirements.
     });
 }
 
@@ -682,7 +759,7 @@ function initAnimations() {
     gsap.to('#scramble-text', {
         duration: 2,
         text: {
-            value: "ACADEMIC_ARCHIVE",
+            value: "Academic Archive",
             delimiter: ""
         },
         ease: "none",
@@ -1255,16 +1332,81 @@ function animateValue(obj, start, end, duration) {
     window.requestAnimationFrame(step);
 }
 
+function shareNote(event, id, title) {
+    if (event) event.stopPropagation();
+    const shareUrl = `${window.location.origin}${window.location.pathname}?note=${id}`;
+
+    if (navigator.share) {
+        navigator.share({
+            title: title,
+            url: shareUrl
+        }).catch(err => console.log('Error sharing', err));
+    } else {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            showToast('Link copied to clipboard!');
+        });
+    }
+}
+
 // 12. Manual Scroll Control
 function toggleMarquee(id) {
     const list = document.getElementById(id);
-    const container = id === 'quick-links' ? list.querySelector('.quick-links-container') : list;
+    if (!list) return;
 
-    if (container.classList.contains('manual-scroll')) {
-        container.classList.remove('manual-scroll');
-        showToast('🔄 Auto-scroll enabled');
-    } else {
-        container.classList.add('manual-scroll');
+    // Target the actual track with the animation
+    const track = list.querySelector('.news-track') || list.querySelector('.marquee-content') || list;
+
+    const isPaused = track.style.animationPlayState === 'paused';
+    track.style.animationPlayState = isPaused ? 'running' : 'paused';
+
+    // Update button text if possible
+    const btn = event ? event.currentTarget : null;
+    if (btn && btn.tagName === 'BUTTON') {
+        btn.innerText = isPaused ? 'Toggle Auto-Scroll' : 'Manual Mode';
+        btn.style.background = isPaused ? '' : 'rgba(255, 255, 255, 0.1)';
+    }
+
+    // Ensure manual scrollability
+    if (!isPaused) {
+        list.style.overflowY = 'auto';
+        list.style.overflowX = 'hidden';
         showToast('🖱️ Manual scroll enabled');
+    } else {
+        list.style.overflow = 'hidden';
+        showToast('🔄 Auto-scroll enabled');
+    }
+}
+
+// Toggle Liquid Glass Effect (Performance Mode)
+function toggleGlassEffect() {
+    const body = document.body;
+    body.classList.toggle('simple-mode');
+    const isSimple = body.classList.contains('simple-mode');
+    localStorage.setItem('cfis_simple_mode', isSimple);
+    updateGlassBtnState(isSimple);
+}
+
+function updateGlassBtnState(isSimple) {
+    const btn = document.getElementById('glass-toggle-btn');
+    if (!btn) return;
+
+    if (isSimple) {
+        btn.querySelector('span:last-child').innerText = 'Normal';
+        btn.style.opacity = '0.7';
+        showToast('💧 Glass Effect Disabled');
+    } else {
+        btn.querySelector('span:last-child').innerText = 'Glass';
+        btn.style.opacity = '1';
+        showToast('✨ Glass Effect Enabled');
+    }
+}
+
+// Check saved preference
+function checkGlassPref() {
+    const isSimple = localStorage.getItem('cfis_simple_mode') === 'true';
+    if (isSimple) {
+        document.body.classList.add('simple-mode');
+        // Wait for DOM
+        setTimeout(() => updateGlassBtnState(true), 100);
     }
 }

@@ -7,7 +7,10 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>CFIS | College Notes Archive</title>
+    <title>CFIS | Academic Archive</title>
+    <link rel="icon" type="image/png" href="https://unpkg.com/lucide-static@latest/icons/graduation-cap.svg">
+    <meta name="description"
+        content="Curated academic resources, notes, and papers for Msc. Cyber Forensics & Information Security. A premium high-contrast archive.">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,6 +26,7 @@
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/TextPlugin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/ScrollTrigger.min.js"></script>
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -47,10 +51,8 @@
     <div class="cmd-overlay" id="cmd-overlay">
         <div class="glass-panel cmd-palette">
             <div class="cmd-header">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path
-                        d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" />
-                </svg>
+                <img src="https://unpkg.com/lucide-static@latest/icons/search.svg" width="20" height="20"
+                    alt="Search icon">
                 <input type="text" id="cmd-input" placeholder="Type a command or search..." autocomplete="off">
                 <span class="cmd-badge">ESC</span>
             </div>
@@ -73,7 +75,7 @@
     <div id="focus-controls" class="glass-panel"
         style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:9001; display:none; flex-direction:column; align-items:center; padding:3rem; border-radius:32px; box-shadow: 0 0 100px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1);">
 
-        <h2 style="font-weight:300; margin-bottom: 2rem; color:rgba(255,255,255,0.7); letter-spacing: 2px;">DEEP FOCUS
+        <h2 style="font-weight:300; margin-bottom: 2rem; color:rgba(255,255,255,0.7); letter-spacing: 2px;">Deep focus
         </h2>
 
         <div style="display:flex; gap:2rem; align-items:center; margin-bottom: 3rem;">
@@ -117,14 +119,15 @@
             <div class="modal-header">
                 <h3 class="modal-title" id="preview-title">Preview</h3>
                 <div class="modal-actions">
-                    <a href="#" id="open-new-tab" target="_blank" class="icon-btn" title="Open in New Tab"
+                    <a href="#" id="open-new-tab" target="_blank" class="icon-btn" title="Open in new tab"
                         style="color: white">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
-                        </svg>
+                        <img src="https://unpkg.com/lucide-static@latest/icons/share-2.svg" width="20" height="20"
+                            alt="External link icon">
                     </a>
-                    <button class="icon-btn close-btn" onclick="closePreview()">✕</button>
+                    <button class="icon-btn close-btn" onclick="closePreview()">
+                        <img src="https://unpkg.com/lucide-static@latest/icons/x.svg" width="20" height="20"
+                            alt="Close icon">
+                    </button>
                 </div>
             </div>
             <div class="modal-body">
@@ -140,7 +143,10 @@
             <div class="modal-header">
                 <h3 id="comments-title">Community Discussions</h3>
                 <div class="modal-actions">
-                    <button class="icon-btn" onclick="closeCommentsModal()">✕</button>
+                    <button class="icon-btn" onclick="closeCommentsModal()">
+                        <img src="https://unpkg.com/lucide-static@latest/icons/x.svg" width="20" height="20"
+                            alt="Close icon">
+                    </button>
                 </div>
             </div>
             <div class="modal-body">
@@ -172,6 +178,12 @@
                         <span>💬</span>
                         <span>Discuss</span>
                     </button>
+                    <button onclick="toggleGlassEffect()" id="glass-toggle-btn" class="glass-panel"
+                        style="padding: 0.4rem 1rem; border-radius: 100px; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); color: var(--text-secondary); height: 32px; font-size: 0.85rem; font-weight: 500; transition: all 0.3s;"
+                        title="Toggle Liquid Glass Effect">
+                        <span>💧</span>
+                        <span>Glass</span>
+                    </button>
                     <div class="visitor-counter glass-panel" style="padding: 0.2rem 0.5rem;">
                         <img src="https://visitor-badge.laobi.icu/badge?page_id=sriram.github.io.notes&left_color=151515&right_color=0ae448&left_text=Visitors"
                             alt="Visitor count badge" loading="lazy" style="height: 20px;">
@@ -184,9 +196,9 @@
                     <span class="status-dot"></span>
                     <span>Systems Updated</span>
                 </div>
-                <h1 class="hero-title" id="scramble-text">ACADEMIC_ARCHIVE</h1>
+                <h1 class="hero-title" id="scramble-text">Academic Archive</h1>
                 <p class="hero-subtitle">Curated resources for Msc. Cyber Forensics & Information Security. A collection
-                    of notes, papers and references.</p>
+                    of notes and papers.</p>
             </div>
         </header>
 
@@ -196,8 +208,6 @@
             <div class="glass-panel dashboard-card" style="min-height: 200px;">
                 <div class="dash-header">
                     <h3>🔔 Notifications & Updates</h3>
-                    <button onclick="toggleMarquee('news-feed')" class="btn-glass"
-                        style="font-size:0.7rem; padding:0.3rem 0.6rem;">Toggle Auto-Scroll</button>
                 </div>
                 <div id="news-feed" class="news-list">
                     <!-- Dynamic -->
@@ -208,8 +218,6 @@
             <div class="glass-panel dashboard-card" style="min-height: 200px;">
                 <div class="dash-header">
                     <h3>🔗 Important Links</h3>
-                    <button onclick="toggleMarquee('quick-links')" class="btn-glass"
-                        style="font-size:0.7rem; padding:0.3rem 0.6rem;">Toggle Auto-Scroll</button>
                 </div>
                 <!-- Removed legacy 'links-grid' class to prevent layout conflict with new ticker -->
                 <div id="quick-links" style="width: 100%; flex:1;">
@@ -233,11 +241,8 @@
         <section class="content-section">
             <div class="controls-container">
                 <div class="search-container glass-panel">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="search-icon">
-                        <path
-                            d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
+                    <img src="https://unpkg.com/lucide-static@latest/icons/search.svg" width="20" height="20"
+                        alt="Search icon" class="search-icon" style="filter: invert(1); opacity: 0.5;">
                     <input type="text" id="search-input" placeholder="Search notes, subjects..." autocomplete="off">
                 </div>
 
