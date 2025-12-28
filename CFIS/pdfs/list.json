@@ -42,11 +42,10 @@
     "title": "Introduction to Information Security",
     "description": "Important Questions",
     "filename": "PCI1C Information Security.pdf",
-    "category": "semester1",
+    "category": "quickaccess",
     "tags": [
-      "Introduction to Information Security"
-    ],
-    "type": "Mam Edition"
+      "security"
+    ]
   },
   {
     "title": "Network and Communication Protocols - Keywords",
@@ -69,12 +68,13 @@
   },
   {
     "filename": "PCI2F_-_NETWORK_SECURITY_AND_CRYPTOGRAPHY_FinalNotes.pdf",
-    "title": "VP MAM Notes NETWORK SECURITY AND CRYPTOGRAPHY",
+    "title": "Notes NETWORK SECURITY AND CRYPTOGRAPHY",
     "description": "Uploaded via Admin v2",
     "category": "semester2",
     "tags": [
       "NETWORK SECURITY AND CRYPTOGRAPHY"
-    ]
+    ],
+    "type": "Mam Edition"
   },
   {
     "filename": "PCI2G_-_BASICS_OF_CYBER_FORENSICS.pdf",
