@@ -625,22 +625,28 @@ kbd {
 /* Large card variations can be added by classes like .col-span-2 */
 .card {
     border-radius: var(--radius-lg);
-    padding: 2.5rem;
+    padding: 1.5rem;
+    /* Tighter padding */
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    min-height: 320px;
+    justify-content: flex-start;
+    height: 320px;
+    min-height: 320px !important;
     position: relative;
-    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: pointer;
     overflow: hidden;
+    background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(35px);
+    -webkit-backdrop-filter: blur(35px);
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    border-color: var(--glass-highlight);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    transform: translateY(-8px) scale(1.01);
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(139, 92, 246, 0.1);
 }
 
 .card::before {
@@ -665,47 +671,375 @@ kbd {
     z-index: 2;
 }
 
-.card-meta {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    margin-bottom: 1rem;
+/* Card Hierarchy & Tags */
+/* 3D Glass Header Hierarchy */
+.card-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    z-index: 10;
 }
 
-.sem-tag,
-.type-tag {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 0.2rem 0.6rem;
-    border-radius: 4px;
+.tags-group {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.subject-icon-pill {
+    --accent-glow: rgba(139, 92, 246, 0.5);
+    /* Default fallback */
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    position: relative;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+        inset 0 1px 1px rgba(255, 255, 255, 0.2),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.2),
+        0 4px 15px var(--accent-glow);
+    transition: all 0.3s ease;
+}
+
+.subject-icon-pill::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 20%;
+    width: 60%;
+    height: 20%;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent);
+    border-radius: 10px;
+    pointer-events: none;
+}
+
+.sem-pill {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.6rem;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.subject-pill {
+    background: rgba(139, 92, 246, 0.12);
+    color: #c4b5fd;
+    padding: 0.35rem 0.7rem;
+    border-radius: 6px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    width: fit-content;
+}
+
+/* Base tag styling for any remaining legacy usage */
+.type-tag,
+.subject-tag,
+.sem-tag {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    padding: 0.3rem 0.7rem;
+    border-radius: 8px;
     color: var(--text-primary);
+    font-size: 0.75rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
 }
 
 .type-tag {
-    background: rgba(99, 102, 241, 0.2);
-    color: #a5b4fc;
-    margin-right: 0.5rem;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-weight: 600;
+}
+
+.subject-tag {
+    color: #c4b5fd;
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+/* Zone UI */
+.zone-container {
+    position: relative;
+    height: 320px;
+    /* Uniform with standard cards */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    perspective: 1200px;
+    margin-bottom: 2.5rem;
+    transition: all 0.3s ease;
+}
+
+.zone-container:hover {
+    z-index: 100;
+    box-shadow: 0 0 50px rgba(139, 92, 246, 0.2);
+    /* Muted violet hover glow */
+}
+
+.zone-stack-area {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* Fill container, header will be absolute on top */
+    pointer-events: none;
+}
+
+.zone-card {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100% !important;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: center bottom;
+    z-index: 1;
+    pointer-events: none;
+    transform: translateY(calc(-50% - (var(--card-index, 0) * 8px))) scale(calc(1 - (var(--card-index, 0) * 0.03)));
+    z-index: calc(10 - var(--card-index, 0));
+    opacity: 1;
+}
+
+.zone-card:nth-child(n+8) {
+    display: none;
+}
+
+/* Clamp to 7 */
+
+.zone-container.active .zone-card {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+}
+
+.zone-header-info {
+    position: absolute;
+    bottom: 0.8rem;
+    /* Pin to absolute bottom of bento cell */
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 200;
+}
+
+.zone-label {
+    background: rgba(139, 92, 246, 0.2);
+    /* Muted Violet instead of hard green */
+    color: #c4b5fd;
+    padding: 0.25rem 0.8rem;
+    /* Even tighter */
+    border-radius: 100px;
+    font-size: 0.6rem;
+    /* Tighter typography as requested */
+    font-weight: 600;
+    white-space: nowrap;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.zone-count {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 0.55rem;
+    opacity: 0.8;
+}
+
+/* Expanded Grid for Zones */
+.zone-expanded-view {
+    grid-column: 1 / -1;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--glass-border);
+    margin: 1rem 0 3rem 0;
+    position: relative;
+    animation: zoneExpand 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.zone-expanded-view .card {
+    /* Override any zone-card specific styles in expanded mode */
+    position: relative !important;
+    transform: none !important;
+    z-index: 1 !important;
+    opacity: 1 !important;
+    display: flex !important;
+    height: auto !important;
+}
+
+.zone-expanded-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+@keyframes zoneExpand {
+    from {
+        opacity: 0;
+        transform: scale(0.98) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.zone-close-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+}
+
+.zone-close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.card-actions-top {
+    display: flex;
+    gap: 0.3rem;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.3rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.action-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-secondary);
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    transform: scale(1.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.action-btn.fav.active {
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.2);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.subject-admin-label {
+    --label-color: #8b5cf6;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.8rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--label-color);
+    border-radius: 100px;
+    color: var(--label-color);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.8rem;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 10px var(--label-color);
+    opacity: 0.85;
 }
 
 .card-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
+    font-size: 1.15rem;
+    /* Reduced size */
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.4rem;
     line-height: 1.3;
+    color: #fff;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .card-desc {
+    display: none;
+    /* Removed for new hierarchy */
+}
+
+.card-footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.8rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    z-index: 2;
+}
+
+.card-meta-info {
+    font-size: 0.55rem;
     color: var(--text-secondary);
-    font-size: 0.95rem;
-    margin-bottom: 2rem;
+    opacity: 0.4;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.type-indicator {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.55rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.card-meta-bottom {
+    margin-top: auto;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    opacity: 0.5;
+    font-family: var(--font-mono);
 }
 
 .card-action {
-    z-index: 2;
-    margin-top: auto;
-    display: flex;
-    gap: 0.8rem;
+    display: none;
+    /* Removed as requested */
 }
 
 .icon-btn {
@@ -1143,6 +1477,8 @@ kbd {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
     mask-composite: exclude;
     pointer-events: none;
 }
@@ -1297,4 +1633,79 @@ kbd {
         min-width: auto;
         width: 100%;
     }
+}
+
+/* --- Skeleton Loading --- */
+.skeleton {
+    position: relative !important;
+    overflow: hidden !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+    pointer-events: none !important;
+    height: 320px !important;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.skeleton::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(90deg,
+            rgba(255, 255, 255, 0) 0,
+            rgba(255, 255, 255, 0.03) 20%,
+            rgba(255, 255, 255, 0.08) 60%,
+            rgba(255, 255, 255, 0));
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.skeleton-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.skeleton-pill {
+    width: 60px;
+    height: 18px;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.skeleton-text {
+    height: 14px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    margin-bottom: 0.8rem;
+}
+
+.skeleton-title {
+    width: 80%;
+    height: 22px;
+    margin-bottom: 1rem;
+}
+
+.skeleton-label {
+    width: 40%;
+    height: 18px;
+    margin-bottom: 1.5rem;
+}
+
+.skeleton-footer {
+    margin-top: auto;
+    width: 100%;
+    height: 14px;
 }

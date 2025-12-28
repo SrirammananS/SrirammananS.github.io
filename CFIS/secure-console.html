@@ -559,70 +559,71 @@
                 to quickly apply it.</p>
         </div>
     </div>
-    <div class="glass-panel modal-content" style="max-width: 500px; height: auto; padding: 2rem;">
-        <h3>📝 Edit Resource Metadata</h3>
-        <div class="input-group">
-            <label>Title</label>
-            <input type="text" id="editFileTitle" class="input-field">
-        </div>
-        <div class="input-group">
-            <label>Description</label>
-            <textarea id="editFileDesc" class="input-field" style="height: 80px; resize: none;"></textarea>
-        </div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+    <div id="editResourceModal" class="modal-search-overlay" style="z-index: 10001;">
+        <div class="glass-panel modal-content" style="max-width: 500px; height: auto; padding: 2rem;">
+            <h3>📝 Edit Resource Metadata</h3>
             <div class="input-group">
-                <label>Semester</label>
-                <select id="editFileSem" class="input-field">
-                    <option value="semester1">Sem 1</option>
-                    <option value="semester2">Sem 2</option>
-                    <option value="semester3">Sem 3</option>
+                <label>Title</label>
+                <input type="text" id="editFileTitle" class="input-field">
+            </div>
+            <div class="input-group">
+                <label>Description</label>
+                <textarea id="editFileDesc" class="input-field" style="height: 80px; resize: none;"></textarea>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                <div class="input-group">
+                    <label>Semester</label>
+                    <select id="editFileSem" class="input-field">
+                        <option value="semester1">Sem 1</option>
+                        <option value="semester2">Sem 2</option>
+                        <option value="semester3">Sem 3</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Subject</label>
+                    <input type="text" id="editFileSub" class="input-field">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Quick Apply Label</label>
+                <div style="display:flex; gap:0.5rem;">
+                    <select id="editApplyPreset" class="input-field" onchange="applyPresetToForm('edit')"
+                        style="background:rgba(255,255,255,0.05); color:var(--accent-color); border:1px dashed var(--accent-color); flex:1;">
+                        <option value="">-- No Labels Found --</option>
+                    </select>
+                    <button onclick="openLabelSelector('edit')" class="btn-primary"
+                        style="width: auto; margin-top:0; padding: 0 1rem; font-size: 0.8rem; background:rgba(255,255,255,0.1); border:1px solid var(--glass-border);">📋
+                        Select</button>
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                <div class="input-group">
+                    <label>Resource Type</label>
+                    <input type="text" id="editFileType" class="input-field" list="typeSuggestions">
+                </div>
+                <div class="input-group">
+                    <label>Label Emoji</label>
+                    <input type="text" id="editFileEmoji" class="input-field">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Label Color</label>
+                <select id="editFileColor" class="input-field">
+                    <option value="#0ae448">GSAP Green</option>
+                    <option value="#8b5cf6">Violet</option>
+                    <option value="#3b82f6">Blue</option>
+                    <option value="#eab308">Gold</option>
+                    <option value="#ef4444">Red</option>
+                    <option value="#ffffff">White</option>
                 </select>
             </div>
-            <div class="input-group">
-                <label>Subject</label>
-                <input type="text" id="editFileSub" class="input-field">
+            <div style="display:flex; gap:1rem; margin-top: 1rem;">
+                <button onclick="saveResourceEdit()" class="btn-primary" style="margin-top:0; background:#22c55e;">Save
+                    Changes</button>
+                <button onclick="closeEditModal()" class="btn-primary"
+                    style="margin-top:0; background:rgba(255,255,255,0.1); color:white;">Cancel</button>
             </div>
         </div>
-        <div class="input-group">
-            <label>Quick Apply Label</label>
-            <div style="display:flex; gap:0.5rem;">
-                <select id="editApplyPreset" class="input-field" onchange="applyPresetToForm('edit')"
-                    style="background:rgba(255,255,255,0.05); color:var(--accent-color); border:1px dashed var(--accent-color); flex:1;">
-                    <option value="">-- No Labels Found --</option>
-                </select>
-                <button onclick="openLabelSelector('edit')" class="btn-primary"
-                    style="width: auto; margin-top:0; padding: 0 1rem; font-size: 0.8rem; background:rgba(255,255,255,0.1); border:1px solid var(--glass-border);">📋
-                    Select</button>
-            </div>
-        </div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
-            <div class="input-group">
-                <label>Resource Type</label>
-                <input type="text" id="editFileType" class="input-field" list="typeSuggestions">
-            </div>
-            <div class="input-group">
-                <label>Label Emoji</label>
-                <input type="text" id="editFileEmoji" class="input-field">
-            </div>
-        </div>
-        <div class="input-group">
-            <label>Label Color</label>
-            <select id="editFileColor" class="input-field">
-                <option value="#0ae448">GSAP Green</option>
-                <option value="#8b5cf6">Violet</option>
-                <option value="#3b82f6">Blue</option>
-                <option value="#eab308">Gold</option>
-                <option value="#ef4444">Red</option>
-                <option value="#ffffff">White</option>
-            </select>
-        </div>
-        <div style="display:flex; gap:1rem; margin-top: 1rem;">
-            <button onclick="saveResourceEdit()" class="btn-primary" style="margin-top:0; background:#22c55e;">Save
-                Changes</button>
-            <button onclick="closeEditModal()" class="btn-primary"
-                style="margin-top:0; background:rgba(255,255,255,0.1); color:white;">Cancel</button>
-        </div>
-    </div>
     </div>
 
     <script>
@@ -1163,6 +1164,50 @@
 
             if (uploadSelector) uploadSelector.innerHTML = options;
             if (editSelector) editSelector.innerHTML = options;
+        }
+
+        let currentSelectorTarget = 'upload';
+        function openLabelSelector(target) {
+            currentSelectorTarget = target;
+            const grid = document.getElementById('labelGrid');
+            const labels = localSiteConfig.labelPresets || [];
+
+            if (labels.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; opacity:0.5;">No labels found. Fetch or create some!</p>';
+            } else {
+                grid.innerHTML = labels.map((p, idx) => `
+                    <button onclick="applySelectedLabel(${idx})" class="glass-panel" 
+                        style="padding:0.8rem; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:0.3rem; transition:all 0.2s; border:1px solid ${p.color}44; background:${p.color}11;">
+                        <span style="font-size:1.2rem;">${p.emoji}</span>
+                        <span style="font-size:0.75rem; font-weight:600; color:white; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;">${p.name}</span>
+                    </button>
+                `).join('');
+            }
+
+            document.getElementById('labelSelectorModal').classList.add('active');
+        }
+
+        function closeLabelSelector() {
+            document.getElementById('labelSelectorModal').classList.remove('active');
+        }
+
+        function applySelectedLabel(index) {
+            const p = localSiteConfig.labelPresets[index];
+            const target = currentSelectorTarget;
+
+            if (target === 'upload') {
+                document.getElementById('fileType').value = p.name;
+                document.getElementById('fileEmoji').value = p.emoji;
+                document.getElementById('fileColor').value = p.color;
+                document.getElementById('applyPreset').value = index;
+            } else {
+                document.getElementById('editFileType').value = p.name;
+                document.getElementById('editFileEmoji').value = p.emoji;
+                document.getElementById('editFileColor').value = p.color;
+                document.getElementById('editApplyPreset').value = index;
+            }
+
+            closeLabelSelector();
         }
 
         function applyPresetToForm(formType) {

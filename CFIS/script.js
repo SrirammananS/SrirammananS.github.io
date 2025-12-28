@@ -120,7 +120,7 @@ async function fetchSiteConfig() {
 
 async function fetchNotes() {
     const grid = document.getElementById('notes-grid');
-    grid.innerHTML = '<p style="color:var(--text-secondary); text-align:center;">Syncing with Archive...</p>';
+    renderSkeletons();
 
     try {
         const response = await fetch(`${LIST_JSON_URL}?t=${Date.now()}`);
@@ -214,6 +214,48 @@ function renderQuickLinks() { // 4. Quick Links (Vertical Ticker - Restored Styl
     }
 }
 
+function renderSkeletons() {
+    const grid = document.getElementById('notes-grid');
+    grid.innerHTML = '';
+    for (let i = 0; i < 6; i++) {
+        const skeleton = document.createElement('div');
+        skeleton.className = 'glass-panel card skeleton';
+        skeleton.innerHTML = `
+            <div class="card-header">
+                <div class="tags-group">
+                    <div class="skeleton-icon"></div>
+                    <div class="skeleton-pill"></div>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="skeleton-label skeleton-text"></div>
+                <div class="skeleton-title skeleton-text" style="width:80%; height:20px;"></div>
+                <div class="skeleton-text" style="width:60%;"></div>
+            </div>
+            <div class="card-footer" style="padding-top:1rem; border-top:1px solid rgba(255,255,255,0.05);">
+                <div class="skeleton-text" style="width:100px; margin:0;"></div>
+            </div>
+        `;
+        grid.appendChild(skeleton);
+    }
+}
+
+function trackReadingProgress(id) {
+    if (!id) return;
+    let recent = JSON.parse(localStorage.getItem('cfis_recent') || '[]');
+    recent = recent.filter(i => i !== id);
+    recent.unshift(id);
+    recent = recent.slice(0, 10);
+    localStorage.setItem('cfis_recent', JSON.stringify(recent));
+
+    // Optional: Re-render to show badges if currently filtered by 'all'
+    const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+    if (activeFilter === 'all') {
+        const searchInput = document.getElementById('search-input');
+        renderNotes(activeFilter, searchInput.value);
+    }
+}
+
 // Render Notes (with Filter & Search)
 function renderNotes(filter, searchQuery = '') {
     const grid = document.getElementById('notes-grid');
@@ -242,65 +284,312 @@ function renderNotes(filter, searchQuery = '') {
         return;
     }
 
-    filteredNotes.forEach(note => {
-        // Determine Type Label
-        const typeLabel = note.type || 'Note';
+    // Determine if we should use STACKS (only when filter is a Semester and no active search)
+    const useStacks = (filter.startsWith('Sem')) && searchQuery === '';
 
-        const card = document.createElement('div');
-        card.className = 'glass-panel card';
-        card.id = note.id; // For deep linking
-
-        // Check if Fav
-        const favs = JSON.parse(localStorage.getItem('cfis_favorites') || '[]');
-        const isFav = favs.includes(note.id);
-
-        card.innerHTML = `
-            <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${note.id}')">
-                ${isFav ? '❤️' : '🤍'}
-            </button>
-            <div class="card-content" onclick="openPreview('${note.pdfUrl}', '${note.title.replace(/'/g, "\\'")}', '${note.type}')">
-                <div class="card-meta">
-                    <span class="subject-tag">${note.subject}</span>
-                    <span class="sem-tag">${note.semester}</span>
-                </div>
-                <div style="margin-bottom: 0.5rem;">
-                     <span class="type-tag" style="${note.color ? `background:${note.color}; color:black; font-weight:700;` : ''}">
-                        ${note.emoji ? `<span style="margin-right:0.3rem;">${note.emoji}</span>` : ''}
-                        ${typeLabel}
-                     </span>
-                </div>
-                <h3 class="card-title">${note.title}</h3>
-                <p class="card-desc">${note.description}</p>
-            </div>
-            <div class="card-action">
-                <button class="btn-glass" onclick="openPreview('${note.pdfUrl}', '${note.title.replace(/'/g, "\\'")}', '${note.type}')">
-                    <span>Preview</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7Z"/></svg>
-                </button>
-                <button class="icon-btn" onclick="copyLink('${note.id}')" title="Copy Link">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                </button>
-            </div>
-    `;
-
-        // Add mouse move listener for gradient effect
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            card.style.setProperty('--mouse-x', `${x} px`);
-            card.style.setProperty('--mouse-y', `${y} px`);
+    if (useStacks) {
+        // Group by subject
+        const groups = {};
+        filteredNotes.forEach(note => {
+            const sub = note.subject || 'GENERAL';
+            if (!groups[sub]) groups[sub] = [];
+            groups[sub].push(note);
         });
 
-        grid.appendChild(card);
+        // Sorted Subjects
+        const subjects = Object.keys(groups).sort((a, b) => {
+            if (a === 'GENERAL') return 1;
+            if (b === 'GENERAL') return -1;
+            return a.localeCompare(b);
+        });
+
+        subjects.forEach(sub => {
+            const groupNotes = groups[sub];
+            if (groupNotes.length > 1 && sub !== 'GENERAL') {
+                renderZone(sub, groupNotes, grid);
+            } else {
+                groupNotes.forEach(note => renderCard(note, grid));
+            }
+        });
+    } else {
+        // Render all as tiles (Grid view)
+        filteredNotes.forEach(note => renderCard(note, grid));
+    }
+
+    // GSAP Entrance Animation
+    gsap.from('.card, .zone-container', {
+        y: 40,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power3.out',
+        clearProps: 'all'
+    });
+}
+
+function renderCard(note, container, isStackItem = false) {
+    const typeLabel = note.type || 'Note';
+    const card = document.createElement('div');
+    card.className = `glass-panel card ${isStackItem ? 'zone-item' : ''}`;
+    card.id = note.id;
+
+    const favs = JSON.parse(localStorage.getItem('cfis_favorites') || '[]');
+    const isFav = favs.includes(note.id);
+    const recents = JSON.parse(localStorage.getItem('cfis_recent') || '[]');
+    const isRecent = recents.includes(note.id);
+
+    card.innerHTML = `
+        <div class="card-header">
+            <div class="tags-group">
+                <div class="subject-icon-pill" title="${note.subject}" style="--accent-glow: ${note.color}44;">
+                    ${note.emoji || '📁'}
+                </div>
+                <div class="sem-pill">${note.semester}</div>
+                ${isRecent ? '<div class="sem-pill" style="background:rgba(255,255,255,0.05); color:var(--accent-color); border-color:var(--accent-color); font-weight:700;">RECENT</div>' : ''}
+            </div>
+            <div class="card-actions-top">
+                <button class="action-btn preview" onclick="openPreview(event, '${note.pdfUrl}', '${note.title.replace(/'/g, "\\'")}', '${note.type}', '${note.id}')" title="Preview">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+                <button class="action-btn fav ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${note.id}')" title="Favorite">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
+                <button class="action-btn share" onclick="copyLink(event, '${note.id}')" title="Share Link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                </button>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="subject-admin-label" style="--label-color: ${note.color || '#8b5cf6'};">
+                ${note.subject}
+            </div>
+            <h3 class="card-title">${note.title}</h3>
+        </div>
+        <div class="card-footer">
+            <span class="card-meta-info">REF: ${note.id.split('-')[0].toUpperCase()}</span>
+            <span class="type-indicator">${typeLabel}</span>
+        </div>
+    `;
+
+    card.onclick = () => openPreview(null, note.pdfUrl, note.title.replace(/'/g, "\\'"), note.type, note.id);
+
+    card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
     });
 
-    // Re-trigger entrance animation for new cards
-    gsap.fromTo('.card',
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'power2.out', clearProps: 'transform' }
-    );
+    container.appendChild(card);
 }
+
+function renderZone(subject, notes, container) {
+    const zone = document.createElement('div');
+    zone.className = 'zone-container';
+
+    const stackArea = document.createElement('div');
+    stackArea.className = 'zone-stack-area';
+
+    // Render up to 7 cards for depth (as many as there are files)
+    const cardLimit = Math.min(7, notes.length);
+    for (let i = 0; i < cardLimit; i++) {
+        const note = notes[i];
+        const dummy = document.createElement('div');
+        dummy.className = 'glass-panel card zone-card';
+        dummy.style.setProperty('--card-index', i);
+        dummy.innerHTML = `
+            <div class="card-header">
+                <div class="tags-group">
+                    <div class="subject-icon-pill" style="--accent-glow: rgba(139, 92, 246, 0.4);">
+                        📁
+                    </div>
+                    <div class="sem-pill">${note.semester || 'Sem 2'}</div>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="subject-admin-label" style="--label-color: #8b5cf6;">
+                    ${subject}
+                </div>
+                <h3 class="card-title">${note.title}</h3>
+            </div>
+            <div class="card-footer">
+                <span class="card-meta-info">ZONE PREVIEW</span>
+                <span class="type-indicator">${note.type || 'PDF'}</span>
+            </div>
+        `;
+        stackArea.appendChild(dummy);
+    }
+    zone.appendChild(stackArea);
+
+    // Zone Label Info (Physically placed AFTER stack-area in the flex column)
+    const info = document.createElement('div');
+    info.className = 'zone-header-info';
+    info.innerHTML = `
+        <div class="zone-label">
+            <span style="font-size:0.9rem;">📁</span>
+            <span>${subject}</span>
+            <span class="zone-count">${notes.length} Files</span>
+        </div>
+    `;
+    zone.appendChild(info);
+
+    // High-Fidelity physical shuffle logic
+    let shuffleInterval = null;
+    let cardOrder = Array.from({ length: cardLimit }, (_, i) => i);
+
+    const performShuffle = () => {
+        const cards = stackArea.querySelectorAll('.zone-card');
+        if (cards.length < 2) return;
+
+        const bottomCardIdx = cardOrder.pop();
+        cardOrder.unshift(bottomCardIdx);
+
+        cards.forEach((card, i) => {
+            const pos = cardOrder.indexOf(i);
+
+            if (i === bottomCardIdx) {
+                const tl = gsap.timeline();
+                tl.to(card, {
+                    x: 100,
+                    rotation: 20,
+                    duration: 0.3,
+                    ease: "power2.in"
+                });
+                tl.set(card, { zIndex: 12 });
+                tl.to(card, {
+                    x: 0,
+                    rotation: 0,
+                    yPercent: -50, // Matches CSS centering
+                    y: 0,
+                    scale: 1,
+                    duration: 0.4,
+                    ease: "power2.out"
+                });
+            } else {
+                gsap.to(card, {
+                    yPercent: -50,
+                    y: - (pos * 8), // Tighter macOS offset
+                    scale: 1 - (pos * 0.03),
+                    duration: 0.5,
+                    zIndex: 10 - pos,
+                    ease: "power2.inOut"
+                });
+            }
+        });
+    };
+
+    zone.addEventListener('mouseenter', () => {
+        if (cardLimit < 2) return;
+        performShuffle();
+        shuffleInterval = setInterval(performShuffle, 1400);
+    });
+
+    zone.addEventListener('mouseleave', () => {
+        if (shuffleInterval) {
+            clearInterval(shuffleInterval);
+            shuffleInterval = null;
+        }
+        cardOrder = Array.from({ length: cardLimit }, (_, i) => i);
+        const cards = stackArea.querySelectorAll('.zone-card');
+        gsap.to(cards, {
+            x: 0,
+            yPercent: -50,
+            y: (i) => - (i * 8), // Reset to tighter offset
+            rotation: 0,
+            scale: (i) => 1 - (i * 0.03),
+            zIndex: (i) => 10 - i,
+            duration: 0.5,
+            ease: "back.out(1.2)"
+        });
+    });
+
+    zone.onclick = (e) => {
+        e.stopPropagation();
+        expandZone(subject, notes, zone);
+    };
+
+    container.appendChild(zone);
+}
+
+let activeZoneView = null;
+let zoneKeyHandler = null;
+
+function expandZone(subject, notes, zoneEl) {
+    if (activeZoneView) closeZoneView();
+
+    zoneEl.classList.add('active');
+
+    const view = document.createElement('div');
+    view.className = 'zone-expanded-view';
+    view.innerHTML = `
+        <div class="zone-expanded-header">
+            <h2 style="margin:0; font-size:1.5rem; letter-spacing:1px;">📂 ${subject} <span style="font-size:0.9rem; opacity:0.5; font-weight:normal; margin-left:10px;">(${notes.length} File${notes.length > 1 ? 's' : ''})</span></h2>
+            <button class="zone-close-btn" onclick="closeZoneView()">Close Zone ✕</button>
+        </div>
+        <div class="bento-grid" id="expanded-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+        </div>
+    `;
+
+    const grid = view.querySelector('#expanded-grid');
+    notes.forEach(note => renderCard(note, grid, true));
+
+    // Keyboard navigation
+    let currentIndex = -1;
+    const items = view.querySelectorAll('.card');
+
+    zoneKeyHandler = (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+            e.preventDefault();
+            currentIndex = Math.min(currentIndex + 1, items.length - 1);
+            items[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            items[currentIndex].classList.add('highlight');
+            setTimeout(() => items[currentIndex].classList.remove('highlight'), 1000);
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            currentIndex = Math.max(currentIndex - 1, 0);
+            items[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            items[currentIndex].classList.add('highlight');
+            setTimeout(() => items[currentIndex].classList.remove('highlight'), 1000);
+        } else if (e.key === 'Enter' && currentIndex >= 0) {
+            items[currentIndex].querySelector('.card-content').click();
+        } else if (e.key === 'Escape') {
+            closeZoneView();
+        }
+    };
+
+    document.addEventListener('keydown', zoneKeyHandler);
+    activeZoneView = view;
+
+    // Insert after zone
+    zoneEl.after(view);
+    view.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Animate items
+    gsap.from(items, {
+        scale: 0.9,
+        opacity: 0,
+        y: 20,
+        duration: 0.4,
+        stagger: 0.05,
+        ease: "power2.out"
+    });
+}
+
+window.closeZoneView = function () {
+    if (!activeZoneView) return;
+
+    const zone = activeZoneView.previousElementSibling;
+    if (zone) zone.classList.remove('active');
+
+    if (zoneKeyHandler) {
+        document.removeEventListener('keydown', zoneKeyHandler);
+        zoneKeyHandler = null;
+    }
+
+    activeZoneView.remove();
+    activeZoneView = null;
+};
 
 // Filter Setup
 function setupFilters() {
@@ -405,7 +694,12 @@ function setupMagneticHover() {
 // --- Features ---
 
 // Preview
-function openPreview(url, title, type) {
+function openPreview(e, url, title, type, id = null) {
+    if (e && e.stopPropagation) e.stopPropagation();
+
+    // Track Progress
+    if (id) trackReadingProgress(id);
+
     if (type === 'link') {
         window.open(url, '_blank');
         return;
@@ -436,7 +730,8 @@ function closePreview() {
 }
 
 // Deep Linking
-function copyLink(id) {
+function copyLink(e, id) {
+    if (e && e.stopPropagation) e.stopPropagation();
     const url = `${window.location.origin}${window.location.pathname}#${id}`;
     navigator.clipboard.writeText(url);
     showToast('Link copied to clipboard!');
@@ -740,6 +1035,7 @@ async function fetchGallery() {
         // Render helper with PROXY FIX
         const createItem = (asset) => {
             const isImg = asset.type.startsWith('image') || /\.(jpg|jpeg|png|webp|gif)$/i.test(asset.name);
+            const isPdf = asset.name.toLowerCase().endsWith('.pdf');
 
             // Proxy URL generator
             const getProxyUrl = (rawUrl) => {
@@ -753,6 +1049,14 @@ async function fetchGallery() {
                 return `
                 <div class="gallery-item no-copy" onclick="openGalleryModal('${asset.url}', '${asset.name}', 'image')">
                     <img src="${asset.url}" alt="${asset.name}" class="gallery-img" loading="lazy">
+                </div>`;
+            } else if (isPdf) {
+                return `
+                <div class="gallery-item no-copy" onclick="openGalleryModal('${asset.url}', '${asset.name}', 'pdf')">
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:0.5rem; background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); border-radius:12px;">
+                        <span style="font-size:2.5rem;">📄</span>
+                        <span style="font-size:0.7rem; opacity:0.6; text-align:center; padding:0 0.5rem; overflow:hidden; text-overflow:ellipsis; width:80%;">PDF: ${asset.name}</span>
+                    </div>
                 </div>`;
             } else {
                 // For HTML, use iframe with PROXY URL
@@ -810,6 +1114,9 @@ function openGalleryModal(url, title, type) {
 
     if (type === 'image') {
         body.innerHTML = `<img src="${url}" style="max-width:100%; max-height:100%; object-fit:contain;" class="no-copy" oncontextmenu="return false;">`;
+    } else if (type === 'pdf') {
+        const viewerUrl = `https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true`;
+        body.innerHTML = `<iframe src="${viewerUrl}" style="width:100%; height:100%; border:none;" class="no-copy"></iframe>`;
     } else {
         // Protected Iframe
         body.innerHTML = `<iframe src="${url}" style="width:100%; height:100%; border:none;" sandbox="allow-scripts allow-forms allow-same-origin" class="no-copy"></iframe>`;
