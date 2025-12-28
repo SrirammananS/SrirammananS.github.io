@@ -332,6 +332,19 @@
                         <input type="text" id="fileSub" class="input-field" placeholder="Subject">
                     </div>
                 </div>
+                <div class="input-group">
+                    <label>Resource Type (e.g. Note, Guide, Video)</label>
+                    <input type="text" id="fileType" class="input-field" list="typeSuggestions" placeholder="Note">
+                    <datalist id="typeSuggestions">
+                        <option value="Note">
+                        <option value="Guide">
+                        <option value="Syllabus">
+                        <option value="Video">
+                        <option value="Q&A">
+                        <option value="PPT">
+                        <option value="Mam Notes">
+                    </datalist>
+                </div>
                 <button onclick="handleUpload()" class="btn-primary" id="uploadBtn">Upload & Push</button>
                 <div id="uploadStatus" class="status-msg"></div>
 
@@ -448,7 +461,50 @@
                     Changes to site_config.json</button>
             </div>
 
-            <div id="globalStatus" class="status-msg"></div>
+            <button onclick="saveConfig()" class="btn-primary" style="background: #22c55e; margin-top:2rem;">💾 Save
+                Changes to site_config.json</button>
+        </div>
+
+        <div id="globalStatus" class="status-msg"></div>
+    </div>
+    </div>
+
+    <!-- [NEW] Resource Edit Modal -->
+    <div id="editResourceModal" class="modal-search-overlay" style="z-index: 10001;">
+        <div class="glass-panel modal-content" style="max-width: 500px; height: auto; padding: 2rem;">
+            <h3>📝 Edit Resource Metadata</h3>
+            <div class="input-group">
+                <label>Title</label>
+                <input type="text" id="editFileTitle" class="input-field">
+            </div>
+            <div class="input-group">
+                <label>Description</label>
+                <textarea id="editFileDesc" class="input-field" style="height: 80px; resize: none;"></textarea>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                <div class="input-group">
+                    <label>Semester</label>
+                    <select id="editFileSem" class="input-field">
+                        <option value="semester1">Sem 1</option>
+                        <option value="semester2">Sem 2</option>
+                        <option value="semester3">Sem 3</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Subject</label>
+                    <input type="text" id="editFileSub" class="input-field">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Resource Type</label>
+                <input type="text" id="editFileType" class="input-field" list="typeSuggestions">
+            </div>
+            <div style="display:flex; gap:1rem; margin-top: 1rem;">
+                <button onclick="saveResourceEdit()" class="btn-primary" style="margin-top:0; background:#22c55e;">Save
+                    Changes</button>
+                <button onclick="closeEditModal()" class="btn-primary"
+                    style="margin-top:0; background:rgba(255,255,255,0.1); color:white;">Cancel</button>
+            </div>
         </div>
     </div>
 
@@ -699,11 +755,12 @@
                 // Check if entry already exists to update it or append
                 const entryIndex = listJson.findIndex(x => x.filename === safeFileName);
                 const newEntry = {
-                    filename: safeFileName,
-                    title: document.getElementById('fileTitle').value || file.name,
+                    title: document.getElementById('fileTitle').value || safeFileName,
                     description: "Uploaded via Admin v2",
+                    filename: safeFileName,
                     category: document.getElementById('fileSem').value,
-                    tags: [document.getElementById('fileSub').value]
+                    type: document.getElementById('fileType').value || "Note",
+                    tags: [document.getElementById('fileSub').value || "General"]
                 };
 
                 if (entryIndex >= 0) {
@@ -863,7 +920,7 @@
                 document.querySelector('#newsTab button[onclick="addNewsItem()"]').style.display = 'inline-block';
                 document.getElementById('updateNewsBtn').style.display = 'none';
                 document.getElementById('cancelNewsBtn').style.display = 'none';
-            } else {
+            } else if (type === 'links') {
                 editIndexLinks = -1;
                 document.getElementById('linkTitle').value = '';
                 document.getElementById('linkUrl').value = '';
@@ -1052,12 +1109,16 @@
 
                 listContainer.innerHTML = json.map((item, index) => `
                     <div class="list-item">
-                        <div style="display:flex; flex-direction:column;">
-                            <span style="font-weight:600">${item.title}</span>
+                        <div style="display:flex; flex-direction:column; overflow: hidden; margin-right: 1rem; flex: 1;">
+                            <div style="display:flex; align-items:center; gap:0.5rem;">
+                                <span style="font-weight:600; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${item.title}</span>
+                                <span style="font-size:0.7rem; background:var(--accent-color); color:black; padding:0.1rem 0.4rem; border-radius:4px; font-weight:bold; white-space:nowrap;">${item.type || 'Note'}</span>
+                            </div>
                             <span style="font-size:0.8rem; opacity:0.6">${item.filename}</span>
                         </div>
-                        <div class="item-actions">
-                            <button onclick="deleteResource('${item.filename}', ${index})" title="Delete File & Entry">🗑️</button>
+                        <div class="item-actions" style="display: flex; gap: 0.5rem;">
+                            <button onclick="openEditModal(${index})" title="Edit Labels" style="color:var(--accent-color); font-size: 1.1rem;">✏️</button>
+                            <button onclick="deleteResource('${item.filename}', ${index})" title="Delete File & Entry" style="font-size: 1.1rem;">🗑️</button>
                         </div>
                     </div>
                 `).join('');
@@ -1407,6 +1468,84 @@
             if (!res.ok) {
                 const err = await res.json();
                 throw new Error(err.message);
+            }
+        }
+
+        // --- EDIT RESOURCE METADATA ---
+        let currentEditingIndex = -1;
+        let localResourceList = [];
+
+        async function openEditModal(index) {
+            const listContainer = document.getElementById('resourceList');
+            // We need to fetch the list content if we haven't already
+            // Re-fetch to ensure we have context
+            const pat = document.getElementById('ghPat').value;
+            const owner = document.getElementById('repoOwner').value;
+            const repo = document.getElementById('repoName').value;
+            const path = document.getElementById('targetPath').value + '/list.json';
+
+            try {
+                const rawResp = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/${path}?t=${Date.now()}`);
+                localResourceList = await rawResp.json();
+
+                const item = localResourceList[index];
+                currentEditingIndex = index;
+
+                document.getElementById('editFileTitle').value = item.title || '';
+                document.getElementById('editFileDesc').value = item.description || '';
+                document.getElementById('editFileSem').value = item.category || 'semester1';
+                document.getElementById('editFileSub').value = (item.tags && item.tags[0]) ? item.tags[0] : '';
+                document.getElementById('editFileType').value = item.type || '';
+
+                document.getElementById('editResourceModal').classList.add('active');
+            } catch (e) {
+                alert("Could not load current list for editing: " + e.message);
+            }
+        }
+
+        function closeEditModal() {
+            document.getElementById('editResourceModal').classList.remove('active');
+            currentEditingIndex = -1;
+        }
+
+        async function saveResourceEdit() {
+            if (currentEditingIndex === -1) return;
+
+            const pat = document.getElementById('ghPat').value;
+            if (!pat) return alert('PAT required to save changes.');
+
+            const owner = document.getElementById('repoOwner').value;
+            const repo = document.getElementById('repoName').value;
+            const path = document.getElementById('targetPath').value + '/list.json';
+
+            const item = localResourceList[currentEditingIndex];
+            item.title = document.getElementById('editFileTitle').value;
+            item.description = document.getElementById('editFileDesc').value;
+            item.category = document.getElementById('editFileSem').value;
+            item.tags = [document.getElementById('editFileSub').value];
+            item.type = document.getElementById('editFileType').value;
+
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerText = 'Saving...';
+
+            try {
+                // Get current SHA
+                const existing = await githubGet(pat, owner, repo, path);
+                const sha = existing.sha;
+
+                // Push update
+                const content = btoa(unescape(encodeURIComponent(JSON.stringify(localResourceList, null, 2))));
+                await githubPut(pat, owner, repo, path, content, `Update metadata for ${item.filename}`, sha);
+
+                alert('Resource updated successfully!');
+                closeEditModal();
+                loadResourceList();
+            } catch (e) {
+                alert('Failed to save changes: ' + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Save Changes';
             }
         }
     </script>

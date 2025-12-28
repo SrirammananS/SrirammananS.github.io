@@ -317,6 +317,10 @@ body {
     margin: 0;
 }
 
+.news-item:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.05);
+}
+
 .news-item::before {
     display: none;
 }
@@ -865,13 +869,13 @@ kbd {
 
 .links-ticker-track {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    /* 2 items per row */
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 items per row */
     gap: 1rem;
     animation: scrollVerticalLinks 30s linear infinite;
     /* Slower for readability */
-    padding-bottom: 2rem;
-    /* Spacing */
+    padding-bottom: 1rem;
+    /* Seamless loop gap */
 }
 
 .quick-links-container:hover .links-ticker-track {
@@ -905,6 +909,10 @@ kbd {
     text-align: center;
     height: 100%;
     /* Fill grid cell */
+}
+
+.quick-link:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.06);
 }
 
 .quick-link:hover {
@@ -992,9 +1000,9 @@ kbd {
 }
 
 .gallery-item {
-    width: 300px;
+    width: 350px;
     /* Fixed width for horizontal items */
-    height: aspect-ratio;
+    aspect-ratio: 16 / 10;
     border-radius: 12px;
     overflow: hidden;
     background: var(--glass-bg);
@@ -1003,6 +1011,7 @@ kbd {
     cursor: pointer;
     flex-shrink: 0;
     /* Prevent squishing */
+    position: relative;
 }
 
 .gallery-item:hover {
@@ -1010,10 +1019,12 @@ kbd {
     box-shadow: 0 0 20px rgba(10, 228, 72, 0.1);
 }
 
-/* HTML Thumbnail Embed */
+/* HTML Thumbnail Embed - Responsive Scaling */
 .html-thumb-frame {
-    width: 100%;
-    height: 250px;
+    width: 1200px;
+    /* Viewport width for rendering */
+    height: 750px;
+    /* Viewport height for rendering */
     border: none;
     pointer-events: none;
     /* Make it just a visual thumbnail */
@@ -1021,12 +1032,14 @@ kbd {
     background: #fff;
     /* Ensure contrast for pages */
     overflow: hidden;
-    transform: scale(1);
+    transform: scale(0.292);
+    /* Scale 1200px down to 350px */
     transform-origin: top left;
 }
 
 .gallery-img {
     width: 100%;
+    height: 100%;
     display: block;
     object-fit: cover;
 }

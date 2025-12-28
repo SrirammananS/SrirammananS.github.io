@@ -99,6 +99,7 @@ async function fetchSiteConfig() {
         // Re-render
         renderNews();
         renderQuickLinks();
+        renderNotes('all'); // Re-render notes to apply labels
     } catch (e) {
 
         // In local dev without python server, this might fail on CORS or file:// protocol
@@ -110,6 +111,7 @@ async function fetchSiteConfig() {
             linksData = localData.links;
             renderNews();
             renderQuickLinks();
+            renderNotes('all');
         } catch (err) {
             console.error('Config load failed', err);
         }
@@ -179,8 +181,12 @@ function createNewsItemHtml(item) {
 function renderQuickLinks() { // 4. Quick Links (Vertical Ticker - Restored Style)
     const container = document.getElementById('quick-links');
     if (linksData && linksData.length > 0) {
-        // We use the original .quick-link class inside the ticker track
-        // The CSS for .quick-link is already in style.css, providing the "box" look.
+        // Pad to multiple of 3 to ensure perfect grid rows for vertical ticker
+        const paddedLinks = [...linksData];
+        while (paddedLinks.length % 3 !== 0) {
+            paddedLinks.push(linksData[paddedLinks.length % linksData.length]);
+        }
+
         const createLink = (l) => `
             <a href="${l.url}" target="_blank" class="quick-link" ${l.id ? `id="link-${l.id}"` : ''}>
                 <span class="link-icon" style="font-size:1.5rem;">${l.icon}</span>
@@ -195,9 +201,9 @@ function renderQuickLinks() { // 4. Quick Links (Vertical Ticker - Restored Styl
         container.innerHTML = `
             <div class="quick-links-container">
                 <div class="links-ticker-track">
-                    ${linksData.map(createLink).join('')}
+                    ${paddedLinks.map(createLink).join('')}
                     <!-- Duplicate for infinite scroll -->
-                    ${linksData.map(createLink).join('')}
+                    ${paddedLinks.map(createLink).join('')}
                 </div>
             </div>
         `;
@@ -236,12 +242,7 @@ function renderNotes(filter, searchQuery = '') {
 
     filteredNotes.forEach(note => {
         // Determine Type Label
-        let typeLabel = 'Note';
-        const titleLower = note.title.toLowerCase();
-        if (titleLower.includes('guide')) typeLabel = 'Guide';
-        else if (titleLower.includes('syllabus')) typeLabel = 'Syllabus';
-        else if (titleLower.includes('recording')) typeLabel = 'Video';
-        else if (titleLower.includes('question')) typeLabel = 'Q&A';
+        const typeLabel = note.type || 'Note';
 
         const card = document.createElement('div');
         card.className = 'glass-panel card';
@@ -752,7 +753,7 @@ async function fetchGallery() {
                 // For HTML, use iframe with PROXY URL
                 return `
                 <div class="gallery-item no-copy" onclick="openGalleryModal('${proxyUrl}', '${asset.name}', 'html')">
-                    <div style="position:relative; height:100%; min-height:200px; background:white;">
+                    <div style="position:relative; width:100%; height:100%;">
                          <iframe src="${proxyUrl}" class="html-thumb-frame" sandbox="allow-scripts allow-same-origin"></iframe>
                          <div style="position:absolute; inset:0; z-index:2; background:transparent;"></div> <!-- Click shield -->
                     </div>
