@@ -68,13 +68,12 @@
   },
   {
     "filename": "PCI2F_-_NETWORK_SECURITY_AND_CRYPTOGRAPHY_FinalNotes.pdf",
-    "title": "Notes NETWORK SECURITY AND CRYPTOGRAPHY",
+    "title": "VP MAM Notes NETWORK SECURITY AND CRYPTOGRAPHY",
     "description": "Uploaded via Admin v2",
     "category": "semester2",
     "tags": [
       "NETWORK SECURITY AND CRYPTOGRAPHY"
-    ],
-    "type": "Mam Edition"
+    ]
   },
   {
     "filename": "PCI2G_-_BASICS_OF_CYBER_FORENSICS.pdf",
@@ -231,11 +230,12 @@
   },
   {
     "filename": "BFSI_-_Unit_IV.pptx",
-    "title": "PPT | BFSI - Unit IV",
+    "title": "BFSI - Unit IV",
     "description": "Uploaded via Admin v2",
     "category": "semester2",
     "tags": [
       "BFSI Fraud"
-    ]
+    ],
+    "type": "PPT"
   }
 ]
