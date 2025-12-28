@@ -234,9 +234,9 @@
     "tags": [
       "BFSI Fraud"
     ],
-    "type": "Mam Edition",
-    "emoji": "👩‍🏫",
-    "color": "#0ae448"
+    "type": "PPT",
+    "emoji": "🪧",
+    "color": "#ffffff"
   },
   {
     "filename": "BFSI_Fraud__3_.pptx",
@@ -245,10 +245,7 @@
     "category": "semester2",
     "tags": [
       "BFSI Fraud"
-    ],
-    "type": "PPT",
-    "emoji": "🪧",
-    "color": "#ffffff"
+    ]
   },
   {
     "filename": "BFSI_Fraud__4_.pptx",
