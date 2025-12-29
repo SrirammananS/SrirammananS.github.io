@@ -17,7 +17,7 @@
     "filename": "PCI1E Cyber Crimes.pdf",
     "category": "semester1",
     "tags": [
-      "Forms of Cyber Crime"
+      "Forms of Cyber Crimes"
     ],
     "type": "Mam Edition",
     "emoji": "👩‍🏫",
@@ -29,7 +29,7 @@
     "filename": "PCI1A Cyber Criminology.pdf",
     "category": "quickaccess",
     "tags": [
-      "criminology"
+      "Introduction to Cyber Criminology"
     ],
     "type": "Mam Edition",
     "emoji": "👩‍🏫",
@@ -41,8 +41,7 @@
     "filename": "PCI1D IT infra and Cloud Computing.pdf",
     "category": "quickaccess",
     "tags": [
-      "cloud",
-      "infrastructure"
+      "IT Infrastructure and Cloud Computing"
     ],
     "type": "Mam Edition",
     "emoji": "👩‍🏫",
@@ -64,10 +63,9 @@
     "title": "Network and Communication Protocols - Keywords",
     "description": "Important questions with keys",
     "filename": "Networking.html",
-    "category": "quickaccess",
+    "category": "semester1",
     "tags": [
-      "network",
-      "keywords"
+      "Network and Communication Protocols"
     ],
     "type": "Mam Edition",
     "emoji": "👩‍🏫",
