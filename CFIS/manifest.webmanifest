@@ -6,6 +6,15 @@
   "background_color": "#0a0a0a",
   "theme_color": "#0a0a0a",
   "icons": [
-    { "src": "favicon.ico", "sizes": "48x48 64x64", "type": "image/x-icon" }
+    {
+      "src": "favicon.ico",
+      "sizes": "48x48 64x64",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "images/app_icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
   ]
 }
