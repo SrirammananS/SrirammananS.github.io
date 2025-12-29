@@ -22,6 +22,7 @@ linksData = [];
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
     initApp();
+    initPWAPrompt(); // PWA Install Prompt
 });
 
 async function initApp() {
@@ -1594,4 +1595,94 @@ function checkGlassPref() {
         // Wait for DOM
         setTimeout(() => updateGlassBtnState(true), 100);
     }
+}
+// PWA Install Prompt
+let deferredPrompt;
+
+function initPWAPrompt() {
+    // Capture the install prompt event
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+
+        // Check if already installed or dismissed
+        const dismissed = localStorage.getItem('cfis_pwa_dismissed');
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+
+        if (!dismissed && !isStandalone) {
+            // Show install prompt after 3 seconds
+            setTimeout(showPWAPrompt, 3000);
+        }
+    });
+
+    // Detect if app was installed
+    window.addEventListener('appinstalled', () => {
+        deferredPrompt = null;
+        localStorage.removeItem('cfis_pwa_dismissed');
+    });
+}
+
+function showPWAPrompt() {
+    const toast = document.createElement('div');
+    toast.className = 'glass-panel toast pwa-install-toast';
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10000;
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        max-width: 90%;
+        animation: slideUp 0.3s ease-out;
+    `;
+
+    toast.innerHTML = `
+        <div style="flex: 1;">
+            <div style="font-weight: 600; margin-bottom: 0.25rem;">📱 Install App</div>
+            <div style="font-size: 0.85rem; opacity: 0.8;">Add to home screen for better experience</div>
+        </div>
+        <button onclick="installPWA()" class="btn-glass" style="background: var(--accent-color); color: #000; padding: 0.5rem 1rem; font-weight: 600; white-space: nowrap;">
+            Install
+        </button>
+        <button onclick="dismissPWAPrompt()" class="icon-btn" style="opacity: 0.5;">
+            ✕
+        </button>
+    `;
+
+    document.body.appendChild(toast);
+
+    // Add animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideUp {
+            from { transform: translate(-50%, 100px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+function installPWA() {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+            console.log('PWA installed');
+        }
+        deferredPrompt = null;
+        dismissPWAPrompt();
+    });
+}
+
+function dismissPWAPrompt() {
+    const toast = document.querySelector('.pwa-install-toast');
+    if (toast) {
+        toast.style.animation = 'slideDown 0.3s ease-out';
+        setTimeout(() => toast.remove(), 300);
+    }
+    localStorage.setItem('cfis_pwa_dismissed', 'true');
 }

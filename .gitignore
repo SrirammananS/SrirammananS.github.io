@@ -23,3 +23,22 @@ dist-ssr
 *.sln
 *.sw?
 .env
+# Keep original CFIS script.js private (only obfuscated version is public)
+# This only ignores script.js in the CFIS directory, not other script.js files
+CFIS/script.js
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build files
+CFIS/build-obfuscate.js
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
