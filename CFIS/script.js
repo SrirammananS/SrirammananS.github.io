@@ -459,6 +459,9 @@ function renderCard(note, container, isStackItem = false) {
     const iconUrl = note.type === 'pdf' ? `${lucideBase}file-text.svg` : `${lucideBase}link.svg`;
     const typeLabel = note.type === 'pdf' ? 'Document' : 'Resource';
 
+    card.className = `card note-card glass-panel ${note.type}`;
+    card.setAttribute('data-note-id', note.id);
+
     card.innerHTML = `
             <div class="card-bg"></div>
         <div class="card-emoji-topleft" style="position: absolute; top: 1rem; left: 1rem; font-size: 1.2rem; z-index: 10;">${emoji}</div>
@@ -919,7 +922,39 @@ function checkDeepLink() {
     const hash = window.location.hash.substring(1);
     if (!hash) return;
 
-    // Wait for render
+    // Check if it's a file anchor (format: file-{id})
+    if (hash.startsWith('file-')) {
+        const fileId = hash.replace('file-', '');
+
+        // Wait for notes to be loaded
+        setTimeout(() => {
+            const note = notesConfig.find(n => n.id === fileId);
+            if (note) {
+                // First, scroll to the card
+                const cardElement = document.querySelector(`[data-note-id="${fileId}"]`);
+                if (cardElement) {
+                    cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    cardElement.classList.add('highlight');
+
+                    // Then open the preview after scroll animation
+                    setTimeout(() => {
+                        openPreview(null, note.pdfUrl, note.title, note.type, note.id);
+                        showToast('📂 Opening shared file...');
+                        cardElement.classList.remove('highlight');
+                    }, 800);
+                } else {
+                    // If card not found, just open preview
+                    openPreview(null, note.pdfUrl, note.title, note.type, note.id);
+                    showToast('📂 Opening shared file...');
+                }
+            } else {
+                showToast('⚠️ File not found');
+            }
+        }, 800);
+        return;
+    }
+
+    // Original scroll-to-element behavior for other anchors
     setTimeout(() => {
         const el = document.getElementById(hash);
         if (el) {
@@ -1376,7 +1411,7 @@ function animateValue(obj, start, end, duration) {
 
 function shareNote(event, id, title) {
     if (event) event.stopPropagation();
-    const shareUrl = `${window.location.origin}${window.location.pathname}?note=${id}`;
+    const shareUrl = `${window.location.origin}${window.location.pathname}#file-${id}`;
 
     if (navigator.share) {
         navigator.share({
@@ -1385,7 +1420,7 @@ function shareNote(event, id, title) {
         }).catch(err => console.log('Error sharing', err));
     } else {
         navigator.clipboard.writeText(shareUrl).then(() => {
-            showToast('Link copied to clipboard!');
+            showToast('🔗 Link copied to clipboard!');
         });
     }
 }
