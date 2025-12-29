@@ -128,6 +128,14 @@
       "icon": "book",
       "color": "#3b82f6",
       "description": ""
+    },
+    {
+      "name": "Forms of Cyber Crimes",
+      "code": "",
+      "semester": "Sem 1",
+      "icon": "book",
+      "color": "#eab308",
+      "description": ""
     }
   ]
 }
