@@ -80,10 +80,7 @@
     "category": "semester2",
     "tags": [
       "General"
-    ],
-    "type": "Video",
-    "emoji": "🎥",
-    "color": "#3b82f6"
+    ]
   },
   {
     "filename": "PCI2F_-_NETWORK_SECURITY_AND_CRYPTOGRAPHY_FinalNotes.pdf",
@@ -116,7 +113,10 @@
     "category": "semester2",
     "tags": [
       "IT AND TELECOM FRAUD AND COUNTERMEASURES"
-    ]
+    ],
+    "type": "MAM EDITION",
+    "emoji": "👩‍🏫",
+    "color": "#eab308"
   },
   {
     "filename": "PCI2K_-_BFSI_FRAUD_COUNTERMEASURES.pdf",
