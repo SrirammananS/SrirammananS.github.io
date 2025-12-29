@@ -792,7 +792,10 @@
         function resetSessionTimer() {
             clearTimeout(sessionTimer);
             if (document.getElementById('dashboardSection').style.display === 'block') {
-                sessionTimer = setTimeout(lockSession, 5 * 60 * 1000); // 5 mins
+                // Extended session for mobile (30 mins), desktop (5 mins)
+                const isMobile = window.innerWidth <= 768;
+                const timeout = isMobile ? 30 * 60 * 1000 : 5 * 60 * 1000;
+                sessionTimer = setTimeout(lockSession, timeout);
             }
         }
 
