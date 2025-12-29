@@ -67,6 +67,7 @@
   "subjects": [
     {
       "name": "NETWORK SECURITY AND CRYPTOGRAPHY",
+      "code": "PCI2F",
       "semester": "Sem 2",
       "icon": "🌐",
       "color": "#8b5cf6",
@@ -74,6 +75,7 @@
     },
     {
       "name": "BASICS OF CYBER FORENSICS",
+      "code": "PCI2G",
       "semester": "Sem 2",
       "icon": "🕵️",
       "color": "#3b82f6",
@@ -81,6 +83,7 @@
     },
     {
       "name": "IT AND TELECOM FRAUDS & COUNTERMEASURES",
+      "code": "PCI2H",
       "semester": "Sem 2",
       "icon": "📡",
       "color": "#eab308",
@@ -88,9 +91,42 @@
     },
     {
       "name": "BFSI FRAUDS & COUNTERMEASURES",
+      "code": "PCI2K",
       "semester": "Sem 2",
       "icon": "🏛️",
       "color": "#ef4444",
+      "description": ""
+    },
+    {
+      "name": "Network and Communication Protocols",
+      "code": "",
+      "semester": "Sem 1",
+      "icon": "📶",
+      "color": "#8b5cf6",
+      "description": ""
+    },
+    {
+      "name": "Introduction to Cyber Criminology",
+      "code": "",
+      "semester": "Sem 1",
+      "icon": "book",
+      "color": "#0ae448",
+      "description": ""
+    },
+    {
+      "name": "Introduction to Information Security",
+      "code": "",
+      "semester": "Sem 1",
+      "icon": "book",
+      "color": "#ef4444",
+      "description": ""
+    },
+    {
+      "name": "IT Infrastructure and Cloud Computing",
+      "code": "",
+      "semester": "Sem 1",
+      "icon": "book",
+      "color": "#3b82f6",
       "description": ""
     }
   ]
