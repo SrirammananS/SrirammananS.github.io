@@ -80,7 +80,10 @@
     "category": "semester2",
     "tags": [
       "General"
-    ]
+    ],
+    "type": "Video",
+    "emoji": "🎥",
+    "color": "#3b82f6"
   },
   {
     "filename": "PCI2F_-_NETWORK_SECURITY_AND_CRYPTOGRAPHY_FinalNotes.pdf",
@@ -222,9 +225,9 @@
     "tags": [
       "BFSI Fraud"
     ],
-    "type": "PPT",
-    "emoji": "🪧",
-    "color": "#ffffff"
+    "type": "Mam Edition",
+    "emoji": "👩‍🏫",
+    "color": "#0ae448"
   },
   {
     "filename": "BFSI_Fraud__2_.pptx",
