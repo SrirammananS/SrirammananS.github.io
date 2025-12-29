@@ -395,6 +395,7 @@ function renderNotes(filter, searchQuery = '') {
 
     // Determine if we should use STACKS (only when filter is a Semester and no active search)
     const useStacks = (filter.startsWith('Sem')) && searchQuery === '';
+    const isMobile = window.innerWidth <= 768;
 
     if (useStacks) {
         // Group by subject
@@ -415,7 +416,12 @@ function renderNotes(filter, searchQuery = '') {
         subjects.forEach(sub => {
             const groupNotes = groups[sub];
             if (groupNotes.length > 1 && sub !== 'GENERAL') {
-                renderZone(sub, groupNotes, grid);
+                // Use folders on mobile, zones on desktop
+                if (isMobile) {
+                    renderMobileSection(sub, groupNotes, grid);
+                } else {
+                    renderZone(sub, groupNotes, grid);
+                }
             } else {
                 groupNotes.forEach(note => renderCard(note, grid));
             }
@@ -426,7 +432,7 @@ function renderNotes(filter, searchQuery = '') {
     }
 
     // GSAP Entrance Animation
-    gsap.from('.card, .zone-container', {
+    gsap.from('.card, .zone-container, .mobile-subject-section', {
         y: 40,
         opacity: 0,
         duration: 0.8,
@@ -521,6 +527,55 @@ function renderCard(note, container, isStackItem = false) {
     });
 
     container.appendChild(card);
+}
+
+// Mobile Section Renderer (Clean List View)
+function renderMobileSection(subject, notes, container) {
+    const section = document.createElement('div');
+    section.className = 'mobile-subject-section';
+
+    // Create section header
+    const header = document.createElement('div');
+    header.className = 'mobile-subject-header';
+    header.innerHTML = `
+        <div class="mobile-subject-title">
+            <span>📚</span>
+            <span>${subject}</span>
+        </div>
+        <div class="mobile-subject-count">${notes.length} file${notes.length > 1 ? 's' : ''}</div>
+    `;
+
+    // Create file list
+    const fileList = document.createElement('div');
+    fileList.className = 'mobile-file-list';
+
+    // Render each file as a list item
+    notes.forEach(note => {
+        const item = document.createElement('div');
+        item.className = 'mobile-file-item';
+
+        // Icon
+        const lucideBase = 'https://unpkg.com/lucide-static@latest/icons/';
+        const iconUrl = note.type === 'pdf' ? `${lucideBase}file-text.svg` : `${lucideBase}link.svg`;
+        const typeLabel = note.type === 'pdf' ? 'PDF' : 'Link';
+
+        item.innerHTML = `
+            <div class="mobile-file-icon">
+                <img src="${iconUrl}" alt="${typeLabel}">
+            </div>
+            <div class="mobile-file-title">${note.title}</div>
+            <div class="mobile-file-tag">${typeLabel}</div>
+        `;
+
+        // Click to open preview
+        item.onclick = () => openPreview(null, note.pdfUrl, note.title, note.type, note.id);
+
+        fileList.appendChild(item);
+    });
+
+    section.appendChild(header);
+    section.appendChild(fileList);
+    container.appendChild(section);
 }
 
 // Global state for Zone management
