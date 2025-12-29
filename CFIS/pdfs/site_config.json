@@ -63,5 +63,35 @@
       "emoji": "🪧",
       "color": "#ffffff"
     }
+  ],
+  "subjects": [
+    {
+      "name": "NETWORK SECURITY AND CRYPTOGRAPHY",
+      "semester": "Sem 2",
+      "icon": "🌐",
+      "color": "#8b5cf6",
+      "description": ""
+    },
+    {
+      "name": "BASICS OF CYBER FORENSICS",
+      "semester": "Sem 2",
+      "icon": "🕵️",
+      "color": "#3b82f6",
+      "description": ""
+    },
+    {
+      "name": "IT AND TELECOM FRAUDS & COUNTERMEASURES",
+      "semester": "Sem 2",
+      "icon": "📡",
+      "color": "#eab308",
+      "description": ""
+    },
+    {
+      "name": "BFSI FRAUDS & COUNTERMEASURES",
+      "semester": "Sem 2",
+      "icon": "🏛️",
+      "color": "#ef4444",
+      "description": ""
+    }
   ]
 }
