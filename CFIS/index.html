@@ -200,7 +200,11 @@
     <main class="container">
         <header class="hero-section">
             <nav class="top-nav">
-                <div class="logo">MSC-CFIS<span class="dot">.</span></div>
+                <div class="logo" style="display: flex; align-items: center; gap: 0.8rem;">
+                    <img src="images/app_icon.png" alt="CFIS Logo"
+                        style="width: 40px; height: 40px; border-radius: 10px; object-fit: cover;">
+                    <span>MSC-CFIS<span class="dot">.</span></span>
+                </div>
 
                 <!-- Mobile Burger Trigger -->
                 <button onclick="toggleMobileMenu()" class="icon-btn mobile-only" id="burger-btn" style="display:none;">
@@ -320,18 +324,18 @@
 
         <footer class="site-footer">
             <p>© 2026 CFIS Archive. By SrirammananS <span class="mono">v2.1.1</span></p>
-            <div style="margin-top: 1rem;">
-                <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js"
-                    data-name="bmc-button" data-slug="jython" data-color="#FFDD00" data-emoji="" data-font="Inter"
-                    data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000"
-                    data-coffee-color="#ffffff"></script>
+            <div style="margin-top: 1rem; display: flex; justify-content: center;" id="darsh-footer-btn">
+                <button onclick="showDarsh()"
+                    style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 0.8rem 1.5rem; border-radius: 12px; cursor: pointer; font-size: 0.9rem; font-weight: 600; width: 100%; max-width: 300px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background 0.3s;">
+                    <span>❤️</span> Support Jython
+                </button>
             </div>
         </footer>
     </main>
 
-    <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
-        data-id="jython" data-description="Support me on Buy me a coffee!" data-message="" data-color="#5F7FFF"
-        data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+    <script src="https://darsh-2026.web.app/widget.js" data-upi="8608431233" data-name="Jython" data-variant="fab"
+        data-color="#FFD700"
+        data-message="If this archive helped you, consider supporting its maintenance with a small coffee. Every bit helps us keep the site ad-free and fast!"></script>
 
     <script src="script.min.js?v=2.1.1"></script>
 </body>
