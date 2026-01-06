@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telecom & IT Frauds Question Bank</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .filters {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 18px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .results-info {
+            padding: 20px 30px;
+            background: #e8eaf6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .results-count {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 1.1em;
+        }
+
+        .clear-filters {
+            padding: 8px 16px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .clear-filters:hover {
+            background: #ee5a52;
+        }
+
+        .questions {
+            padding: 30px;
+        }
+
+        .question-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .question-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .year-tag {
+            background: #667eea;
+            color: white;
+        }
+
+        .unit-tag {
+            background: #4caf50;
+            color: white;
+        }
+
+        .marks-badge {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1em;
+            white-space: nowrap;
+        }
+
+        .marks-2 {
+            background: #e3f2fd;
+            color: #1976d2;
+            border: 2px solid #1976d2;
+        }
+
+        .marks-6 {
+            background: #fff3e0;
+            color: #f57c00;
+            border: 2px solid #f57c00;
+        }
+
+        .marks-10 {
+            background: #fce4ec;
+            color: #c2185b;
+            border: 2px solid #c2185b;
+        }
+
+        .question-text {
+            font-size: 1.05em;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .no-results-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .filter-row {
+                flex-direction: column;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .results-info {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .question-header {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Telecom & IT Frauds Question Bank</h1>
+            <div class="subtitle">PCI2H - Previous Year Questions (2019-2024)</div>
+        </header>
+
+        <div class="filters">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label>🔍 Search Questions</label>
+                    <input type="text" class="search-box" id="searchBox" placeholder="Search by keyword...">
+                </div>
+            </div>
+
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label>📅 Filter by Year</label>
+                    <div class="filter-buttons" id="yearFilters"></div>
+                </div>
+            </div>
+
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label>📖 Filter by Unit</label>
+                    <div class="filter-buttons" id="unitFilters"></div>
+                </div>
+            </div>
+
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label>🎯 Filter by Marks</label>
+                    <div class="filter-buttons" id="marksFilters"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-info">
+            <div class="results-count" id="resultsCount">Loading questions...</div>
+            <button class="clear-filters" id="clearFilters">Clear All Filters</button>
+        </div>
+
+        <div class="questions" id="questionsContainer"></div>
+    </div>
+
+    <script>
+        let activeFilters = {
+            years: new Set(),
+            units: new Set(),
+            marks: new Set(),
+            search: ''
+        };
+
+        const questions = [
+            // December 2019
+            {year: "Dec 2019", unit: 1, marks: 2, text: "Network"},
+            {year: "Dec 2019", unit: 1, marks: 2, text: "Virus"},
+            {year: "Dec 2019", unit: 1, marks: 2, text: "Software development"},
+            {year: "Dec 2019", unit: 1, marks: 2, text: "Software Piracy"},
+            {year: "Dec 2019", unit: 2, marks: 2, text: "Network Management System"},
+            {year: "Dec 2019", unit: 3, marks: 2, text: "SIM"},
+            {year: "Dec 2019", unit: 5, marks: 2, text: "PBX Hacking"},
+            {year: "Dec 2019", unit: 3, marks: 2, text: "War Dialing"},
+            {year: "Dec 2019", unit: 4, marks: 2, text: "SS7 attack"},
+            {year: "Dec 2019", unit: 3, marks: 2, text: "Subscription Frauds"},
+            {year: "Dec 2019", unit: 5, marks: 2, text: "Pre-paid fraud"},
+            {year: "Dec 2019", unit: 2, marks: 2, text: "GSM Network"},
+            {year: "Dec 2019", unit: 1, marks: 6, text: "Explain the theft of proprietary information."},
+            {year: "Dec 2019", unit: 1, marks: 6, text: "Write a note on Software Management."},
+            {year: "Dec 2019", unit: 3, marks: 6, text: "Enumerate the frauds in different segments (at least 10)."},
+            {year: "Dec 2019", unit: 3, marks: 6, text: "Discuss on Technical Frauds in telecos."},
+            {year: "Dec 2019", unit: 4, marks: 6, text: "Elucidate frauds in Mobile Network."},
+            {year: "Dec 2019", unit: 4, marks: 6, text: "Enumerate the frauds affecting fixed line telecos."},
+            {year: "Dec 2019", unit: 5, marks: 6, text: "Enlist IP security issues in 3G (at least 5)."},
+            {year: "Dec 2019", unit: 1, marks: 10, text: "Suggest effective counter measures for mitigating the frauds in IT (at least 10)."},
+            {year: "Dec 2019", unit: 3, marks: 10, text: "Give an account on classification of telecommunication Frauds with suitable examples."},
+            {year: "Dec 2019", unit: 4, marks: 10, text: "Enumerate and explain the frauds in wireless domain."},
+            {year: "Dec 2019", unit: 5, marks: 10, text: "Explain the frauds in 3G network."},
+            {year: "Dec 2019", unit: 5, marks: 10, text: "Elucidate on Fraud management system."},
+
+            // December 2020
+            {year: "Dec 2020", unit: 1, marks: 2, text: "Wireless Network."},
+            {year: "Dec 2020", unit: 1, marks: 2, text: "Misuse of Public Web Application."},
+            {year: "Dec 2020", unit: 1, marks: 2, text: "Software Management."},
+            {year: "Dec 2020", unit: 1, marks: 2, text: "Software Piracy."},
+            {year: "Dec 2020", unit: 2, marks: 2, text: "GPRS."},
+            {year: "Dec 2020", unit: 2, marks: 2, text: "NGN."},
+            {year: "Dec 2020", unit: 3, marks: 2, text: "Non-Technical Frauds."},
+            {year: "Dec 2020", unit: 5, marks: 2, text: "Voice mail Hacking."},
+            {year: "Dec 2020", unit: 5, marks: 2, text: "DISA Hacking."},
+            {year: "Dec 2020", unit: 5, marks: 2, text: "3G Network."},
+            {year: "Dec 2020", unit: 5, marks: 2, text: "EPABX Hacking."},
+            {year: "Dec 2020", unit: 5, marks: 2, text: "Data Interception."},
+            {year: "Dec 2020", unit: 3, marks: 6, text: "Explain the insider abuse in telecom frauds."},
+            {year: "Dec 2020", unit: 1, marks: 6, text: "Unauthorized access of information is a crime- Argue."},
+            {year: "Dec 2020", unit: 1, marks: 6, text: "Write a note on Software Development."},
+            {year: "Dec 2020", unit: 3, marks: 6, text: "Discuss on Ghosting."},
+            {year: "Dec 2020", unit: 2, marks: 6, text: "Why is Network Management System a mandate in telecos?"},
+            {year: "Dec 2020", unit: 5, marks: 6, text: "Explain the frauds in 3G network."},
+            {year: "Dec 2020", unit: 3, marks: 6, text: "Write a brief account on subscription frauds."},
+            {year: "Dec 2020", unit: 1, marks: 10, text: "Suggest preventive measures for mitigating the frauds in IT (at least 10)."},
+            {year: "Dec 2020", unit: 3, marks: 10, text: "Give an account on classification of telecommunication frauds with suitable examples."},
+            {year: "Dec 2020", unit: 4, marks: 10, text: "Enumerate and explain the frauds in fixed network."},
+            {year: "Dec 2020", unit: 5, marks: 10, text: "Give an account Fraud Management System."},
+            {year: "Dec 2020", unit: 5, marks: 10, text: "Distinguish 2G, 3G and 4G. Explain various types of frauds in 2G and 3G tele communications."},
+
+            // May 2021
+            {year: "May 2021", unit: 1, marks: 2, text: "Wireless Network"},
+            {year: "May 2021", unit: 1, marks: 2, text: "Virus"},
+            {year: "May 2021", unit: 1, marks: 2, text: "Software frauds"},
+            {year: "May 2021", unit: 1, marks: 2, text: "Software Piracy"},
+            {year: "May 2021", unit: 3, marks: 2, text: "Insiders Frauds"},
+            {year: "May 2021", unit: 2, marks: 2, text: "Network Management System"},
+            {year: "May 2021", unit: 5, marks: 2, text: "Voicemail"},
+            {year: "May 2021", unit: 3, marks: 2, text: "SIM"},
+            {year: "May 2021", unit: 5, marks: 2, text: "PBX Hacking"},
+            {year: "May 2021", unit: 3, marks: 2, text: "War Dialing"},
+            {year: "May 2021", unit: 4, marks: 2, text: "SS7 attacks"},
+            {year: "May 2021", unit: 2, marks: 2, text: "GSM Network."},
+            {year: "May 2021", unit: 1, marks: 6, text: "Explain the mobile theft."},
+            {year: "May 2021", unit: 1, marks: 6, text: "Write a note on Software Management."},
+            {year: "May 2021", unit: 2, marks: 6, text: "Enumerate the root causes of Fraud."},
+            {year: "May 2021", unit: 3, marks: 6, text: "Discuss on Facilitation frauds."},
+            {year: "May 2021", unit: 3, marks: 6, text: "Discuss on Technical Frauds in telecos."},
+            {year: "May 2021", unit: 4, marks: 6, text: "Give ways to mitigate frauds in Mobile Network."},
+            {year: "May 2021", unit: 4, marks: 6, text: "Enumerate the frauds affecting fixed line telecos."},
+            {year: "May 2021", unit: 1, marks: 10, text: "Enumerate the misuse of public web application (at least 10)"},
+            {year: "May 2021", unit: 1, marks: 10, text: "Suggest effective counter measures for mitigating the frauds in software industry (at least 10)."},
+            {year: "May 2021", unit: 3, marks: 10, text: "Give an account on classification of telecommunication Frauds with suitable examples."},
+            {year: "May 2021", unit: 4, marks: 10, text: "Enumerate and explain the frauds in wireless domain."},
+            {year: "May 2021", unit: 5, marks: 10, text: "Explain the domestic telecom laws."},
+
+            // December 2021
+            {year: "Dec 2021", unit: 1, marks: 2, text: "Network"},
+            {year: "Dec 2021", unit: 1, marks: 2, text: "Misuse of Public Web Application"},
+            {year: "Dec 2021", unit: 1, marks: 2, text: "Software Management"},
+            {year: "Dec 2021", unit: 1, marks: 2, text: "Software Piracy and intrusion"},
+            {year: "Dec 2021", unit: 2, marks: 2, text: "GPRS"},
+            {year: "Dec 2021", unit: 2, marks: 2, text: "NGN"},
+            {year: "Dec 2021", unit: 2, marks: 2, text: "CDMA"},
+            {year: "Dec 2021", unit: 3, marks: 2, text: "Phantom Account"},
+            {year: "Dec 2021", unit: 3, marks: 2, text: "Non-Technical Frauds"},
+            {year: "Dec 2021", unit: 3, marks: 2, text: "Ghosting"},
+            {year: "Dec 2021", unit: 5, marks: 2, text: "EPABX Hacking"},
+            {year: "Dec 2021", unit: 5, marks: 2, text: "Micro payment."},
+            {year: "Dec 2021", unit: 3, marks: 6, text: "Explain the insider attack."},
+            {year: "Dec 2021", unit: 1, marks: 6, text: "Authorized access of information is a not crime- Argue."},
+            {year: "Dec 2021", unit: 1, marks: 6, text: "Write a note on Software Development."},
+            {year: "Dec 2021", unit: 3, marks: 6, text: "Discuss on Non-technical Frauds."},
+            {year: "Dec 2021", unit: 3, marks: 6, text: "Write a note SIM Stuffing"},
+            {year: "Dec 2021", unit: 4, marks: 6, text: "Differentiate Pre-Post call validation."},
+            {year: "Dec 2021", unit: 5, marks: 6, text: "Explain the frauds in 3G network."},
+            {year: "Dec 2021", unit: 1, marks: 10, text: "Suggest preventive measures for mitigating the frauds in IT (at least ten)."},
+            {year: "Dec 2021", unit: 3, marks: 10, text: "Give an account on classification of telecommunication Frauds with suitable examples."},
+            {year: "Dec 2021", unit: 4, marks: 10, text: "Enumerate and explain the frauds in fixed network."},
+            {year: "Dec 2021", unit: 5, marks: 10, text: "Give an account Fraud Management System."},
+            {year: "Dec 2021", unit: 2, marks: 10, text: "Why is Network Management System a mandate in telecos?"},
+
+            // May 2022
+            {year: "May 2022", unit: 1, marks: 2, text: "Laptop Theft and risk"},
+            {year: "May 2022", unit: 1, marks: 2, text: "Wireless network and its importance"},
+            {year: "May 2022", unit: 1, marks: 2, text: "Unauthorized access of information"},
+            {year: "May 2022", unit: 1, marks: 2, text: "Credit Card Fraudsters"},
+            {year: "May 2022", unit: 2, marks: 2, text: "PBX"},
+            {year: "May 2022", unit: 2, marks: 2, text: "NGN"},
+            {year: "May 2022", unit: 2, marks: 2, text: "Is staff dissatisfaction a problem in telecom sector?"},
+            {year: "May 2022", unit: 3, marks: 2, text: "Chaining Fraud"},
+            {year: "May 2022", unit: 3, marks: 2, text: "Ghosting"},
+            {year: "May 2022", unit: 4, marks: 2, text: "Mobile Network Fraud"},
+            {year: "May 2022", unit: 3, marks: 2, text: "Partnership Fraud"},
+            {year: "May 2022", unit: 5, marks: 2, text: "3G Business model"},
+            {year: "May 2022", unit: 1, marks: 6, text: "Explain the concept of system penetration."},
+            {year: "May 2022", unit: 1, marks: 6, text: "Suggest ways reduce software piracy (at least 6)."},
+            {year: "May 2022", unit: 1, marks: 6, text: "Differentiate Software Development and Management."},
+            {year: "May 2022", unit: 3, marks: 6, text: "Discuss on Creeping Frauds."},
+            {year: "May 2022", unit: 3, marks: 6, text: "Write a note on Cloning."},
+            {year: "May 2022", unit: 4, marks: 6, text: "Differentiate Post call validation."},
+            {year: "May 2022", unit: 5, marks: 6, text: "Explain the Tumbling Phone."},
+            {year: "May 2022", unit: 1, marks: 10, text: "Enumerate way to use public web application (at least 10) positively."},
+            {year: "May 2022", unit: 1, marks: 10, text: "Suggest effective counter measures for mitigating the frauds in software development (at least 10)."},
+            {year: "May 2022", unit: 2, marks: 10, text: "Give an account on Network Management System."},
+            {year: "May 2022", unit: 1, marks: 10, text: "Enumerate and explain the frauds in cyber space."},
+            {year: "May 2022", unit: 5, marks: 10, text: "Explain the international telecom laws."},
+
+            // December 2022
+            {year: "Dec 2022", unit: 2, marks: 2, text: "What is Telecommunication Fraud?"},
+            {year: "Dec 2022", unit: 1, marks: 2, text: "What is Information?"},
+            {year: "Dec 2022", unit: 1, marks: 2, text: "System Penetration."},
+            {year: "Dec 2022", unit: 1, marks: 2, text: "Write a short note about the unauthorized access to information."},
+            {year: "Dec 2022", unit: 1, marks: 2, text: "Financial fraud"},
+            {year: "Dec 2022", unit: 1, marks: 2, text: "What is Virus?"},
+            {year: "Dec 2022", unit: 1, marks: 2, text: "Mention any two networks."},
+            {year: "Dec 2022", unit: 1, marks: 2, text: "Define counter measures."},
+            {year: "Dec 2022", unit: 1, marks: 2, text: "Mention any two web applications."},
+            {year: "Dec 2022", unit: 1, marks: 2, text: "Define Internet."},
+            {year: "Dec 2022", unit: 2, marks: 2, text: "Role of Analog Networks."},
+            {year: "Dec 2022", unit: 2, marks: 2, text: "Operational support systems."},
+            {year: "Dec 2022", unit: 2, marks: 6, text: "Explain the technologies used in committing Telecommunication Fraud."},
+            {year: "Dec 2022", unit: 3, marks: 6, text: "Detail the frauds in different segments of Tele communication operations."},
+            {year: "Dec 2022", unit: 3, marks: 6, text: "Write notes on (a) Human Fraud (b) Insider Fraud"},
+            {year: "Dec 2022", unit: 3, marks: 6, text: "Explain Ghosting techniques in Telecommunication Fraud."},
+            {year: "Dec 2022", unit: 4, marks: 6, text: "Explain the objectives of the Fixed Network Fraud."},
+            {year: "Dec 2022", unit: 4, marks: 6, text: "Elucidate the development of Fixed Networks."},
+            {year: "Dec 2022", unit: 5, marks: 6, text: "Explain in detail the Clip-on and Boxing Fraud."},
+            {year: "Dec 2022", unit: 5, marks: 10, text: "Describe the Roaming Subscription Fraud."},
+            {year: "Dec 2022", unit: 5, marks: 10, text: "Explain the 3G Technology and Services."},
+            {year: "Dec 2022", unit: 5, marks: 10, text: "Explain Social Engineering and friendly Fraud."},
+            {year: "Dec 2022", unit: 5, marks: 10, text: "Explain the Micro Payment fraud."},
+            {year: "Dec 2022", unit: 5, marks: 10, text: "Explain the strategic perspective of Fraud Management System."},
+
+            // May 2023
+            {year: "May 2023", unit: 1, marks: 2, text: "Define IT Fraud"},
+            {year: "May 2023", unit: 1, marks: 2, text: "Unauthorised access to Information"},
+            {year: "May 2023", unit: 1, marks: 2, text: "Credit card Fraud"},
+            {year: "May 2023", unit: 3, marks: 2, text: "Subscription Fraud"},
+            {year: "May 2023", unit: 3, marks: 2, text: "Sim cloning"},
+            {year: "May 2023", unit: 4, marks: 2, text: "Mobile Network Validation"},
+            {year: "May 2023", unit: 1, marks: 2, text: "Denial of service"},
+            {year: "May 2023", unit: 4, marks: 2, text: "SS7"},
+            {year: "May 2023", unit: 1, marks: 2, text: "Define abuse of Wireless Network."},
+            {year: "May 2023", unit: 5, marks: 2, text: "Social Engineering"},
+            {year: "May 2023", unit: 3, marks: 2, text: "Explain the Creeping Fraud."},
+            {year: "May 2023", unit: 5, marks: 2, text: "3 G"},
+            {year: "May 2023", unit: 2, marks: 6, text: "Write a note on (a) GSM (b) CDMA (c) NGN Networks."},
+            {year: "May 2023", unit: 1, marks: 6, text: "Explain laptop theft and the need for reporting laptop theft to police."},
+            {year: "May 2023", unit: 4, marks: 6, text: "Explain various physical attacks on networks."},
+            {year: "May 2023", unit: 4, marks: 6, text: "Write a short note on Fraud detection systems."},
+            {year: "May 2023", unit: 4, marks: 6, text: "Explain the common types of Frauds affecting fixed line telecoms."},
+            {year: "May 2023", unit: 5, marks: 6, text: "Write short notes on hacking of networks and telecom."},
+            {year: "May 2023", unit: 5, marks: 6, text: "Explain the EPABX Hacking."},
+            {year: "May 2023", unit: 1, marks: 10, text: "Explain any two types of IT frauds with suitable example."},
+            {year: "May 2023", unit: 3, marks: 10, text: "Explain any four types of Telecom Frauds."},
+            {year: "May 2023", unit: 4, marks: 10, text: "Explain the counter measures to prevent telecom frauds."},
+            {year: "May 2023", unit: 1, marks: 10, text: "How to prevent various IT Frauds? Explain."},
+            {year: "May 2023", unit: 5, marks: 10, text: "Explain the telecom laws available in India."},
+
+            // December 2023
+            {year: "Dec 2023", unit: 1, marks: 2, text: "Define Internet Access."},
+            {year: "Dec 2023", unit: 1, marks: 2, text: "Define System."},
+            {year: "Dec 2023", unit: 1, marks: 2, text: "Define Mobile theft."},
+            {year: "Dec 2023", unit: 1, marks: 2, text: "Explain Public misuse of web application."},
+            {year: "Dec 2023", unit: 1, marks: 2, text: "Define Network."},
+            {year: "Dec 2023", unit: 1, marks: 2, text: "Write the abuse of Wireless Network."},
+            {year: "Dec 2023", unit: 1, marks: 2, text: "Mention any two uses of Web Application."},
+            {year: "Dec 2023", unit: 1, marks: 2, text: "Define Penetration."},
+            {year: "Dec 2023", unit: 1, marks: 2, text: "Define System Access."},
+            {year: "Dec 2023", unit: 1, marks: 2, text: "Define Proprietary Information."},
+            {year: "Dec 2023", unit: 4, marks: 2, text: "Explain the role of the security of Mobile Networks."},
+            {year: "Dec 2023", unit: 2, marks: 2, text: "Explain about the Fraudsters in Telecom Frauds."},
+            {year: "Dec 2023", unit: 2, marks: 6, text: "Enumerate the needs for telecommunication technologies."},
+            {year: "Dec 2023", unit: 3, marks: 6, text: "Explain the non-technical fraud."},
+            {year: "Dec 2023", unit: 3, marks: 6, text: "Discuss the chaining fraud."},
+            {year: "Dec 2023", unit: 3, marks: 6, text: "Explain the Partnership Fraud and its uses."},
+            {year: "Dec 2023", unit: 3, marks: 6, text: "Explain the process fraud."},
+            {year: "Dec 2023", unit: 4, marks: 6, text: "Suggest the methods to mitigate mobile network fraud."},
+            {year: "Dec 2023", unit: 5, marks: 6, text: "Enumerate the needs for Security Policy."},
+            {year: "Dec 2023", unit: 4, marks: 10, text: "Explain the Frauds in Wireless Domain."},
+            {year: "Dec 2023", unit: 2, marks: 10, text: "Can awareness training of telecommunication frauds mitigate the event of fraud- Opine."},
+            {year: "Dec 2023", unit: 5, marks: 10, text: "Explain the Classification of the Managing Risks."},
+            {year: "Dec 2023", unit: 5, marks: 10, text: "Explain the controlling Physical Access."},
+            {year: "Dec 2023", unit: 4, marks: 10, text: "Describe the methods of Fraud Detection Systems."},
+
+            // June 2024
+            {year: "Jun 2024", unit: 2, marks: 2, text: "CDMA."},
+            {year: "Jun 2024", unit: 3, marks: 2, text: "Creeping Fraud."},
+            {year: "Jun 2024", unit: 1, marks: 2, text: "Software Piracy."},
+            {year: "Jun 2024", unit: 3, marks: 2, text: "Cloning."},
+            {year: "Jun 2024", unit: 1, marks: 2, text: "Unauthorized Amendment of Data."},
+            {year: "Jun 2024", unit: 3, marks: 2, text: "Phantom Account."},
+            {year: "Jun 2024", unit: 3, marks: 2, text: "Premium Rate Fraud."},
+            {year: "Jun 2024", unit: 1, marks: 2, text: "Wireless Networks."},
+            {year: "Jun 2024", unit: 1, marks: 2, text: "Countermeasures against Insider abuse of Internet Access."},
+            {year: "Jun 2024", unit: 5, marks: 2, text: "Line Tapping."},
+            {year: "Jun 2024", unit: 5, marks: 2, text: "Mailbox Abuse."},
+            {year: "Jun 2024", unit: 3, marks: 6, text: "Describe the common techniques used in cloning fraud in GSM networks."},
+            {year: "Jun 2024", unit: 3, marks: 6, text: "Explain Ghosting techniques in Telecommunication Fraud."},
+            {year: "Jun 2024", unit: 1, marks: 6, text: "Explain the concept of system penetration in IT frauds."},
+            {year: "Jun 2024", unit: 2, marks: 6, text: "Using examples from recent cases, illustrate the demographic factors that influence the occurrence of telecommunication fraud."},
+            {year: "Jun 2024", unit: 2, marks: 6, text: "Explain the concept of 'using a service without payment' in telecommunication fraud."},
+            {year: "Jun 2024", unit: 5, marks: 6, text: "Describe the security challenges posed by IP security issues in 3G networks and suggest countermeasures"},
+            {year: "Jun 2024", unit: 4, marks: 6, text: "Explain various physical attacks on networks."},
+            {year: "Jun 2024", unit: 1, marks: 10, text: "Provide detailed examples of techniques used by attackers to penetrate IT systems and discuss advanced measures organizations can adopt to enhance system security against such penetrations"},
+            {year: "Jun 2024", unit: 5, marks: 10, text: "Explain the telecom laws available in India."},
+            {year: "Jun 2024", unit: 2, marks: 10, text: "Give an account on Network Management System."},
+            {year: "Jun 2024", unit: 5, marks: 10, text: "Explain the vulnerabilities and impacts of EPABX hacking in telecom systems."},
+            {year: "Jun 2024", unit: 5, marks: 10, text: "Explain the 3G Technology and Services."},
+
+            // December 2024
+            {year: "Dec 2024", unit: 2, marks: 2, text: "Telecommunication Fraud with three examples."},
+            {year: "Dec 2024", unit: 2, marks: 2, text: "GSM"},
+            {year: "Dec 2024", unit: 5, marks: 2, text: "Social Engineering"},
+            {year: "Dec 2024", unit: 4, marks: 2, text: "SS7 Attacks"},
+            {year: "Dec 2024", unit: 1, marks: 2, text: "System Penetration."},
+            {year: "Dec 2024", unit: 3, marks: 2, text: "Chaining Fraud"},
+            {year: "Dec 2024", unit: 3, marks: 2, text: "Subscription Fraud"},
+            {year: "Dec 2024", unit: 5, marks: 2, text: "Identity Theft"},
+            {year: "Dec 2024", unit: 1, marks: 2, text: "Worms"},
+            {year: "Dec 2024", unit: 3, marks: 2, text: "Non-Technical Frauds"},
+            {year: "Dec 2024", unit: 5, marks: 2, text: "EPABX Hacking"},
+            {year: "Dec 2024", unit: 1, marks: 2, text: "Software Management"},
+            {year: "Dec 2024", unit: 4, marks: 6, text: "Write a short note on Fraud detection systems."},
+            {year: "Dec 2024", unit: 1, marks: 6, text: "Discuss the challenges posed by insider abuse of internet access in organizations. How can organizations mitigate this risk effectively?"},
+            {year: "Dec 2024", unit: 5, marks: 6, text: "Explain PBX/DISA fraud and its implications for business communications."},
+            {year: "Dec 2024", unit: 5, marks: 6, text: "Explain the concept of 'mailbox abuse' and provide measures to prevent it in telecom systems."},
+            {year: "Dec 2024", unit: 1, marks: 6, text: "Describe a real-world example of a phishing attack targeting a telecom network."},
+            {year: "Dec 2024", unit: 3, marks: 6, text: "Differentiate between technical and non-technical telecommunication fraud."},
+            {year: "Dec 2024", unit: 3, marks: 6, text: "Compare and contrast the risks associated with premium-rate services fraud and calling-card fraud in telecommunication."},
+            {year: "Dec 2024", unit: 1, marks: 10, text: "Explain any two types of IT frauds with suitable example."},
+            {year: "Dec 2024", unit: 5, marks: 10, text: "Describe the common techniques used in cloning fraud in GSM networks. Discuss the technological measures telcos can adopt to detect and prevent cloning fraud effectively."},
+            {year: "Dec 2024", unit: 2, marks: 10, text: "Describe the root causes of telecommunication fraud. How do factors like penetration of new technology and staff dissatisfaction contribute to the prevalence of fraud in telecom networks?"},
+            {year: "Dec 2024", unit: 4, marks: 10, text: "Enumerate and explain the frauds in fixed network."},
+            {year: "Dec 2024", unit: 1, marks: 10, text: "Suggest preventive measures for mitigating the frauds in IT."}
+        ];
+
+        // Extract unique values
+        const years = [...new Set(questions.map(q => q.year))].sort();
+        const units = [...new Set(questions.map(q => q.unit))].sort((a, b) => a - b);
+        const marksValues = [...new Set(questions.map(q => q.marks))].sort((a, b) => a - b);
+
+        // Initialize filters
+        function initFilters() {
+            const yearFilters = document.getElementById('yearFilters');
+            const unitFilters = document.getElementById('unitFilters');
+            const marksFilters = document.getElementById('marksFilters');
+
+            years.forEach(year => {
+                const btn = createFilterButton(year, 'year');
+                yearFilters.appendChild(btn);
+            });
+
+            units.forEach(unit => {
+                const btn = createFilterButton(`Unit ${unit}`, 'unit', unit);
+                unitFilters.appendChild(btn);
+            });
+
+            marksValues.forEach(mark => {
+                const btn = createFilterButton(`${mark} Marks`, 'marks', mark);
+                marksFilters.appendChild(btn);
+            });
+        }
+
+        function createFilterButton(label, type, value) {
+            const btn = document.createElement('button');
+            btn.className = 'filter-btn';
+            btn.textContent = label;
+            btn.dataset.type = type;
+            btn.dataset.value = value || label;
+            
+            btn.addEventListener('click', () => {
+                btn.classList.toggle('active');
+                toggleFilter(type, value || label);
+            });
+            
+            return btn;
+        }
+
+        function toggleFilter(type, value) {
+            const filterSet = activeFilters[type + 's'];
+            if (filterSet.has(value)) {
+                filterSet.delete(value);
+            } else {
+                filterSet.add(value);
+            }
+            filterQuestions();
+        }
+
+        function filterQuestions() {
+            const searchTerm = activeFilters.search.toLowerCase();
+            
+            const filtered = questions.filter(q => {
+                const matchesYear = activeFilters.years.size === 0 || activeFilters.years.has(q.year);
+                const matchesUnit = activeFilters.units.size === 0 || activeFilters.units.has(q.unit);
+                const matchesMarks = activeFilters.marks.size === 0 || activeFilters.marks.has(q.marks);
+                const matchesSearch = !searchTerm || q.text.toLowerCase().includes(searchTerm);
+                
+                return matchesYear && matchesUnit && matchesMarks && matchesSearch;
+            });
+
+            displayQuestions(filtered);
+        }
+
+        function displayQuestions(questionsToShow) {
+            const container = document.getElementById('questionsContainer');
+            const resultsCount = document.getElementById('resultsCount');
+            
+            resultsCount.textContent = `Showing ${questionsToShow.length} of ${questions.length} questions`;
+
+            if (questionsToShow.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <div class="no-results-icon">🔍</div>
+                        <h2>No questions found</h2>
+                        <p>Try adjusting your filters or search terms</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = questionsToShow.map(q => `
+                <div class="question-card">
+                    <div class="question-header">
+                        <div class="question-tags">
+                            <span class="tag year-tag">${q.year}</span>
+                            <span class="tag unit-tag">Unit ${q.unit}</span>
+                        </div>
+                        <div class="marks-badge marks-${q.marks}">
+                            ${q.marks} Marks
+                        </div>
+                    </div>
+                    <div class="question-text">${q.text}</div>
+                </div>
+            `).join('');
+        }
+
+        // Search functionality
+        document.getElementById('searchBox').addEventListener('input', (e) => {
+            activeFilters.search = e.target.value;
+            filterQuestions();
+        });
+
+        // Clear filters
+        document.getElementById('clearFilters').addEventListener('click', () => {
+            activeFilters = {
+                years: new Set(),
+                units: new Set(),
+                marks: new Set(),
+                search: ''
+            };
+            
+            document.getElementById('searchBox').value = '';
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            filterQuestions();
+        });
+
+        // Initialize
+        initFilters();
+        displayQuestions(questions);
+    </script>
