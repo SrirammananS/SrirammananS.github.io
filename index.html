@@ -619,6 +619,7 @@
                 <li><a href="#skills">Skills</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#certifications">Certifications</a></li>
+                <li><a href="#research">Research</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </div>
@@ -792,6 +793,28 @@
                         <span class="skill-tag">🔍 Gobuster</span>
                         <span class="skill-tag">⚔️ FFUF</span>
                         <span class="skill-tag">📊 Wireshark</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="research">
+        <div class="container">
+            <h2 class="section-title">Research</h2>
+            <div class="experience-timeline">
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">2026 · Draft / Preprint</div>
+                    <h3 class="timeline-title">SAFE-SCAN: AI Flow & Algorithms (Panel View)</h3>
+                    <div class="timeline-company">Return-fraud prevention using Golden Value + multi-signal verification + AI image authenticity</div>
+                    <p>
+                        Paper-ready technical summary covering the end-to-end flow (dispatch reference creation, customer upload gate,
+                        pickup/FC verification) and core algorithms (SNN-style embedding similarity, FGVC micro-features, fusion scoring,
+                        AI Judge aggregation).
+                    </p>
+                    <div class="cta-buttons" style="margin-top: 1rem;">
+                        <a class="btn btn-primary" href="https://SrirammananS.github.io/Research/SAFE-SCAN%20_%20AI%20Flow%20%26%20Algorithms%20(Panel%20View).pdf" target="_blank" rel="noreferrer">Open PDF</a>
+                        <a class="btn btn-secondary" href="https://SrirammananS.github.io/Research/" target="_blank" rel="noreferrer">Research Folder</a>
                     </div>
                 </div>
             </div>
@@ -997,4 +1020,24 @@
         createParticles();
 
         // Navbar scroll effect
-        window.addEventListener('
+        window.addEventListener('scroll', function () {
+            const nav = document.querySelector('nav');
+            if (!nav) return;
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(15, 15, 35, 0.98)';
+                nav.style.boxShadow = '0 10px 30px rgba(0,0,0,0.35)';
+            } else {
+                nav.style.background = 'rgba(15, 15, 35, 0.95)';
+                nav.style.boxShadow = 'none';
+            }
+        });
+
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+            });
+        });
+    </script>
+</body>
+
+</html>
