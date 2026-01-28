@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Dashboard: Student Summary & Analytics</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .fade-enter-active, .fade-leave-active { transition: opacity 0.3s; }
+        .fade-enter-from, .fade-leave-to { opacity: 0; }
+        /* Table Sticky Header */
+        thead th { position: sticky; top: 0; z-index: 20; }
+        /* Custom Scrollbar */
+        .custom-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-gray-50 text-slate-800 font-sans h-screen flex flex-col overflow-hidden">
+
+<div id="app" class="flex flex-col h-full">
+
+    <nav class="bg-slate-900 text-white p-3 shadow-lg z-30 shrink-0">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600 p-1.5 rounded text-white">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight">Fee Analytics Pro</h1>
+                    <p class="text-[10px] text-slate-400">Merged Data • Summation • Insights</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <div class="relative">
+                    <input type="file" @change="handleFileUpload" accept=".xlsx, .xls" class="hidden" id="fileInput">
+                    <label for="fileInput" class="cursor-pointer bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition shadow-md flex items-center gap-2">
+                        <i class="fas fa-cloud-upload-alt"></i> Upload Report
+                    </label>
+                </div>
+                <button v-if="dbData.length" @click="resetAll" class="text-xs text-red-300 hover:text-red-100 underline">Reset All</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow flex flex-col container mx-auto p-4 gap-4 overflow-hidden relative">
+
+        <div v-if="!workbook && dbData.length === 0" class="flex-grow flex flex-col items-center justify-center text-center p-10 border-2 border-dashed border-gray-300 rounded-xl bg-white/50 m-4">
+            <div class="text-6xl text-slate-200 mb-6 animate-pulse"><i class="fas fa-file-excel"></i></div>
+            <h2 class="text-2xl font-bold text-slate-700 mb-2">Upload Fee Report</h2>
+            <p class="text-slate-500 mb-8 max-w-md">
+                I will automatically find the headers, merge student rows, calculate totals, and fix column mismatches.
+            </p>
+            <label for="fileInput" class="cursor-pointer bg-slate-800 hover:bg-slate-700 text-white px-8 py-3 rounded-full shadow-lg transition transform hover:-translate-y-1 font-bold flex items-center gap-2">
+                <i class="fas fa-search"></i> Select Excel File
+            </label>
+        </div>
+
+        <div v-if="workbook && dbData.length === 0" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden transform transition-all scale-100">
+                <div class="bg-gray-100 p-4 border-b">
+                    <h3 class="font-bold text-gray-700">Select Data Sheet</h3>
+                </div>
+                <div class="p-2 max-h-[50vh] overflow-y-auto">
+                    <button v-for="sheetName in workbook.SheetNames" :key="sheetName" 
+                        @click="processSheet(sheetName)"
+                        class="w-full text-left p-3 rounded hover:bg-blue-50 hover:text-blue-700 transition border-b last:border-0 border-gray-100 flex justify-between">
+                        <span>{{ sheetName }}</span>
+                        <i class="fas fa-chevron-right text-xs opacity-50"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="dbData.length > 0" class="flex flex-col h-full gap-4">
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 shrink-0">
+                <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-blue-500">
+                    <div class="text-[10px] font-bold text-gray-400 uppercase">Grand Total</div>
+                    <div class="text-2xl font-bold text-slate-800">{{ formatCurrency(grandTotal) }}</div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-emerald-500">
+                    <div class="text-[10px] font-bold text-gray-400 uppercase">Unique Students</div>
+                    <div class="text-2xl font-bold text-slate-800">{{ uniqueStudentsCount }}</div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-purple-500">
+                    <div class="text-[10px] font-bold text-gray-400 uppercase">Total Transactions</div>
+                    <div class="text-2xl font-bold text-slate-800">{{ dbData.length }}</div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-amber-500">
+                    <div class="text-[10px] font-bold text-gray-400 uppercase">Top Dept</div>
+                    <div class="text-sm font-bold text-slate-800 truncate">{{ topDept }}</div>
+                </div>
+            </div>
+
+            <div class="bg-white p-3 rounded-xl shadow-sm flex flex-col md:flex-row gap-4 items-end justify-between shrink-0 z-10 border border-gray-100">
+                <div class="flex flex-wrap gap-3 w-full md:w-auto flex-grow items-end">
+                    
+                    <div class="w-full md:w-48">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase block mb-1">Search</label>
+                        <div class="relative">
+                            <i class="fas fa-search absolute left-3 top-2.5 text-gray-300 text-xs"></i>
+                            <input v-model="filters.search" placeholder="Name, Roll, Dept..." class="w-full pl-8 pr-2 py-1.5 text-sm border rounded bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition">
+                        </div>
+                    </div>
+
+                    <div class="w-full md:w-56">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase block mb-1">View Perspective</label>
+                        <select v-model="viewMode" class="w-full px-2 py-1.5 text-sm border rounded bg-gray-50 font-medium text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="detailed">📋 Detailed (All Rows)</option>
+                            <option value="summary">∑ Student Summary (Summed)</option>
+                            <option value="duplicates">⚠️ Duplicates Only</option>
+                        </select>
+                    </div>
+
+                    <button v-if="sort.key" @click="resetSort" class="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 rounded transition border border-gray-200 h-[34px]">
+                        <i class="fas fa-undo mr-1"></i> Reset Sort
+                    </button>
+                </div>
+
+                <button @click="exportExcel" class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-5 py-2 rounded shadow transition flex items-center gap-2">
+                    <i class="fas fa-file-excel"></i> Export Current View
+                </button>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex-grow flex flex-col relative">
+                <div class="overflow-auto flex-grow custom-scroll">
+                    <table class="w-full text-left border-collapse min-w-[1000px]">
+                        <thead class="bg-gray-50 text-xs uppercase text-gray-500 font-semibold border-b border-gray-200">
+                            <tr>
+                                <th class="p-3 w-20">
+                                    Sl. No 
+                                    <span v-if="viewMode === 'summary'" class="text-[9px] lowercase font-normal block text-gray-400">(Clubbed)</span>
+                                </th>
+                                <th @click="sortBy('enrollNo')" class="p-3 cursor-pointer hover:bg-gray-100 transition select-none group">
+                                    Enroll No <i :class="getSortIcon('enrollNo')" class="ml-1 text-gray-300 group-hover:text-blue-500"></i>
+                                </th>
+                                <th @click="sortBy('name')" class="p-3 cursor-pointer hover:bg-gray-100 transition select-none group">
+                                    Student Name <i :class="getSortIcon('name')" class="ml-1 text-gray-300 group-hover:text-blue-500"></i>
+                                </th>
+                                <th class="p-3">Particulars</th>
+                                <th @click="sortBy('dept')" class="p-3 cursor-pointer hover:bg-gray-100 transition select-none group">
+                                    Dept <i :class="getSortIcon('dept')" class="ml-1 text-gray-300 group-hover:text-blue-500"></i>
+                                </th>
+                                <th @click="sortBy('year')" class="p-3 text-center cursor-pointer hover:bg-gray-100 transition select-none group">
+                                    Year <i :class="getSortIcon('year')" class="ml-1 text-gray-300 group-hover:text-blue-500"></i>
+                                </th>
+                                <th @click="sortBy('amount')" class="p-3 text-right cursor-pointer hover:bg-gray-100 transition select-none group">
+                                    <span v-if="viewMode === 'summary'">Total Amount</span>
+                                    <span v-else>Amount</span>
+                                    <i :class="getSortIcon('amount')" class="ml-1 text-gray-300 group-hover:text-blue-500"></i>
+                                </th>
+                                <th class="p-3 text-center" v-if="viewMode === 'summary'">Count</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm divide-y divide-gray-100">
+                            <tr v-for="(row, index) in displayData" :key="index" class="hover:bg-blue-50/50 transition-colors">
+                                
+                                <td class="p-3 text-gray-400 text-xs break-words max-w-[100px]" :title="row.slNo">
+                                    {{ row.slNo }}
+                                </td>
+
+                                <td class="p-3 font-mono font-medium text-slate-700">
+                                    {{ row.enrollNo }}
+                                </td>
+
+                                <td class="p-3 font-medium text-slate-800">{{ row.name }}</td>
+
+                                <td class="p-3 text-gray-500 text-xs">
+                                    <div v-if="Array.isArray(row.particularsList)" class="flex flex-col gap-1">
+                                        <span v-for="(p, i) in row.particularsList" :key="i" class="truncate max-w-[200px] border-b border-dashed border-gray-100 pb-0.5 last:border-0" :title="p">
+                                            • {{ p }}
+                                        </span>
+                                    </div>
+                                    <span v-else>{{ row.particulars }}</span>
+                                </td>
+
+                                <td class="p-3 text-xs"><span class="bg-gray-100 px-2 py-1 rounded text-gray-600">{{ row.dept }}</span></td>
+
+                                <td class="p-3 text-center text-gray-500">{{ row.year }}</td>
+
+                                <td class="p-3 text-right font-mono font-medium text-slate-700">
+                                    {{ formatCurrency(row.amount) }}
+                                </td>
+
+                                <td v-if="viewMode === 'summary'" class="p-3 text-center">
+                                    <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full text-xs font-bold">{{ row.count }}</span>
+                                </td>
+                            </tr>
+                            <tr v-if="displayData.length === 0">
+                                <td colspan="8" class="p-10 text-center text-gray-400 italic">No data matches your current filters.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="bg-gray-50 p-2 text-right text-[10px] text-gray-400 border-t">
+                    {{ displayData.length }} rows visible
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+</div>
+
+<script>
+    const { createApp } = Vue;
+
+    createApp({
+        data() {
+            return {
+                workbook: null,
+                dbData: [], // The raw, detailed data
+                viewMode: 'summary', // detailed, summary, duplicates
+                filters: {
+                    search: ''
+                },
+                sort: {
+                    key: '',
+                    order: 1
+                }
+            }
+        },
+        computed: {
+            // 1. First, create the "Student Summary" dataset
+            summaryData() {
+                const map = new Map();
+
+                this.dbData.forEach(row => {
+                    const key = row.enrollNo;
+                    if (!key) return;
+
+                    if (!map.has(key)) {
+                        map.set(key, {
+                            ...row,
+                            slNo: String(row.slNo), // Start as string
+                            amount: Number(row.amount) || 0,
+                            particularsList: [row.particulars],
+                            count: 1,
+                            rawSlNos: [row.slNo] // Keep track to avoid duplicate S.Nos in string
+                        });
+                    } else {
+                        const existing = map.get(key);
+                        existing.amount += (Number(row.amount) || 0);
+                        existing.particularsList.push(row.particulars);
+                        existing.count += 1;
+                        if (!existing.rawSlNos.includes(row.slNo)) {
+                            existing.rawSlNos.push(row.slNo);
+                            existing.slNo += `, ${row.slNo}`;
+                        }
+                    }
+                });
+                return Array.from(map.values());
+            },
+
+            // 2. Determine which dataset to use based on Mode
+            baseData() {
+                if (this.viewMode === 'summary') {
+                    return this.summaryData;
+                } else if (this.viewMode === 'duplicates') {
+                    // Find duplicate enrollNos from raw data
+                    const counts = {};
+                    this.dbData.forEach(r => counts[r.enrollNo] = (counts[r.enrollNo] || 0) + 1);
+                    return this.dbData.filter(r => counts[r.enrollNo] > 1);
+                } else {
+                    return this.dbData; // Detailed view
+                }
+            },
+
+            // 3. Apply Filters and Sorting to the selected dataset
+            displayData() {
+                let data = this.baseData;
+
+                // Search Filter
+                if (this.filters.search) {
+                    const q = this.filters.search.toLowerCase();
+                    data = data.filter(row => {
+                        return Object.values(row).some(val => 
+                            String(val).toLowerCase().includes(q)
+                        );
+                    });
+                }
+
+                // Sorting
+                if (this.sort.key) {
+                    data.sort((a, b) => {
+                        let valA = a[this.sort.key];
+                        let valB = b[this.sort.key];
+
+                        if (typeof valA === 'string') valA = valA.toLowerCase();
+                        if (typeof valB === 'string') valB = valB.toLowerCase();
+                        
+                        // Handle numbers correctly
+                        if (!isNaN(parseFloat(valA)) && isFinite(valA) && !isNaN(parseFloat(valB)) && isFinite(valB)) {
+                            valA = Number(valA);
+                            valB = Number(valB);
+                        }
+
+                        if (valA < valB) return -1 * this.sort.order;
+                        if (valA > valB) return 1 * this.sort.order;
+                        return 0;
+                    });
+                }
+
+                return data;
+            },
+            
+            // Stats
+            grandTotal() {
+                // Always sum raw data to prevent double counting errors
+                return this.dbData.reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
+            },
+            uniqueStudentsCount() {
+                return new Set(this.dbData.map(r => r.enrollNo)).size;
+            },
+            topDept() {
+                if(this.dbData.length === 0) return '-';
+                const counts = {};
+                this.dbData.forEach(r => counts[r.dept] = (counts[r.dept] || 0) + 1);
+                return Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+            }
+        },
+        methods: {
+            formatCurrency(val) {
+                if(!val && val !== 0) return '-';
+                return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(val);
+            },
+            sortBy(key) {
+                if (this.sort.key === key) this.sort.order *= -1;
+                else { this.sort.key = key; this.sort.order = 1; }
+            },
+            resetSort() {
+                this.sort.key = '';
+                this.sort.order = 1;
+            },
+            getSortIcon(key) {
+                if (this.sort.key !== key) return 'fa-sort opacity-20';
+                return this.sort.order === 1 ? 'fa-sort-up' : 'fa-sort-down';
+            },
+            resetAll() {
+                this.dbData = [];
+                this.workbook = null;
+                this.viewMode = 'summary';
+            },
+
+            // --- SMART FILE PROCESSING ---
+            handleFileUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const data = new Uint8Array(e.target.result);
+                    this.workbook = XLSX.read(data, { type: 'array' });
+                    if (this.workbook.SheetNames.length === 1) {
+                        this.processSheet(this.workbook.SheetNames[0]);
+                    }
+                };
+                reader.readAsArrayBuffer(file);
+            },
+
+            processSheet(sheetName) {
+                const worksheet = this.workbook.Sheets[sheetName];
+
+                // 1. UNMERGE (Fixes merging issues)
+                if (worksheet['!merges']) {
+                    worksheet['!merges'].forEach(range => {
+                        const topLeft = XLSX.utils.encode_cell({ r: range.s.r, c: range.s.c });
+                        const val = worksheet[topLeft] ? worksheet[topLeft].v : null;
+                        for (let R = range.s.r; R <= range.e.r; ++R) {
+                            for (let C = range.s.c; C <= range.e.c; ++C) {
+                                const addr = XLSX.utils.encode_cell({ r: R, c: C });
+                                if (!worksheet[addr]) worksheet[addr] = { t: 's', v: val };
+                                else if (worksheet[addr].v == null) worksheet[addr].v = val;
+                            }
+                        }
+                    });
+                }
+
+                // 2. FIND HEADER ROW (Fixes "Header also coming" and Mismatches)
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                
+                let headerRowIndex = -1;
+                let colMap = {};
+
+                // Scan first 20 rows to find the real header
+                for(let i=0; i<Math.min(20, jsonData.length); i++) {
+                    const rowStr = JSON.stringify(jsonData[i]).toLowerCase();
+                    if(rowStr.includes('enroll') || rowStr.includes('name of the student')) {
+                        headerRowIndex = i;
+                        // Map columns dynamically
+                        jsonData[i].forEach((cell, colIdx) => {
+                            if(!cell) return;
+                            const txt = String(cell).toLowerCase().trim();
+                            if(txt.includes('sl')) colMap.sl = colIdx;
+                            else if(txt.includes('enroll')) colMap.enroll = colIdx;
+                            else if(txt.includes('name')) colMap.name = colIdx;
+                            else if(txt.includes('particular')) colMap.part = colIdx;
+                            else if(txt.includes('dept') || txt.includes('branch')) colMap.dept = colIdx;
+                            else if(txt.includes('year')) colMap.year = colIdx;
+                            // Strict check for Amount to avoid picking up "Year" or "Concession" text
+                            else if(txt.includes('amount') || txt.includes('fees') && !txt.includes('particular')) colMap.amount = colIdx; 
+                            else if(txt.includes('approved')) colMap.appr = colIdx;
+                        });
+                        break;
+                    }
+                }
+
+                if(headerRowIndex === -1) {
+                    alert("Could not detect headers automatically. Trying default layout.");
+                    headerRowIndex = 0; 
+                    // Fallback map
+                    colMap = { sl:0, enroll:1, name:2, part:3, dept:4, year:5, amount:6, appr:7 };
+                }
+
+                // 3. PROCESS DATA
+                const processed = [];
+                for(let i = headerRowIndex + 1; i < jsonData.length; i++) {
+                    const row = jsonData[i];
+                    if(!row || row.length === 0) continue;
+
+                    // Safety access
+                    const getVal = (idx) => (row[idx] !== undefined && row[idx] !== null) ? row[idx] : '';
+
+                    // Check if this row is actually a repeated header or junk
+                    const rawEnroll = getVal(colMap.enroll);
+                    if(!rawEnroll || String(rawEnroll).toLowerCase().includes('enroll')) continue;
+
+                    processed.push({
+                        slNo: getVal(colMap.sl),
+                        enrollNo: rawEnroll,
+                        name: getVal(colMap.name),
+                        particulars: getVal(colMap.part),
+                        dept: getVal(colMap.dept),
+                        year: getVal(colMap.year),
+                        amount: getVal(colMap.amount),
+                        approvedBy: getVal(colMap.appr)
+                    });
+                }
+
+                this.dbData = processed;
+            },
+
+            exportExcel() {
+                // Export whatever is currently in 'displayData'
+                const exportRaw = this.displayData.map(r => {
+                    const row = {
+                        "Sl. No": r.slNo,
+                        "Enroll No": r.enrollNo,
+                        "Name": r.name,
+                        "Department": r.dept,
+                        "Year": r.year,
+                        "Amount": r.amount
+                    };
+                    
+                    if(this.viewMode === 'summary') {
+                        row["Particulars"] = r.particularsList.join(", ");
+                        row["Count"] = r.count;
+                    } else {
+                        row["Particulars"] = r.particulars;
+                        row["Approved By"] = r.approvedBy;
+                    }
+                    return row;
+                });
+
+                const ws = XLSX.utils.json_to_sheet(exportRaw);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Processed_Fee_Data");
+                XLSX.writeFile(wb, "Fee_Analytics_Export.xlsx");
+            }
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>
