@@ -414,6 +414,11 @@
         body.intro-no-scroll { overflow: hidden; height: 100vh; }
 
         /* ========== MOBILE RESPONSIVE ========== */
+        /* Intro terminal: fixed height on web (70vh), taller on mobile */
+        .intro-terminal-window { height: 70vh; min-height: 70vh; max-height: 85vh; }
+        @media (max-width: 767px) {
+            .intro-terminal-window { height: 80vh; min-height: 80vh; max-height: 98vh; }
+        }
         /* Intro: keep words intact, no mid-word breaks; last line left-aligned so it doesn't stretch */
         .intro-para, #intro-subtitle, .intro-legend { word-break: normal; overflow-wrap: break-word; hyphens: none; }
         .intro-para { text-align-last: left; }
@@ -515,9 +520,8 @@
                 </div>
 
                 <!-- Terminal window: tall enough to fit all boot lines + whoami -->
-                <div class="hyper-border w-full max-w-full sm:max-w-5xl flex flex-col rounded-sm transition-all duration-700 ease-out z-10 min-w-0"
-                    :class="[booting ? 'scale-95 opacity-0' : 'scale-100 opacity-100', showBio && 'intro-bio-reveal']"
-                    style="min-height: 82vh; max-height: 92vh; height: 82vh;">
+                <div class="intro-terminal-window hyper-border w-full max-w-full sm:max-w-5xl flex flex-col rounded-sm transition-all duration-700 ease-out z-10 min-w-0"
+                    :class="[booting ? 'scale-95 opacity-0' : 'scale-100 opacity-100', showBio && 'intro-bio-reveal']">
                     <div class="flex items-center justify-between px-4 py-2 bg-neutral-900/50 border-b border-white/5 flex-shrink-0">
                         <div class="flex gap-1.5">
                             <div class="w-2.5 h-2.5 rounded-full bg-red-500/20 border border-red-500/40"></div>
@@ -899,11 +903,11 @@
                     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
                     if (isMobile) {
                         this.log.push({ text: 'LOADING WEB TALENT... OK', type: 'success' });
-                        await this.sleep(300);
+                        await this.sleep(100);
                         this.log.push({ text: 'VAPT & RED TEAM MODULES... VERIFIED', type: 'success' });
-                        await this.sleep(200);
-                        this.log.push({ text: 'FETCHING IDENTITY DATA...', type: 'info' });
-                        await this.sleep(400);
+                        await this.sleep(100);
+                        this.log.push({ text: 'SYSTEM READY. ACCESSING PROFILE...', type: 'success' });
+                        await this.sleep(120);
                         this.booting = false;
                         this.showBio = true;
                         this.scrollToBottom();
