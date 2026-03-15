@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="Srirammanan S — Cybersecurity Specialist, Penetration Tester, VAPT & OWASP Top 10 Expert. Bengaluru.">
     <meta name="google-site-verification" content="DR7zWbA91KppvzEoJdhl8LhciMJjlSWLiLevS8ZwkTQ">
-    <title>Srirammanan S // SEC_ENG // PORTFOLIO</title>
+    <title>Srirammanan - Security Engineer</title>
 
     <!-- Canonical (replace with your production URL) -->
     <link rel="canonical" href="https://srirammanan.me/">
@@ -13,7 +13,7 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Srirammanan S — SEC_ENG Portfolio">
-    <meta property="og:title" content="Srirammanan S // SEC_ENG // PORTFOLIO">
+    <meta property="og:title" content="Srirammanan - Security Engineer">
     <meta property="og:description" content="Cybersecurity Specialist, Penetration Tester, VAPT & OWASP Top 10 Expert. Bengaluru.">
     <meta property="og:url" content="https://srirammanan.me/">
     <meta property="og:image" content="https://srirammanan.me/og-image.png">
@@ -23,7 +23,7 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Srirammanan S // SEC_ENG // PORTFOLIO">
+    <meta name="twitter:title" content="Srirammanan - Security Engineer">
     <meta name="twitter:description" content="Cybersecurity Specialist, Penetration Tester, VAPT & OWASP Top 10 Expert. Bengaluru.">
     <meta name="twitter:image" content="https://srirammanan.me/og-image.png">
 
@@ -412,6 +412,76 @@
 
         /* Lock page scroll when intro is active */
         body.intro-no-scroll { overflow: hidden; height: 100vh; }
+
+        /* ========== MOBILE RESPONSIVE ========== */
+        /* Intro: keep words intact, no mid-word breaks; last line left-aligned so it doesn't stretch */
+        .intro-para, #intro-subtitle, .intro-legend { word-break: normal; overflow-wrap: break-word; hyphens: none; }
+        .intro-para { text-align-last: left; }
+        @media (max-width: 767px) {
+            .intro-section-padding { padding: 1rem; }
+            #intro-name { font-size: clamp(1rem, 5.5vw, 2.5rem); white-space: nowrap; }
+            .intro-legend { font-size: 9px; line-height: 1.5; padding: 0 0.5rem; flex-wrap: wrap; justify-content: center; gap: 0.25rem; }
+            .intro-buttons-wrap { flex-wrap: wrap; gap: 0.5rem; }
+            .intro-btn { flex: 1 1 auto; min-width: 0; font-size: 9px !important; padding: 0.5rem 0.4rem !important; }
+            .hud-intro { flex-wrap: wrap; gap: 0.5rem; padding-left: 0.5rem; padding-right: 0.5rem; }
+            .hud-intro span { font-size: 9px; }
+            .detail-return-fixed { top: 1rem; left: 1rem; }
+            .detail-return-fixed button { font-size: 10px; }
+            .hud-decor .line { width: 3rem; }
+            .hud-decor span { font-size: 8px; letter-spacing: 0.2em; }
+            .floating-decor { display: none; }
+            .coords-decor { font-size: 6px; bottom: 1rem; left: 1rem; }
+        }
+
+        /* Detail view: stack on mobile (sidebar below content) */
+        .detail-view-container { flex-direction: column; min-height: 100vh; overflow-x: hidden; }
+        @media (min-width: 768px) {
+            .detail-view-container { flex-direction: row; height: 100vh; }
+        }
+        .detail-main-panel { min-height: 50vh; flex: 1 1 auto; }
+        @media (min-width: 768px) {
+            .detail-main-panel { min-height: auto; flex: 1; }
+        }
+        .detail-aside { width: 100%; max-width: 100%; min-height: 0; max-height: 55vh; }
+        @media (min-width: 768px) {
+            .detail-aside { max-width: 28rem; max-height: none; flex-shrink: 0; }
+        }
+        .project-core.detail-core { width: 180px; height: 180px; }
+        @media (min-width: 768px) {
+            .project-core.detail-core { width: 280px; height: 280px; }
+        }
+        @media (min-width: 1024px) {
+            .project-core.detail-core { width: 300px; height: 300px; }
+        }
+        .detail-identity { position: static; margin-top: 1.5rem; text-align: center; padding: 0 1rem; }
+        @media (min-width: 768px) {
+            .detail-identity { position: absolute; bottom: 2rem; left: 2rem; text-align: left; padding: 0; }
+        }
+        .detail-identity h1 { font-size: 1.75rem; }
+        @media (min-width: 768px) {
+            .detail-identity h1 { font-size: 3rem; }
+        }
+        @media (min-width: 1024px) {
+            .detail-identity h1 { font-size: 4.5rem; }
+        }
+
+        /* Directory: mobile nav and header */
+        .dir-nav { flex-wrap: wrap; gap: 0.5rem; padding: 0.75rem 1rem; }
+        .dir-nav-links { flex-wrap: wrap; gap: 0.5rem; }
+        .dir-nav-links a, .dir-nav-links button { font-size: 9px; letter-spacing: 0.15em; }
+        .dir-header-title { font-size: 2rem; line-height: 1.1; }
+        @media (min-width: 768px) {
+            .dir-header-title { font-size: 3.5rem; }
+        }
+        @media (min-width: 1024px) {
+            .dir-header-title { font-size: 4.5rem; }
+        }
+        .dir-filters { flex-wrap: wrap; gap: 0.35rem; }
+        .dir-filters button { font-size: 9px; padding: 0.25rem 0.5rem; }
+        .dir-main { padding-top: 6rem; padding-left: 1rem; padding-right: 1rem; padding-bottom: 2rem; }
+        @media (min-width: 768px) {
+            .dir-main { padding-top: 8rem; padding-left: 1.5rem; padding-right: 1.5rem; }
+        }
     </style>
 </head>
 <body x-data="portfolioApp()" :class="{ 'intro-no-scroll': currentView === 'intro' }">
@@ -421,7 +491,7 @@
     <main class="relative z-10 min-h-screen">
         <!-- Intro view: single screen, no extra scroll -->
         <div x-show="currentView === 'intro'" x-cloak x-transition id="intro-view" class="min-h-screen">
-            <div class="min-h-screen w-full flex flex-col items-center justify-center p-4 md:p-8" x-init="if (!bootStarted) { bootStarted = true; startBoot(); }" id="intro-section">
+            <div class="min-h-screen w-full flex flex-col items-center justify-center p-3 sm:p-4 md:p-8 max-w-full overflow-hidden intro-section-padding" x-init="if (!bootStarted) { bootStarted = true; startBoot(); }" id="intro-section">
                 <!-- Background: 3D grid (scroll-driven zoom like technical_tool_detail) -->
                 <div class="fixed inset-0 z-0 pointer-events-none vex-container" style="perspective: 1200px;" id="intro-vex">
                     <div class="absolute w-[200%] h-[200%] -top-1/2 -left-1/2 intro-grid-3d grid-3d" id="intro-grid-3d" style="background-image: linear-gradient(to right, #333 1px, transparent 1px), linear-gradient(to bottom, #333 1px, transparent 1px); background-size: 60px 60px; transform: rotateX(60deg) translateZ(-100px); animation: grid-move 20s linear infinite;"></div>
@@ -429,7 +499,7 @@
                 </div>
 
                 <!-- HUD -->
-                <div class="absolute top-8 left-8 right-8 flex justify-between items-start pointer-events-none z-10">
+                <div class="absolute top-4 left-3 right-3 sm:top-8 sm:left-8 sm:right-8 flex justify-between items-start pointer-events-none z-10 hud-intro">
                     <div class="flex flex-col">
                         <span class="text-[var(--accent)] font-bold tracking-widest text-xs">SYSTEM_STATUS: ACTIVE</span>
                         <span class="text-neutral-500 text-[10px]" x-text="'LOC_TIME: ' + time"></span>
@@ -445,10 +515,10 @@
                 </div>
 
                 <!-- Terminal window: tall enough to fit all boot lines + whoami -->
-                <div class="hyper-border w-full max-w-5xl flex flex-col rounded-sm transition-all duration-700 ease-out z-10"
+                <div class="hyper-border w-full max-w-full sm:max-w-5xl flex flex-col rounded-sm transition-all duration-700 ease-out z-10 min-w-0"
                     :class="[booting ? 'scale-95 opacity-0' : 'scale-100 opacity-100', showBio && 'intro-bio-reveal']"
-                    style="min-height: 72vh; max-height: 85vh; height: 72vh;">
-                    <div class="flex items-center justify-between px-4 py-2 bg-neutral-900/50 border-b border-white/5">
+                    style="min-height: 82vh; max-height: 92vh; height: 82vh;">
+                    <div class="flex items-center justify-between px-4 py-2 bg-neutral-900/50 border-b border-white/5 flex-shrink-0">
                         <div class="flex gap-1.5">
                             <div class="w-2.5 h-2.5 rounded-full bg-red-500/20 border border-red-500/40"></div>
                             <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/20 border border-yellow-500/40"></div>
@@ -457,7 +527,7 @@
                         <div class="text-[10px] text-neutral-500 font-bold uppercase tracking-widest">tty — bio — 80x24</div>
                         <div class="w-12"></div>
                     </div>
-                    <div class="flex-1 p-6 overflow-hidden font-mono text-sm leading-relaxed" id="terminal-screen">
+                    <div class="flex-1 p-6 overflow-y-auto overflow-x-hidden font-mono text-sm leading-relaxed min-h-0" id="terminal-screen">
                         <template x-for="(line, index) in log" :key="index">
                             <div class="mb-1 intro-log-line">
                                 <span class="text-neutral-500 mr-2">[$]</span>
@@ -466,29 +536,32 @@
                         </template>
                         <div x-show="showBio" x-cloak class="mt-8" id="intro-whoami-block" x-effect="showBio && $nextTick(() => window.runIntroScrollEffects && window.runIntroScrollEffects())">
                             <div class="text-[var(--accent)] mb-2 font-bold" data-ani="prompt"># whoami</div>
-                            <h1 id="intro-name" class="font-['Syne'] text-4xl md:text-6xl font-black mb-6 uppercase tracking-tighter leading-none">SRIRAMMANAN</h1>
+                            <h1 id="intro-name" class="font-['Syne'] text-3xl sm:text-4xl md:text-6xl font-black mb-4 md:mb-6 uppercase tracking-tighter leading-none whitespace-nowrap">SRIRAMMANAN</h1>
                             <p id="intro-subtitle" class="text-neutral-400 mb-4">Penetration Tester | VAPT | OWASP Top 10 Expert</p>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-neutral-400">
-                                <div>
-                                    <p id="intro-para" class="mb-4 text-justify">Passionate penetration tester with 3+ years of experience securing digital assets. I specialize in identifying critical vulnerabilities through comprehensive VAPT assessments, helping businesses stay ahead of cyber threats.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 text-neutral-400">
+                                <div class="min-w-0">
+                                    <p id="intro-para" class="intro-para mb-6 text-justify leading-relaxed">Passionate penetration tester with 3+ years of experience securing digital assets. I specialize in identifying critical vulnerabilities through comprehensive VAPT assessments, helping businesses stay ahead of cyber threats.</p>
                                 </div>
-                                <div class="border-l border-white/10 pl-6 space-y-2 text-xs uppercase tracking-widest intro-meta">
-                                    <div class="flex justify-between" data-meta><span class="text-neutral-600">Specialization</span> <span>Red Teaming / VAPT</span></div>
-                                    <div class="flex justify-between" data-meta><span class="text-neutral-600">Focus</span> <span>Web, API, Mobile</span></div>
-                                    <div class="flex justify-between" data-meta><span class="text-neutral-600">Status</span> <span class="text-[var(--accent)]">Available</span></div>
+                                <div class="intro-meta border-t md:border-t-0 md:border-l border-white/10 pt-4 md:pt-0 md:pl-6 space-y-2 text-xs uppercase tracking-widest">
+                                    <div class="flex justify-between gap-2" data-meta><span class="text-neutral-600 flex-shrink-0">Specialization</span> <span class="text-right">Red Teaming / VAPT</span></div>
+                                    <div class="flex justify-between gap-2" data-meta><span class="text-neutral-600 flex-shrink-0">Focus</span> <span class="text-right">Web, API, Mobile</span></div>
+                                    <div class="flex justify-between gap-2" data-meta><span class="text-neutral-600 flex-shrink-0">Status</span> <span class="text-[var(--accent)]">Available</span></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div id="intro-buttons" class="p-4 border-t border-white/5 flex flex-wrap gap-3 items-center">
+                    <div id="intro-buttons" class="p-3 sm:p-4 border-t border-white/5 flex flex-wrap gap-2 sm:gap-3 items-center intro-buttons-wrap">
                         <button @click="showBio = true" class="btn-command btn-num px-4 py-2 border border-white/10 text-[10px] font-bold uppercase tracking-widest intro-btn" data-btn><span class="text-[var(--accent)]">[01]</span> WHOAMI</button>
                         <button @click="goTo('directory')" class="btn-command btn-num px-4 py-2 border border-white/10 text-[10px] font-bold uppercase tracking-widest intro-btn" data-btn><span class="text-[var(--accent)]">[02]</span> PROJECT EXPERIENCE</button>
                         <a href="https://github.com/SrirammananS" target="_blank" rel="noopener" class="btn-command btn-num px-4 py-2 border border-white/10 text-[10px] font-bold uppercase tracking-widest inline-block intro-btn" data-btn><span class="text-[var(--accent)]">[03]</span> GITHUB</a>
                         <button @click="goTo('detail', 'contact')" class="btn-command btn-num px-4 py-2 border border-white/10 text-[10px] font-bold uppercase tracking-widest intro-btn" data-btn><span class="text-[var(--accent)]">[04]</span> CONTACT</button>
                     </div>
                 </div>
-                <p class="mt-4 text-[10px] text-neutral-500 tracking-wider z-10 text-center">
-                    <span class="text-neutral-600">1</span> = Whoami &nbsp;·&nbsp; <span class="text-[var(--accent)]">2</span> = Project Experience &nbsp;·&nbsp; <span class="text-[var(--accent)]">3</span> = GitHub &nbsp;·&nbsp; <span class="text-[var(--accent)]">4</span> = Contact
+                <p class="mt-3 sm:mt-4 text-[9px] sm:text-[10px] text-neutral-500 tracking-wider z-10 text-center max-w-full px-2 intro-legend flex flex-wrap justify-center gap-x-2 gap-y-1">
+                    <span><span class="text-neutral-600">1</span>=Whoami</span>
+                    <span><span class="text-[var(--accent)]">2</span>=Project Exp</span>
+                    <span><span class="text-[var(--accent)]">3</span>=GitHub</span>
+                    <span><span class="text-[var(--accent)]">4</span>=Contact</span>
                 </p>
                 <!-- Floating rotated decor (system_boot style) -->
                 <div class="floating-decor" aria-hidden="true">SEC_ENG_PORTFOLIO_2025</div>
@@ -500,41 +573,41 @@
                 <div class="grid-plane" :style="`transform: rotateX(65deg) translateZ(-100px) rotateZ(${rotateZ}deg) translateY(${offsetY}px)`"></div>
                 <div class="absolute inset-0" style="background: radial-gradient(circle at center, transparent 0%, var(--bg) 90%);"></div>
             </div>
-            <nav class="fixed top-0 left-0 w-full z-50 p-6 flex justify-between items-center">
-                <div class="flex items-center gap-4">
-                    <button @click="goTo('intro')" class="w-10 h-10 border border-[var(--accent)] flex items-center justify-center font-bold text-[var(--accent)] hover:bg-[var(--accent)] hover:text-black transition-colors">SS</button>
+            <nav class="fixed top-0 left-0 w-full z-50 dir-nav flex justify-between items-center bg-[var(--bg)]/95 backdrop-blur-sm border-b border-white/5">
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <button @click="goTo('intro')" class="w-9 h-9 sm:w-10 sm:h-10 border border-[var(--accent)] flex items-center justify-center font-bold text-[var(--accent)] hover:bg-[var(--accent)] hover:text-black transition-colors flex-shrink-0">SS</button>
                     <div class="hidden md:block">
                         <div class="text-[10px] font-bold tracking-widest text-neutral-400">PORTFOLIO_ARCHIVE_v2.0</div>
                         <div class="text-[8px] text-neutral-600">QUERY_LATENCY: 14ms</div>
                     </div>
                 </div>
-                <div class="flex gap-6 md:gap-8 text-[10px] font-bold tracking-[0.3em] uppercase">
-                    <button @click="goTo('intro')" class="hover:text-[var(--accent)] transition-colors">Intro</button>
-                    <span class="text-[var(--accent)] underline underline-offset-8">Project Experience</span>
-                    <a href="https://github.com/SrirammananS" target="_blank" rel="noopener" class="hover:text-[var(--accent)] transition-colors">GitHub</a>
-                    <button @click="goTo('detail', 'contact')" class="hover:text-[var(--accent)] transition-colors">Contact</button>
+                <div class="flex dir-nav-links gap-2 sm:gap-4 md:gap-8 text-[9px] sm:text-[10px] font-bold tracking-widest uppercase">
+                    <button @click="goTo('intro')" class="hover:text-[var(--accent)] transition-colors whitespace-nowrap">Intro</button>
+                    <span class="text-[var(--accent)] underline underline-offset-4 whitespace-nowrap">Project Exp</span>
+                    <a href="https://github.com/SrirammananS" target="_blank" rel="noopener" class="hover:text-[var(--accent)] transition-colors whitespace-nowrap">GitHub</a>
+                    <button @click="goTo('detail', 'contact')" class="hover:text-[var(--accent)] transition-colors whitespace-nowrap">Contact</button>
                 </div>
             </nav>
-            <main class="relative z-10 pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto flex flex-col">
-                <header class="mb-12">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="text-neutral-600">sriram@sec:~$</span>
-                        <span class="text-[var(--accent)]">ls -la ./portfolio</span>
+            <main class="relative z-10 dir-main max-w-7xl mx-auto flex flex-col w-full min-w-0">
+                <header class="mb-8 md:mb-12">
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="text-neutral-600 text-xs">sriram@sec:~$</span>
+                        <span class="text-[var(--accent)] text-xs sm:text-sm">ls -la ./portfolio</span>
                         <span class="w-2 h-4 bg-[var(--accent)] animate-pulse inline-block"></span>
                     </div>
-                    <h1 class="font-['Syne'] text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.85] mb-4">
+                    <h1 class="font-['Syne'] dir-header-title font-black uppercase tracking-tighter leading-[0.9] mb-4">
                         PROJECT<br><span class="text-neutral-800 outline-text" style="-webkit-text-stroke: 1px #333;">EXPERIENCE</span>
                     </h1>
-                    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/5 pb-4">
-                        <div class="text-[10px] text-neutral-500 uppercase tracking-widest">
-                            Showing <span x-text="filteredEntries.length"></span> objects in /portfolio
+                    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/5 pb-4">
+                        <div class="text-[9px] sm:text-[10px] text-neutral-500 uppercase tracking-widest">
+                            <span x-text="filteredEntries.length"></span> in /portfolio
                         </div>
-                        <div class="flex gap-4">
-                            <button @click="filter = 'all'" :class="filter === 'all' ? 'text-[var(--accent)]' : 'text-neutral-600'" class="text-[10px] font-bold uppercase tracking-widest">All</button>
-                            <button @click="filter = 'experience'" :class="filter === 'experience' ? 'text-[var(--accent)]' : 'text-neutral-600'" class="text-[10px] font-bold uppercase tracking-widest">Experience</button>
-                            <button @click="filter = 'skills'" :class="filter === 'skills' ? 'text-[var(--accent)]' : 'text-neutral-600'" class="text-[10px] font-bold uppercase tracking-widest">Skills</button>
-                            <button @click="filter = 'research'" :class="filter === 'research' ? 'text-[var(--accent)]' : 'text-neutral-600'" class="text-[10px] font-bold uppercase tracking-widest">Research</button>
-                            <button @click="filter = 'certs'" :class="filter === 'certs' ? 'text-[var(--accent)]' : 'text-neutral-600'" class="text-[10px] font-bold uppercase tracking-widest">Certs</button>
+                        <div class="flex dir-filters gap-2">
+                            <button @click="filter = 'all'" :class="filter === 'all' ? 'text-[var(--accent)]' : 'text-neutral-600'" class="font-bold uppercase tracking-widest">All</button>
+                            <button @click="filter = 'experience'" :class="filter === 'experience' ? 'text-[var(--accent)]' : 'text-neutral-600'" class="font-bold uppercase tracking-widest">Exp</button>
+                            <button @click="filter = 'skills'" :class="filter === 'skills' ? 'text-[var(--accent)]' : 'text-neutral-600'" class="font-bold uppercase tracking-widest">Skills</button>
+                            <button @click="filter = 'research'" :class="filter === 'research' ? 'text-[var(--accent)]' : 'text-neutral-600'" class="font-bold uppercase tracking-widest">Research</button>
+                            <button @click="filter = 'certs'" :class="filter === 'certs' ? 'text-[var(--accent)]' : 'text-neutral-600'" class="font-bold uppercase tracking-widest">Certs</button>
                         </div>
                     </div>
                 </header>
@@ -591,10 +664,10 @@
                 </footer>
             </main>
         </div>
-        <!-- Detail view -->
-        <div x-show="currentView === 'detail'" x-cloak x-transition class="h-screen w-full flex overflow-hidden">
+        <!-- Detail view: stacked on mobile, side-by-side on desktop -->
+        <div x-show="currentView === 'detail'" x-cloak x-transition class="detail-view-container w-full flex overflow-x-hidden">
             <!-- HUD decor top center (technical_tool_detail) -->
-            <div class="hud-decor" x-show="currentView === 'detail'" x-cloak>
+            <div class="hud-decor hidden sm:flex" x-show="currentView === 'detail'" x-cloak>
                 <div class="line"></div>
                 <span class="text-[10px] text-neutral-500 uppercase tracking-[0.4em]">Section Detail</span>
                 <div class="line line-right"></div>
@@ -602,10 +675,10 @@
             <!-- RETURN TO GRID: fixed like HUD so it doesn't zoom with 3D -->
             <div class="detail-return-fixed" x-show="currentView === 'detail'" x-cloak>
                 <button @click="goTo('directory')" class="group flex items-center gap-2 text-xs font-bold tracking-widest text-neutral-500 hover:text-[var(--accent)] transition-colors glitch-hover">
-                    <span class="group-hover:-translate-x-0.5 transition-transform">←</span> <span>RETURN_TO_GRID</span>
+                    <span class="group-hover:-translate-x-0.5 transition-transform">←</span> <span class="hidden sm:inline">RETURN_TO_GRID</span><span class="sm:hidden">BACK</span>
                 </button>
             </div>
-            <div class="flex-1 flex flex-col items-center justify-center p-8 md:p-12 relative detail-zoom-panel" :class="{ 'zoomed': detailIsZoomed }" @mouseenter="detailIsZoomed = true" @mouseleave="detailIsZoomed = false">
+            <div class="detail-main-panel flex flex-col items-center justify-center p-4 sm:p-8 md:p-12 relative detail-zoom-panel min-w-0" :class="{ 'zoomed': detailIsZoomed }" @mouseenter="detailIsZoomed = true" @mouseleave="detailIsZoomed = false">
                 <div class="project-core detail-core relative">
                     <div class="core-layer layer-1"></div>
                     <div class="core-layer layer-2"></div>
@@ -634,9 +707,9 @@
                         <span x-show="detailSection === 'contact'" x-cloak><span class="text-neutral-500">Open to:</span> <span class="text-[var(--accent)]">Pentesting, AppSec</span></span>
                     </div>
                 </div>
-                <div class="absolute bottom-8 left-8 md:left-12">
+                <div class="detail-identity">
                     <h2 class="text-neutral-600 text-xs font-bold mb-2 tracking-[0.3em]" x-text="detailSection ? detailSection.toUpperCase() : ''"></h2>
-                    <h1 class="font-['Syne'] text-4xl md:text-7xl font-black uppercase tracking-tighter leading-none">
+                    <h1 class="font-['Syne'] font-black uppercase tracking-tighter leading-none">
                         <span x-show="detailSection === 'skills'" x-cloak>EXPERTISE_<br><span class="text-[var(--accent)]">SKILLS</span></span>
                         <span x-show="detailSection === 'experience'" x-cloak>PRO_<br><span class="text-[var(--accent)]">EXPERIENCE</span></span>
                         <span x-show="detailSection === 'research'" x-cloak>RESEARCH_<br><span class="text-[var(--accent)]">SAFE_SCAN</span></span>
@@ -645,15 +718,15 @@
                     </h1>
                 </div>
             </div>
-            <aside class="w-full max-w-md flex-shrink-0 hyper-border hyper-border-detail flex flex-col h-full z-20 overflow-hidden">
+            <aside class="detail-aside hyper-border hyper-border-detail flex flex-col z-20 overflow-hidden flex-shrink-0">
                 <!-- HEADER INFO (technical_tool_detail) -->
-                <div class="p-8 border-b border-white/5 bg-white/[0.02]">
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="flex flex-col">
-                            <span class="text-[var(--accent)] text-[10px] font-black tracking-widest uppercase">Section Specs</span>
-                            <span class="text-2xl font-['Syne'] font-bold mt-1" x-text="detailSection === 'skills' ? 'EXPERTISE_SKILLS' : detailSection === 'experience' ? 'PRO_EXPERIENCE' : detailSection === 'research' ? 'RESEARCH_SAFE_SCAN' : detailSection === 'certs' ? 'CERTIFICATIONS' : detailSection === 'contact' ? 'CONTACT' : 'SECTION'"></span>
+                <div class="p-4 sm:p-6 md:p-8 border-b border-white/5 bg-white/[0.02] flex-shrink-0">
+                    <div class="flex justify-between items-start mb-4 md:mb-6 gap-2">
+                        <div class="flex flex-col min-w-0">
+                            <span class="text-[var(--accent)] text-[9px] sm:text-[10px] font-black tracking-widest uppercase">Section Specs</span>
+                            <span class="text-lg sm:text-xl md:text-2xl font-['Syne'] font-bold mt-1 truncate" x-text="detailSection === 'skills' ? 'EXPERTISE_SKILLS' : detailSection === 'experience' ? 'PRO_EXPERIENCE' : detailSection === 'research' ? 'RESEARCH_SAFE_SCAN' : detailSection === 'certs' ? 'CERTIFICATIONS' : detailSection === 'contact' ? 'CONTACT' : 'SECTION'"></span>
                         </div>
-                        <div class="px-2 py-1 bg-[var(--accent)] text-black text-[9px] font-black uppercase">Production Ready</div>
+                        <div class="px-2 py-1 bg-[var(--accent)] text-black text-[8px] sm:text-[9px] font-black uppercase flex-shrink-0">Ready</div>
                     </div>
 
                     <!-- Key-value rows per section -->
@@ -717,12 +790,12 @@
                 </div>
 
                 <!-- INTERACTIVE TERMINAL SNIPPET (technical_tool_detail) -->
-                <div class="flex-1 flex flex-col overflow-hidden min-h-0">
-                    <div class="p-4 bg-black/40 text-[10px] text-neutral-500 font-bold tracking-widest flex justify-between">
+                <div class="flex-1 flex flex-col overflow-hidden min-h-0 flex-shrink">
+                    <div class="p-2 sm:p-4 bg-black/40 text-[9px] sm:text-[10px] text-neutral-500 font-bold tracking-widest flex justify-between flex-shrink-0">
                         <span x-text="(detailSection || 'section') + '_LOG.sh'"></span>
                         <span class="animate-pulse text-[var(--accent)]">● ACTIVE</span>
                     </div>
-                    <div class="flex-1 p-6 overflow-y-auto font-mono text-xs space-y-3" id="detail-terminal">
+                    <div class="flex-1 p-3 sm:p-6 overflow-y-auto font-mono text-[10px] sm:text-xs space-y-2 sm:space-y-3 min-h-0" id="detail-terminal">
                         <div class="text-neutral-500 italic" x-text="'# ' + (detailSection ? detailSection.charAt(0).toUpperCase() + detailSection.slice(1) + ' section loaded.' : 'Section') + '..'"></div>
                         <template x-for="line in detailLogs" :key="line.id">
                             <div>
@@ -740,7 +813,7 @@
                 </div>
 
                 <!-- FOOTER METRICS (technical_tool_detail) -->
-                <div class="p-6 bg-black text-[9px] flex justify-between border-t border-white/5 flex-shrink-0">
+                <div class="p-3 sm:p-6 bg-black text-[8px] sm:text-[9px] flex justify-between border-t border-white/5 flex-shrink-0">
                     <div class="flex gap-4">
                         <span class="text-neutral-600">CPU: <span class="text-neutral-300">12%</span></span>
                         <span class="text-neutral-600">MEM: <span class="text-neutral-300">64MB</span></span>
@@ -823,6 +896,19 @@
                 async startBoot() {
                     this.updateTime();
                     setInterval(() => this.updateTime(), 1000);
+                    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+                    if (isMobile) {
+                        this.log.push({ text: 'LOADING WEB TALENT... OK', type: 'success' });
+                        await this.sleep(300);
+                        this.log.push({ text: 'VAPT & RED TEAM MODULES... VERIFIED', type: 'success' });
+                        await this.sleep(200);
+                        this.log.push({ text: 'FETCHING IDENTITY DATA...', type: 'info' });
+                        await this.sleep(400);
+                        this.booting = false;
+                        this.showBio = true;
+                        this.scrollToBottom();
+                        return;
+                    }
                     const bootLines = [
                         { text: 'PORTFOLIO INITIALIZED WITH PALADION... OK', type: 'success' },
                         { text: 'LOADING WEB TALENT...', type: 'info' },
