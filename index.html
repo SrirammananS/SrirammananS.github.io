@@ -2,7 +2,7 @@
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <meta name="description" content="Srirammanan S — Cybersecurity Specialist, Penetration Tester, VAPT & OWASP Top 10 Expert. Bengaluru.">
     <meta name="google-site-verification" content="DR7zWbA91KppvzEoJdhl8LhciMJjlSWLiLevS8ZwkTQ">
     <title>Srirammanan - Security Engineer</title>
@@ -17,15 +17,19 @@
     <meta property="og:description" content="Cybersecurity Specialist, Penetration Tester, VAPT & OWASP Top 10 Expert. Bengaluru.">
     <meta property="og:url" content="https://srirammanan.me/">
     <meta property="og:image" content="https://srirammanan.me/og-image.png">
+    <meta property="og:image:secure_url" content="https://srirammanan.me/og-image.png">
+    <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Srirammanan - Security Engineer Portfolio">
     <meta property="og:locale" content="en_IN">
 
-    <!-- Twitter Card -->
+    <!-- Twitter Card (absolute URL required for preview to load) -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Srirammanan - Security Engineer">
     <meta name="twitter:description" content="Cybersecurity Specialist, Penetration Tester, VAPT & OWASP Top 10 Expert. Bengaluru.">
     <meta name="twitter:image" content="https://srirammanan.me/og-image.png">
+    <meta name="twitter:image:alt" content="Srirammanan - Security Engineer Portfolio">
 
     <!-- Mobile & PWA -->
     <meta name="theme-color" content="#0a0a0a">
@@ -34,26 +38,289 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="format-detection" content="telephone=no">
 
-    <!-- Site speed: preconnect to critical origins -->
-    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+    <!-- Materialize CSS 1.0 (Material Design components) + custom cyber theme overrides below -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" crossorigin>
+
+    <!-- Site speed: preconnect to critical origins -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Syne:wght@700;800&display=swap" as="style">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" fetchpriority="high">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
+        /* --- Materialize → dark cyber theme --- */
         :root {
-            --accent: #ccff00; /* Cyber Lime */
+            --accent: #ccff00;
             --bg: #0a0a0a;
             --panel: #141414;
             --border: #222;
             --glow: rgba(204, 255, 0, 0.15);
+            --md-sys-surface: var(--bg);
         }
+        html, body { background-color: var(--bg) !important; }
+        body { font-family: 'JetBrains Mono', monospace !important; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Syne', 'JetBrains Mono', sans-serif !important; }
+        .card, .card-panel {
+            background-color: rgba(20, 20, 20, 0.95) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 2px !important;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.45) !important;
+        }
+        .card.hyper-border { display: flex; flex-direction: column; }
+        .card .card-action { background: rgba(0,0,0,0.25) !important; border-top: 1px solid rgba(255,255,255,0.06) !important; }
+        .btn-flat.cyber-btn { color: #e0e0e0 !important; border: 1px solid rgba(255,255,255,0.12); }
+        .btn-flat.cyber-btn:hover { background: rgba(204, 255, 0, 0.12) !important; color: var(--accent) !important; }
+        .btn.waves-accent { background-color: var(--accent) !important; color: #0a0a0a !important; font-weight: 700; letter-spacing: 0.12em; font-size: 10px; }
+        .btn.waves-accent:hover { filter: brightness(1.05); }
+        nav.cyber-nav { background: rgba(10,10,10,0.96) !important; box-shadow: none !important; border-bottom: 1px solid rgba(255,255,255,0.06); height: auto; line-height: normal; }
+        nav.cyber-nav .nav-wrapper { height: auto; min-height: 56px; padding: 0.5rem 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+        .page-footer.cyber-footer { background: transparent !important; border-top: 1px solid rgba(255,255,255,0.06); color: #888; padding-top: 2rem; }
+        input.browser-default.terminal-input { border-bottom: none !important; box-shadow: none !important; margin: 0 !important; height: auto !important; }
 
+        /* --- Layout helpers (replace former Tailwind utilities) --- */
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .fixed { position: fixed; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        .z-0 { z-index: 0; }
+        .z-10 { z-index: 10; }
+        .z-20 { z-index: 20; }
+        .z-30 { z-index: 30; }
+        .z-50 { z-index: 50; }
+        .z-page { position: relative; z-index: 10; }
+        .min-h-screen { min-height: 100vh; }
+        .min-h-0 { min-height: 0; }
+        .w-full { width: 100%; }
+        .max-w-full { max-width: 100%; }
+        .min-w-0 { min-width: 0; }
+        .flex { display: flex; }
+        .inline-flex { display: inline-flex; }
+        .inline-block { display: inline-block; }
+        .flex-col { flex-direction: column; }
+        .flex-wrap { flex-wrap: wrap; }
+        .flex-1 { flex: 1 1 0%; }
+        .flex-shrink-0 { flex-shrink: 0; }
+        .items-center { align-items: center; }
+        .items-start { align-items: flex-start; }
+        .items-end { align-items: flex-end; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        .self-end { align-self: flex-end; }
+        .gap-1 { gap: 0.25rem; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-8 { gap: 2rem; }
+        .overflow-hidden { overflow: hidden; }
+        .overflow-x-hidden { overflow-x: hidden; }
+        .overflow-y-auto { overflow-y: auto; }
+        .pointer-events-none { pointer-events: none; }
+        .text-left { text-align: left; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .uppercase { text-transform: uppercase; }
+        .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .font-bold { font-weight: 700; }
+        .font-black { font-weight: 900; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .text-xs { font-size: 0.75rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-2xl { font-size: 1.5rem; }
+        .leading-none { line-height: 1; }
+        .leading-relaxed { line-height: 1.625; }
+        .tracking-tight { letter-spacing: -0.025em; }
+        .tracking-tighter { letter-spacing: -0.05em; }
+        .tracking-widest { letter-spacing: 0.2em; }
+        .mb-1 { margin-bottom: 0.25rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-3 { margin-top: 0.75rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mt-8 { margin-top: 2rem; }
+        .mt-20 { margin-top: 5rem; }
+        .mt-auto { margin-top: auto; }
+        .mr-2 { margin-right: 0.5rem; }
+        .ml-2 { margin-left: 0.5rem; }
+        .p-2 { padding: 0.5rem; }
+        .p-3 { padding: 0.75rem; }
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .pt-4 { padding-top: 1rem; }
+        .pt-6 { padding-top: 1.5rem; }
+        .pt-12 { padding-top: 3rem; }
+        .pb-4 { padding-bottom: 1rem; }
+        .border-t { border-top: 1px solid rgba(255,255,255,0.06); }
+        .border-b { border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .border { border: 1px solid rgba(255,255,255,0.1); }
+        .rounded-sm { border-radius: 2px; }
+        .rounded-full { border-radius: 9999px; }
+        .w-2 { width: 0.5rem; }
+        .h-2 { height: 0.5rem; }
+        .w-5 { width: 1.25rem; }
+        .h-5 { height: 1.25rem; }
+        .w-9 { width: 2.25rem; }
+        .h-9 { height: 2.25rem; }
+        .w-10 { width: 2.5rem; }
+        .h-10 { height: 2.5rem; }
+        .w-12 { width: 3rem; }
+        .h-12 { height: 3rem; }
+        .max-w-xs { max-width: 20rem; }
+        .opacity-0 { opacity: 0; }
+        .opacity-100 { opacity: 1; }
+        .scale-95 { transform: scale(0.95); }
+        .scale-100 { transform: scale(1); }
+        .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 300ms; }
+        .duration-700 { transition-duration: 700ms; }
+        .ease-out { transition-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+        .text-white { color: #fff; }
+        .text-red { color: #ef5350; }
+        .text-dim { color: #9e9e9e; }
+        .text-muted { color: #757575; }
+        .text-faint { color: #616161; }
+        .text-accent { color: var(--accent) !important; }
+        .text-outline { color: #262626; -webkit-text-stroke: 1px #333; }
+        .bg-accent-dot { background-color: var(--accent); }
+        .bg-dot-off { background-color: #262626; }
+        .pulse-dot { animation: mat-pulse 1.5s ease-in-out infinite; }
+        @keyframes mat-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+        .cursor-dot { width: 0.5rem; height: 1rem; background: var(--accent); display: inline-block; vertical-align: middle; animation: mat-pulse 1.2s ease-in-out infinite; }
+        .hidden-sm { display: none; }
+        @media (min-width: 601px) { .hidden-sm { display: block; } }
+        .show-sm { display: block; }
+        @media (min-width: 601px) { .show-sm { display: none; } }
+        .hidden-md-up { display: none; }
+        @media (min-width: 993px) { .hidden-md-up { display: block; } }
+        .terminal-booting { opacity: 0; transform: scale(0.95); }
+        .terminal-ready { opacity: 1; transform: scale(1); transition: opacity 0.7s ease-out, transform 0.7s ease-out; }
+        .top-4 { top: 1rem; }
+        .left-3 { left: 0.75rem; }
+        .right-3 { right: 0.75rem; }
+        @media (min-width: 601px) {
+            .sm-top-8 { top: 2rem; }
+            .sm-left-8 { left: 2rem; }
+            .sm-right-8 { right: 2rem; }
+            .sm-p-8 { padding: 2rem; }
+            .sm-max-w-5xl { max-width: 64rem; }
+            .sm-p-4 { padding: 1rem; }
+            .sm-gap-3 { gap: 0.75rem; }
+            .sm-text-4xl { font-size: 2.25rem; }
+            .sm-flex-row .row-split { flex-direction: row; }
+        }
+        @media (min-width: 993px) {
+            .md-text-6xl { font-size: 3.75rem; }
+            .md-mb-6 { margin-bottom: 1.5rem; }
+            .md-p-12 { padding: 3rem; }
+            .md-pl-6 { padding-left: 1.5rem; }
+            .md-pt-0 { padding-top: 0; }
+            .md-border-l { border-left: 1px solid rgba(255,255,255,0.06); border-top: none; }
+            .md-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        }
+        .intro-pad { padding: 0.75rem; }
+        @media (min-width: 601px) { .intro-pad { padding: 1rem 2rem; } }
+        .space-y-1 > * + * { margin-top: 0.25rem; }
+        .space-y-2 > * + * { margin-top: 0.5rem; }
+        .space-y-3 > * + * { margin-top: 0.75rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .whitespace-nowrap { white-space: nowrap; }
+        .group:hover .group-hover-accent { color: var(--accent); }
+        .filter-active { color: var(--accent) !important; }
+        .filter-idle { color: #616161 !important; }
+        .detail-flex { display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
+        @media (min-width: 993px) { .detail-flex { flex-direction: row; height: 100vh; } }
+        .detail-main { min-height: 50vh; flex: 1 1 auto; }
+        @media (min-width: 993px) { .detail-main { min-height: auto; flex: 1; } }
+        .flex-shrink { flex-shrink: 1; min-height: 0; }
+        .bg-bar { background: rgba(0,0,0,0.35); }
+        .bg-head { background: rgba(255,255,255,0.02); }
+        .border-subtle { border-color: rgba(255,255,255,0.06); }
+        .max-w-140 { max-width: 140px; }
+        .max-w-160 { max-width: 160px; }
+        .pos-tag-tl { top: -3rem; left: -3rem; }
+        .pos-tag-br { bottom: -2rem; right: -4rem; }
+        @media (max-width: 600px) { .pos-tag-tl, .pos-tag-br { position: relative; top: auto; left: auto; right: auto; bottom: auto; margin: 0.5rem 0; max-width: 100%; } }
+
+        .intro-grid-size { position: absolute; width: 200%; height: 200%; top: -50%; left: -50%; }
+        .text-10 { font-size: 10px; }
+        .text-9 { font-size: 9px; }
+        .text-8 { font-size: 8px; }
+        .tracking-wide-plus { letter-spacing: 0.12em; }
+        .tracking-ultra { letter-spacing: 0.4em; }
+        .tracking-connect { letter-spacing: 0.5em; }
+        .hud-pos { position: absolute; z-index: 10; top: 1rem; left: 0.75rem; right: 0.75rem; }
+        @media (min-width: 601px) { .hud-pos { top: 2rem; left: 2rem; right: 2rem; } }
+        .traffic-dots { display: flex; gap: 6px; }
+        .traffic-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .traffic-red { background: rgba(239, 83, 80, 0.2); border: 1px solid rgba(239, 83, 80, 0.4); }
+        .traffic-yellow { background: rgba(255, 193, 7, 0.2); border: 1px solid rgba(255, 193, 7, 0.4); }
+        .traffic-green { background: rgba(102, 187, 106, 0.2); border: 1px solid rgba(102, 187, 106, 0.4); }
+        .terminal-titlebar { background: rgba(23, 23, 23, 0.65); border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .backdrop-blur-md { backdrop-filter: blur(12px); }
+        .bg-dark-50 { background: rgba(0,0,0,0.5); }
+        .underline-active { text-decoration: underline; text-underline-offset: 4px; }
+        .hide-on-small { display: none; }
+        @media (min-width: 601px) { .hide-on-small { display: inline; } }
+        .show-on-small-only { display: inline; }
+        @media (min-width: 601px) { .show-on-small-only { display: none; } }
+        .hud-row { display: none; align-items: center; gap: 2rem; }
+        @media (min-width: 601px) { .hud-row { display: flex; } }
+        .cursor-tall { width: 0.5rem; height: 1rem; }
+        .btn-arrow:hover .arrow-nudge { transform: translateX(4px); }
+        .transition-transform { transition: transform 0.2s ease; }
+        .group-hover-nudge:hover .arrow-nudge { transform: translateX(-2px); }
+        .max-w-7xl { max-width: 80rem; margin-left: auto; margin-right: auto; }
+        .leading-tight-9 { line-height: 0.9; }
+        .text-hex { color: #444; }
+        .legend-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.25rem 0.5rem; }
+        .mt-sm { margin-top: 0.75rem; }
+        @media (min-width: 601px) { .mt-sm { margin-top: 1rem; } }
+        .md-block-only { display: none; }
+        @media (min-width: 993px) { .md-block-only { display: block; } }
+        @media (min-width: 601px) {
+            .sm-text-10 { font-size: 10px; }
+            .sm-w-10 { width: 2.5rem; }
+            .sm-h-10 { height: 2.5rem; }
+            .sm-gap-4 { gap: 1rem; }
+            .sm-p-8 { padding: 2rem; }
+            .sm-p-6 { padding: 1.5rem; }
+            .sm-p-4 { padding: 1rem; }
+            .sm-text-xl { font-size: 1.25rem; }
+            .sm-text-xs { font-size: 0.75rem; }
+            .sm-text-9 { font-size: 9px; }
+            .sm-space-y-3 > * + * { margin-top: 0.75rem; }
+        }
+        @media (min-width: 993px) {
+            .md-mb-12 { margin-bottom: 3rem; }
+            .md-flex-row { flex-direction: row; }
+            .md-gap-8 { gap: 2rem; }
+            .md-p-8 { padding: 2rem; }
+            .md-p-12 { padding: 3rem; }
+            .md-text-2xl { font-size: 1.5rem; }
+            .detail-core-text { font-size: 0.75rem; }
+        }
+        .text-bright { color: #e0e0e0; }
+        .tracking-section { letter-spacing: 0.3em; }
+        .ready-chip { background: var(--accent) !important; color: #0a0a0a !important; border-radius: 2px; }
+        nav.cyber-nav .nav-wrapper.dir-nav { display: flex !important; justify-content: space-between !important; align-items: center !important; }
+        .card.project-card { display: flex; flex-direction: column; }
+
+        /* Critical: mobile base so layout applies before full CSS (fixes "sometimes" mobile styling) */
+        html { box-sizing: border-box; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+        *, *::before, *::after { box-sizing: inherit; }
+        @media (max-width: 767px) {
+            html, body { max-width: 100vw; overflow-x: hidden; }
+        }
         html { overflow-y: scroll; scroll-behavior: smooth; }
         body {
             background-color: var(--bg);
@@ -84,13 +351,15 @@
             pointer-events: none;
         }
 
-        /* --- 3D VEX WIREFRAME (Intro) --- */
+        /* --- 3D VEX WIREFRAME (Intro) — CSS 3D; GPU layer for reliable paint across navigations --- */
         .vex-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             perspective: 1000px;
             z-index: 0;
             opacity: 0.3;
+            transform-style: preserve-3d;
+            isolation: isolate;
         }
 
         .grid-3d {
@@ -103,13 +372,30 @@
                 linear-gradient(to right, #333 1px, transparent 1px),
                 linear-gradient(to bottom, #333 1px, transparent 1px);
             background-size: 60px 60px;
-            transform: rotateX(60deg) translateZ(-100px);
+            transform: translate3d(0, 0, 0) rotateX(60deg) translateZ(-100px);
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            will-change: transform;
             animation: grid-move 20s linear infinite;
         }
 
         @keyframes grid-move {
-            0% { transform: rotateX(60deg) translateY(0); }
-            100% { transform: rotateX(60deg) translateY(60px); }
+            0% { transform: translate3d(0, 0, 0) rotateX(60deg) translateZ(-100px) translateY(0); }
+            100% { transform: translate3d(0, 0, 0) rotateX(60deg) translateZ(-100px) translateY(60px); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .grid-3d,
+            .intro-grid-3d {
+                animation: none !important;
+            }
+            .grid-plane {
+                transition: none !important;
+            }
+            .project-core {
+                animation: none !important;
+            }
         }
 
         /* --- TERMINAL / HYPER-BORDER --- */
@@ -163,6 +449,7 @@
             z-index: 0;
             perspective: 1200px;
             overflow: hidden;
+            transform-style: preserve-3d;
         }
         .grid-plane {
             position: absolute;
@@ -173,6 +460,10 @@
             background-image: linear-gradient(to right, #1a1a1a 1px, transparent 1px), linear-gradient(to bottom, #1a1a1a 1px, transparent 1px);
             background-size: 80px 80px;
             transition: transform 0.1s ease-out;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            will-change: transform;
         }
         .project-card {
             background: rgba(20, 20, 20, 0.8);
@@ -414,10 +705,10 @@
         body.intro-no-scroll { overflow: hidden; height: 100vh; }
 
         /* ========== MOBILE RESPONSIVE ========== */
-        /* Intro terminal: fixed height on web (70vh), taller on mobile */
-        .intro-terminal-window { height: 70vh; min-height: 70vh; max-height: 85vh; }
+        /* Intro terminal: fixed height on web (70vh), taller on mobile (body prefix = always applies) */
+        body .intro-terminal-window { height: 70vh; min-height: 70vh; max-height: 85vh; }
         @media (max-width: 767px) {
-            .intro-terminal-window { height: 80vh; min-height: 80vh; max-height: 98vh; }
+            body .intro-terminal-window { height: 80vh; min-height: 80vh; max-height: 98vh; }
         }
         /* Intro: keep words intact, no mid-word breaks; last line left-aligned so it doesn't stretch */
         .intro-para, #intro-subtitle, .intro-legend { word-break: normal; overflow-wrap: break-word; hyphens: none; }
@@ -487,342 +778,361 @@
         @media (min-width: 768px) {
             .dir-main { padding-top: 8rem; padding-left: 1.5rem; padding-right: 1.5rem; }
         }
+        /* CSS Grid replaces Materialize float row/cols — avoids card 5 snagging under a tall col 1 */
+        .dir-entries-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        @media (min-width: 601px) {
+            .dir-entries-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (min-width: 993px) {
+            .dir-entries-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+        .dir-entry-cell {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .dir-entry-cell > .card.project-card { flex: 1 1 auto; width: 100%; }
     </style>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js" crossorigin></script>
 </head>
 <body x-data="portfolioApp()" :class="{ 'intro-no-scroll': currentView === 'intro' }">
+    <noscript>
+        <div style="position:fixed;inset:0;z-index:9999;background:#0a0a0a;color:#ccff00;padding:1.5rem;font-family:monospace;font-size:12px;">
+            JavaScript is required for this portfolio (Alpine.js). Enable JS or contact via <a href="mailto:srirammanansri@gmail.com" style="color:#fff">email</a>.
+        </div>
+    </noscript>
     <div class="grain"></div>
     <div class="crt-scanlines"></div>
 
-    <main class="relative z-10 min-h-screen">
+    <main class="z-page min-h-screen">
         <!-- Intro view: single screen, no extra scroll -->
         <div x-show="currentView === 'intro'" x-cloak x-transition id="intro-view" class="min-h-screen">
-            <div class="min-h-screen w-full flex flex-col items-center justify-center p-3 sm:p-4 md:p-8 max-w-full overflow-hidden intro-section-padding" x-init="if (!bootStarted) { bootStarted = true; startBoot(); }" id="intro-section">
-                <!-- Background: 3D grid (scroll-driven zoom like technical_tool_detail) -->
+            <div class="min-h-screen w-full flex flex-col items-center justify-center intro-pad max-w-full overflow-hidden intro-section-padding" x-init="if (!bootStarted) { bootStarted = true; startBoot(); }" id="intro-section">
+                <!-- Background: 3D grid -->
                 <div class="fixed inset-0 z-0 pointer-events-none vex-container" style="perspective: 1200px;" id="intro-vex">
-                    <div class="absolute w-[200%] h-[200%] -top-1/2 -left-1/2 intro-grid-3d grid-3d" id="intro-grid-3d" style="background-image: linear-gradient(to right, #333 1px, transparent 1px), linear-gradient(to bottom, #333 1px, transparent 1px); background-size: 60px 60px; transform: rotateX(60deg) translateZ(-100px); animation: grid-move 20s linear infinite;"></div>
+                    <div class="intro-grid-size intro-grid-3d grid-3d" id="intro-grid-3d" style="background-image: linear-gradient(to right, #333 1px, transparent 1px), linear-gradient(to bottom, #333 1px, transparent 1px); background-size: 60px 60px;"></div>
                     <div class="absolute inset-0" style="background: radial-gradient(circle at center, transparent 0%, var(--bg) 80%);"></div>
                 </div>
 
                 <!-- HUD -->
-                <div class="absolute top-4 left-3 right-3 sm:top-8 sm:left-8 sm:right-8 flex justify-between items-start pointer-events-none z-10 hud-intro">
+                <div class="hud-pos flex justify-between items-start pointer-events-none hud-intro">
                     <div class="flex flex-col">
-                        <span class="text-[var(--accent)] font-bold tracking-widest text-xs">SYSTEM_STATUS: ACTIVE</span>
-                        <span class="text-neutral-500 text-[10px]" x-text="'LOC_TIME: ' + time"></span>
+                        <span class="text-accent font-bold tracking-widest text-xs">SYSTEM_STATUS: ACTIVE</span>
+                        <span class="text-dim text-10" x-text="'LOC_TIME: ' + time"></span>
                     </div>
                     <div class="text-right flex flex-col items-end">
-                        <span class="text-neutral-500 text-[10px]">AUTH_LEVEL: ROOT</span>
+                        <span class="text-dim text-10">AUTH_LEVEL: ROOT</span>
                         <div class="flex gap-2 mt-1">
-                            <div class="w-2 h-2 bg-[var(--accent)] animate-pulse rounded-full"></div>
-                            <div class="w-2 h-2 bg-neutral-800 rounded-full"></div>
-                            <div class="w-2 h-2 bg-neutral-800 rounded-full"></div>
+                            <div class="w-2 h-2 bg-accent-dot pulse-dot rounded-full"></div>
+                            <div class="w-2 h-2 bg-dot-off rounded-full"></div>
+                            <div class="w-2 h-2 bg-dot-off rounded-full"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Terminal window: tall enough to fit all boot lines + whoami -->
-                <div class="intro-terminal-window hyper-border w-full max-w-full sm:max-w-5xl flex flex-col rounded-sm transition-all duration-700 ease-out z-10 min-w-0"
-                    :class="[booting ? 'scale-95 opacity-0' : 'scale-100 opacity-100', showBio && 'intro-bio-reveal']">
-                    <div class="flex items-center justify-between px-4 py-2 bg-neutral-900/50 border-b border-white/5 flex-shrink-0">
-                        <div class="flex gap-1.5">
-                            <div class="w-2.5 h-2.5 rounded-full bg-red-500/20 border border-red-500/40"></div>
-                            <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/20 border border-yellow-500/40"></div>
-                            <div class="w-2.5 h-2.5 rounded-full bg-green-500/20 border border-green-500/40"></div>
+                <!-- Terminal: Materialize card + cyber hyper-border -->
+                <div class="intro-terminal-window card hyper-border z-depth-2 w-full max-w-full sm-max-w-5xl flex flex-col rounded-sm z-10 min-w-0"
+                    :class="[booting ? 'terminal-booting' : 'terminal-ready', showBio && 'intro-bio-reveal']">
+                    <div class="flex items-center justify-between px-4 py-2 terminal-titlebar flex-shrink-0">
+                        <div class="traffic-dots">
+                            <div class="traffic-dot traffic-red"></div>
+                            <div class="traffic-dot traffic-yellow"></div>
+                            <div class="traffic-dot traffic-green"></div>
                         </div>
-                        <div class="text-[10px] text-neutral-500 font-bold uppercase tracking-widest">tty — bio — 80x24</div>
+                        <div class="text-10 text-dim font-bold uppercase tracking-widest">tty — bio — 80x24</div>
                         <div class="w-12"></div>
                     </div>
-                    <div class="flex-1 p-6 overflow-y-auto overflow-x-hidden font-mono text-sm leading-relaxed min-h-0" id="terminal-screen">
+                    <div class="flex-1 p-6 overflow-y-auto overflow-x-hidden font-mono text-sm leading-relaxed min-h-0 card-content" style="padding: 1.5rem;" id="terminal-screen">
                         <template x-for="(line, index) in log" :key="index">
                             <div class="mb-1 intro-log-line">
-                                <span class="text-neutral-500 mr-2">[$]</span>
-                                <span :class="line.type === 'error' ? 'text-red-500' : (line.type === 'success' ? 'text-[var(--accent)]' : 'text-white')" x-text="line.text"></span>
+                                <span class="text-dim mr-2">[$]</span>
+                                <span :class="line.type === 'error' ? 'text-red' : (line.type === 'success' ? 'text-accent' : 'text-white')" x-text="line.text"></span>
                             </div>
                         </template>
                         <div x-show="showBio" x-cloak class="mt-8" id="intro-whoami-block" x-effect="showBio && $nextTick(() => window.runIntroScrollEffects && window.runIntroScrollEffects())">
-                            <div class="text-[var(--accent)] mb-2 font-bold" data-ani="prompt"># whoami</div>
-                            <h1 id="intro-name" class="font-['Syne'] text-3xl sm:text-4xl md:text-6xl font-black mb-4 md:mb-6 uppercase tracking-tighter leading-none whitespace-nowrap">SRIRAMMANAN</h1>
-                            <p id="intro-subtitle" class="text-neutral-400 mb-4">Penetration Tester | VAPT | OWASP Top 10 Expert</p>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 text-neutral-400">
+                            <div class="text-accent mb-2 font-bold" data-ani="prompt"># whoami</div>
+                            <h1 id="intro-name" class="font-black mb-4 md-mb-6 uppercase tracking-tighter leading-none whitespace-nowrap" style="font-family: 'Syne', sans-serif;">SRIRAMMANAN</h1>
+                            <p id="intro-subtitle" class="text-muted mb-4">Penetration Tester | VAPT | OWASP Top 10 Expert</p>
+                            <div class="md-grid-2 text-muted">
                                 <div class="min-w-0">
-                                    <p id="intro-para" class="intro-para mb-6 text-justify leading-relaxed">Passionate penetration tester with 3+ years of experience securing digital assets. I specialize in identifying critical vulnerabilities through comprehensive VAPT assessments, helping businesses stay ahead of cyber threats.</p>
+                                    <p id="intro-para" class="intro-para mb-6 text-left leading-relaxed" style="text-align: justify; text-align-last: left;">Passionate penetration tester with 3+ years of experience securing digital assets. I specialize in identifying critical vulnerabilities through comprehensive VAPT assessments, helping businesses stay ahead of cyber threats.</p>
                                 </div>
-                                <div class="intro-meta border-t md:border-t-0 md:border-l border-white/10 pt-4 md:pt-0 md:pl-6 space-y-2 text-xs uppercase tracking-widest">
-                                    <div class="flex justify-between gap-2" data-meta><span class="text-neutral-600 flex-shrink-0">Specialization</span> <span class="text-right">Red Teaming / VAPT</span></div>
-                                    <div class="flex justify-between gap-2" data-meta><span class="text-neutral-600 flex-shrink-0">Focus</span> <span class="text-right">Web, API, Mobile</span></div>
-                                    <div class="flex justify-between gap-2" data-meta><span class="text-neutral-600 flex-shrink-0">Status</span> <span class="text-[var(--accent)]">Available</span></div>
+                                <div class="intro-meta border-t md-pt-0 md-pl-6 md-border-l pt-4 space-y-2 text-xs uppercase tracking-widest">
+                                    <div class="flex justify-between gap-2" data-meta><span class="text-faint flex-shrink-0">Specialization</span> <span class="text-right">Red Teaming / VAPT</span></div>
+                                    <div class="flex justify-between gap-2" data-meta><span class="text-faint flex-shrink-0">Focus</span> <span class="text-right">Web, API, Mobile</span></div>
+                                    <div class="flex justify-between gap-2" data-meta><span class="text-faint flex-shrink-0">Status</span> <span class="text-accent">Available</span></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div id="intro-buttons" class="p-3 sm:p-4 border-t border-white/5 flex flex-wrap gap-2 sm:gap-3 items-center intro-buttons-wrap">
-                        <button @click="showBio = true" class="btn-command btn-num px-4 py-2 border border-white/10 text-[10px] font-bold uppercase tracking-widest intro-btn" data-btn><span class="text-[var(--accent)]">[01]</span> WHOAMI</button>
-                        <button @click="goTo('directory')" class="btn-command btn-num px-4 py-2 border border-white/10 text-[10px] font-bold uppercase tracking-widest intro-btn" data-btn><span class="text-[var(--accent)]">[02]</span> PROJECT EXPERIENCE</button>
-                        <a href="https://github.com/SrirammananS" target="_blank" rel="noopener" class="btn-command btn-num px-4 py-2 border border-white/10 text-[10px] font-bold uppercase tracking-widest inline-block intro-btn" data-btn><span class="text-[var(--accent)]">[03]</span> GITHUB</a>
-                        <button @click="goTo('detail', 'contact')" class="btn-command btn-num px-4 py-2 border border-white/10 text-[10px] font-bold uppercase tracking-widest intro-btn" data-btn><span class="text-[var(--accent)]">[04]</span> CONTACT</button>
+                    <div id="intro-buttons" class="card-action p-3 sm-p-4 flex flex-wrap gap-2 sm-gap-3 items-center intro-buttons-wrap" style="padding: 1rem;">
+                        <button type="button" @click="showBio = true" class="btn-command btn-num px-4 py-2 border text-10 font-bold uppercase tracking-wide-plus waves-effect waves-green intro-btn" data-btn><span class="text-accent">[01]</span> WHOAMI</button>
+                        <button type="button" @click="goTo('directory')" class="btn-command btn-num px-4 py-2 border text-10 font-bold uppercase tracking-wide-plus waves-effect waves-green intro-btn" data-btn><span class="text-accent">[02]</span> PROJECT EXPERIENCE</button>
+                        <a href="https://github.com/SrirammananS" target="_blank" rel="noopener" class="btn-command btn-num px-4 py-2 border text-10 font-bold uppercase tracking-wide-plus waves-effect waves-green inline-block intro-btn" data-btn><span class="text-accent">[03]</span> GITHUB</a>
+                        <button type="button" @click="goTo('detail', 'contact')" class="btn-command btn-num px-4 py-2 border text-10 font-bold uppercase tracking-wide-plus waves-effect waves-green intro-btn" data-btn><span class="text-accent">[04]</span> CONTACT</button>
                     </div>
                 </div>
-                <p class="mt-3 sm:mt-4 text-[9px] sm:text-[10px] text-neutral-500 tracking-wider z-10 text-center max-w-full px-2 intro-legend flex flex-wrap justify-center gap-x-2 gap-y-1">
-                    <span><span class="text-neutral-600">1</span>=Whoami</span>
-                    <span><span class="text-[var(--accent)]">2</span>=Project Exp</span>
-                    <span><span class="text-[var(--accent)]">3</span>=GitHub</span>
-                    <span><span class="text-[var(--accent)]">4</span>=Contact</span>
+                <p class="mt-sm text-9 text-dim tracking-wide-plus z-10 text-center max-w-full px-2 intro-legend legend-row">
+                    <span><span class="text-faint">1</span>=Whoami</span>
+                    <span><span class="text-accent">2</span>=Project Exp</span>
+                    <span><span class="text-accent">3</span>=GitHub</span>
+                    <span><span class="text-accent">4</span>=Contact</span>
                 </p>
-                <!-- Floating rotated decor (system_boot style) -->
-                <div class="floating-decor" aria-hidden="true">SEC_ENG_PORTFOLIO_2025</div>
+                <div class="floating-decor" aria-hidden="true">SEC_ENG_PORTFOLIO_2026</div>
             </div>
         </div>
-        <!-- Directory view -->
+        <!-- Directory view (Materialize grid + cards) -->
         <div x-show="currentView === 'directory'" x-cloak x-transition @mousemove="handleMouseMove($event)" class="min-h-screen">
             <div class="world">
                 <div class="grid-plane" :style="`transform: rotateX(65deg) translateZ(-100px) rotateZ(${rotateZ}deg) translateY(${offsetY}px)`"></div>
                 <div class="absolute inset-0" style="background: radial-gradient(circle at center, transparent 0%, var(--bg) 90%);"></div>
             </div>
-            <nav class="fixed top-0 left-0 w-full z-50 dir-nav flex justify-between items-center bg-[var(--bg)]/95 backdrop-blur-sm border-b border-white/5">
-                <div class="flex items-center gap-2 sm:gap-4">
-                    <button @click="goTo('intro')" class="w-9 h-9 sm:w-10 sm:h-10 border border-[var(--accent)] flex items-center justify-center font-bold text-[var(--accent)] hover:bg-[var(--accent)] hover:text-black transition-colors flex-shrink-0">SS</button>
-                    <div class="hidden md:block">
-                        <div class="text-[10px] font-bold tracking-widest text-neutral-400">PORTFOLIO_ARCHIVE_v2.0</div>
-                        <div class="text-[8px] text-neutral-600">QUERY_LATENCY: 14ms</div>
+            <nav class="cyber-nav fixed top-0 left-0 w-full z-50 dir-nav" style="backdrop-filter: blur(8px);">
+                <div class="container">
+                    <div class="nav-wrapper dir-nav flex justify-between items-center">
+                        <div class="flex items-center gap-2 sm-gap-4">
+                            <button type="button" @click="goTo('intro')" class="w-9 h-9 sm-w-10 sm-h-10 border text-accent flex items-center justify-center font-bold waves-effect waves-green flex-shrink-0" style="border-color: var(--accent);">SS</button>
+                            <div class="md-block-only">
+                                <div class="text-10 font-bold tracking-widest text-dim">PORTFOLIO_ARCHIVE_v2.0</div>
+                                <div class="text-8 text-muted">QUERY_LATENCY: 14ms</div>
+                            </div>
+                        </div>
+                        <div class="flex dir-nav-links gap-2 sm-gap-4 md-gap-8 text-9 sm-text-10 font-bold tracking-widest uppercase">
+                            <button type="button" @click="goTo('intro')" class="btn-flat cyber-btn waves-effect">Intro</button>
+                            <span class="text-accent underline-active whitespace-nowrap">Project Exp</span>
+                            <a href="https://github.com/SrirammananS" target="_blank" rel="noopener" class="btn-flat cyber-btn waves-effect">GitHub</a>
+                            <button type="button" @click="goTo('detail', 'contact')" class="btn-flat cyber-btn waves-effect">Contact</button>
+                        </div>
                     </div>
-                </div>
-                <div class="flex dir-nav-links gap-2 sm:gap-4 md:gap-8 text-[9px] sm:text-[10px] font-bold tracking-widest uppercase">
-                    <button @click="goTo('intro')" class="hover:text-[var(--accent)] transition-colors whitespace-nowrap">Intro</button>
-                    <span class="text-[var(--accent)] underline underline-offset-4 whitespace-nowrap">Project Exp</span>
-                    <a href="https://github.com/SrirammananS" target="_blank" rel="noopener" class="hover:text-[var(--accent)] transition-colors whitespace-nowrap">GitHub</a>
-                    <button @click="goTo('detail', 'contact')" class="hover:text-[var(--accent)] transition-colors whitespace-nowrap">Contact</button>
                 </div>
             </nav>
-            <main class="relative z-10 dir-main max-w-7xl mx-auto flex flex-col w-full min-w-0">
-                <header class="mb-8 md:mb-12">
+            <div class="relative z-10 dir-main max-w-7xl w-full min-w-0">
+                <div class="container">
+                <header class="mb-8 md-mb-12">
                     <div class="flex flex-wrap items-center gap-2 mb-3">
-                        <span class="text-neutral-600 text-xs">sriram@sec:~$</span>
-                        <span class="text-[var(--accent)] text-xs sm:text-sm">ls -la ./portfolio</span>
-                        <span class="w-2 h-4 bg-[var(--accent)] animate-pulse inline-block"></span>
+                        <span class="text-muted text-xs">sriram@sec:~$</span>
+                        <span class="text-accent text-xs">ls -la ./portfolio</span>
+                        <span class="cursor-tall bg-accent-dot pulse-dot inline-block"></span>
                     </div>
-                    <h1 class="font-['Syne'] dir-header-title font-black uppercase tracking-tighter leading-[0.9] mb-4">
-                        PROJECT<br><span class="text-neutral-800 outline-text" style="-webkit-text-stroke: 1px #333;">EXPERIENCE</span>
+                    <h1 class="dir-header-title font-black uppercase tracking-tighter leading-tight-9 mb-4" style="font-family: 'Syne', sans-serif;">
+                        PROJECT<br><span class="text-outline">EXPERIENCE</span>
                     </h1>
-                    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/5 pb-4">
-                        <div class="text-[9px] sm:text-[10px] text-neutral-500 uppercase tracking-widest">
+                    <div class="flex flex-wrap items-center justify-between gap-3 border-b pb-4">
+                        <div class="text-9 sm-text-10 text-dim uppercase tracking-widest">
                             <span x-text="filteredEntries.length"></span> in /portfolio
                         </div>
                         <div class="flex dir-filters gap-2">
-                            <button @click="filter = 'all'" :class="filter === 'all' ? 'text-[var(--accent)]' : 'text-neutral-600'" class="font-bold uppercase tracking-widest">All</button>
-                            <button @click="filter = 'experience'" :class="filter === 'experience' ? 'text-[var(--accent)]' : 'text-neutral-600'" class="font-bold uppercase tracking-widest">Exp</button>
-                            <button @click="filter = 'skills'" :class="filter === 'skills' ? 'text-[var(--accent)]' : 'text-neutral-600'" class="font-bold uppercase tracking-widest">Skills</button>
-                            <button @click="filter = 'research'" :class="filter === 'research' ? 'text-[var(--accent)]' : 'text-neutral-600'" class="font-bold uppercase tracking-widest">Research</button>
-                            <button @click="filter = 'certs'" :class="filter === 'certs' ? 'text-[var(--accent)]' : 'text-neutral-600'" class="font-bold uppercase tracking-widest">Certs</button>
+                            <button type="button" @click="filter = 'all'" :class="filter === 'all' ? 'filter-active' : 'filter-idle'" class="btn-flat cyber-btn waves-effect font-bold uppercase tracking-widest">All</button>
+                            <button type="button" @click="filter = 'experience'" :class="filter === 'experience' ? 'filter-active' : 'filter-idle'" class="btn-flat cyber-btn waves-effect font-bold uppercase tracking-widest">Exp</button>
+                            <button type="button" @click="filter = 'skills'" :class="filter === 'skills' ? 'filter-active' : 'filter-idle'" class="btn-flat cyber-btn waves-effect font-bold uppercase tracking-widest">Skills</button>
+                            <button type="button" @click="filter = 'research'" :class="filter === 'research' ? 'filter-active' : 'filter-idle'" class="btn-flat cyber-btn waves-effect font-bold uppercase tracking-widest">Research</button>
+                            <button type="button" @click="filter = 'certs'" :class="filter === 'certs' ? 'filter-active' : 'filter-idle'" class="btn-flat cyber-btn waves-effect font-bold uppercase tracking-widest">Certs</button>
                         </div>
                     </div>
                 </header>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
+                <div class="dir-entries-grid">
                     <template x-for="(entry, index) in filteredEntries" :key="entry.id">
-                        <div class="project-card flex flex-col p-6 group">
-                            <div class="scanner-line"></div>
-                            <div class="flex justify-between items-start mb-6">
-                                <div class="flex flex-col">
-                                    <span class="text-[var(--accent)] text-[10px] font-bold" x-text="'0' + (index + 1)"></span>
-                                    <span class="text-[#444] text-[8px] uppercase tracking-tighter" x-text="entry.year"></span>
+                        <div class="dir-entry-cell">
+                            <div class="card project-card hoverable z-depth-2 flex flex-col group">
+                                <div class="scanner-line"></div>
+                                <div class="card-content flex-1 flex flex-col" style="padding: 1.5rem;">
+                                    <div class="flex justify-between items-start mb-6">
+                                        <div class="flex flex-col">
+                                            <span class="text-accent text-10 font-bold" x-text="'0' + (index + 1)"></span>
+                                            <span class="text-hex text-8 uppercase tracking-tighter" x-text="entry.year"></span>
+                                        </div>
+                                        <div class="flex gap-1 flex-wrap">
+                                            <template x-for="tag in entry.tags">
+                                                <span class="tag-pill" x-text="tag"></span>
+                                            </template>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 mb-8">
+                                        <h3 class="text-xl font-bold mb-4 tracking-tight group-hover-accent transition-colors" style="font-family: 'Syne', sans-serif;" x-text="entry.title"></h3>
+                                        <p class="text-xs text-muted leading-relaxed" x-text="entry.description"></p>
+                                    </div>
                                 </div>
-                                <div class="flex gap-1 flex-wrap">
-                                    <template x-for="tag in entry.tags">
-                                        <span class="tag-pill" x-text="tag"></span>
-                                    </template>
+                                <div class="card-action btn-arrow" style="border-top: 1px solid rgba(255,255,255,0.06);">
+                                    <button type="button" @click="goTo('detail', entry.id)" class="btn-cli waves-effect waves-green w-full flex justify-between items-center btn-arrow" style="width: 100%;">
+                                        <span>Execute Details</span>
+                                        <span class="arrow-nudge transition-transform">_&gt;</span>
+                                    </button>
                                 </div>
-                            </div>
-                            <div class="flex-1 mb-8">
-                                <h3 class="text-xl font-bold mb-4 tracking-tight group-hover:text-[var(--accent)] transition-colors" x-text="entry.title"></h3>
-                                <p class="text-xs text-neutral-400 leading-relaxed" x-text="entry.description"></p>
-                            </div>
-                            <div class="mt-auto pt-6 border-t border-white/5">
-                                <div class="hex-data mb-3" x-text="'0x' + entry.id.toUpperCase().padEnd(8, '0').slice(0, 8)"></div>
-                                <button @click="goTo('detail', entry.id)" class="btn-cli w-full flex justify-between items-center group/btn">
-                                    <span>Execute Details</span>
-                                    <span class="group-hover/btn:translate-x-1 transition-transform">_&gt;</span>
-                                </button>
                             </div>
                         </div>
                     </template>
                 </div>
-                <!-- Fixed coords (project_directory style) -->
                 <div class="coords-decor" x-show="currentView === 'directory'" x-cloak>
                     <div>X: <span x-text="mouseX"></span> / Y: <span x-text="mouseY"></span></div>
                     <div>BUFFER: 0x004F3A</div>
                 </div>
-                <footer class="mt-20 border-t border-white/5 pt-12 flex flex-col md:flex-row justify-between gap-8 items-start">
+                <footer class="page-footer cyber-footer mt-20 pt-12 flex flex-col md-flex-row justify-between gap-8 items-start">
                     <div class="max-w-xs">
-                        <div class="text-[var(--accent)] text-[10px] mb-2 font-bold">SYSTEM_LOG_PIPE</div>
-                        <div class="text-[10px] text-neutral-600 font-mono space-y-1">
+                        <div class="text-accent text-10 mb-2 font-bold">SYSTEM_LOG_PIPE</div>
+                        <div class="text-10 text-muted font-mono space-y-1">
                             <div>[OK] Assets loaded</div>
                             <div>[OK] Grid rendering</div>
-                            <div class="animate-pulse">_ Waiting for input...</div>
+                            <div class="pulse-dot">_ Waiting for input...</div>
                         </div>
                     </div>
-                    <div class="flex flex-col items-end">
-                        <div class="text-[10px] text-neutral-500 mb-4 tracking-[0.5em] uppercase">Connect</div>
+                    <div class="flex flex-col items-end self-end">
+                        <div class="text-10 text-dim mb-4 uppercase tracking-connect">Connect</div>
                         <div class="flex gap-4">
-                            <a href="https://github.com/SrirammananS" target="_blank" rel="noopener" class="w-12 h-12 border border-white/10 flex items-center justify-center hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all text-[10px] font-bold">GH</a>
-                            <a href="https://linkedin.com/in/srirammanan" target="_blank" rel="noopener" class="w-12 h-12 border border-white/10 flex items-center justify-center hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all text-[10px] font-bold">LI</a>
+                            <a href="https://github.com/SrirammananS" target="_blank" rel="noopener" class="w-12 h-12 border flex items-center justify-center waves-effect waves-green text-10 font-bold" style="border-color: rgba(255,255,255,0.1);">GH</a>
+                            <a href="https://linkedin.com/in/srirammanan" target="_blank" rel="noopener" class="w-12 h-12 border flex items-center justify-center waves-effect waves-green text-10 font-bold" style="border-color: rgba(255,255,255,0.1);">LI</a>
                         </div>
                     </div>
                 </footer>
-            </main>
+                </div>
+            </div>
         </div>
-        <!-- Detail view: stacked on mobile, side-by-side on desktop -->
-        <div x-show="currentView === 'detail'" x-cloak x-transition class="detail-view-container w-full flex overflow-x-hidden">
-            <!-- HUD decor top center (technical_tool_detail) -->
-            <div class="hud-decor hidden sm:flex" x-show="currentView === 'detail'" x-cloak>
+        <!-- Detail view: Materialize-style panel + cyber chrome -->
+        <div x-show="currentView === 'detail'" x-cloak x-transition class="detail-flex w-full overflow-x-hidden">
+            <div class="hud-decor hud-row" x-show="currentView === 'detail'" x-cloak>
                 <div class="line"></div>
-                <span class="text-[10px] text-neutral-500 uppercase tracking-[0.4em]">Section Detail</span>
+                <span class="text-10 text-dim uppercase tracking-ultra">Section Detail</span>
                 <div class="line line-right"></div>
             </div>
-            <!-- RETURN TO GRID: fixed like HUD so it doesn't zoom with 3D -->
             <div class="detail-return-fixed" x-show="currentView === 'detail'" x-cloak>
-                <button @click="goTo('directory')" class="group flex items-center gap-2 text-xs font-bold tracking-widest text-neutral-500 hover:text-[var(--accent)] transition-colors glitch-hover">
-                    <span class="group-hover:-translate-x-0.5 transition-transform">←</span> <span class="hidden sm:inline">RETURN_TO_GRID</span><span class="sm:hidden">BACK</span>
+                <button type="button" @click="goTo('directory')" class="group-hover-nudge btn-flat cyber-btn waves-effect flex items-center gap-2 text-xs font-bold tracking-widest text-dim glitch-hover">
+                    <span class="arrow-nudge transition-transform">←</span> <span class="hide-on-small">RETURN_TO_GRID</span><span class="show-on-small-only">BACK</span>
                 </button>
             </div>
-            <div class="detail-main-panel flex flex-col items-center justify-center p-4 sm:p-8 md:p-12 relative detail-zoom-panel min-w-0" :class="{ 'zoomed': detailIsZoomed }" @mouseenter="detailIsZoomed = true" @mouseleave="detailIsZoomed = false">
+            <div class="detail-main-panel detail-main flex flex-col items-center justify-center p-4 sm-p-8 md-p-12 relative detail-zoom-panel min-w-0" :class="{ 'zoomed': detailIsZoomed }" @mouseenter="detailIsZoomed = true" @mouseleave="detailIsZoomed = false">
                 <div class="project-core detail-core relative">
                     <div class="core-layer layer-1"></div>
                     <div class="core-layer layer-2"></div>
                     <div class="core-layer layer-3 flex items-center justify-center p-3">
-                        <div class="core-text font-['Syne'] font-black uppercase tracking-tighter text-center leading-tight text-[10px] md:text-xs text-white">
-                            <span x-show="detailSection === 'skills'" x-cloak class="block">EXPERTISE_<br><span class="text-[var(--accent)]">SKILLS</span></span>
-                            <span x-show="detailSection === 'experience'" x-cloak class="block">PRO_<br><span class="text-[var(--accent)]">EXPERIENCE</span></span>
-                            <span x-show="detailSection === 'research'" x-cloak class="block">RESEARCH_<br><span class="text-[var(--accent)]">SAFE_SCAN</span></span>
-                            <span x-show="detailSection === 'certs'" x-cloak class="block">CERTIFICATIONS_<br><span class="text-[var(--accent)]">ACHIEVEMENTS</span></span>
-                            <span x-show="detailSection === 'contact'" x-cloak class="block">CONTACT_<br><span class="text-[var(--accent)]">CONNECT</span></span>
+                        <div class="core-text font-black uppercase tracking-tighter text-center leading-tight text-10 detail-core-text text-white" style="font-family: 'Syne', sans-serif;">
+                            <span x-show="detailSection === 'skills'" x-cloak class="block">EXPERTISE_<br><span class="text-accent">SKILLS</span></span>
+                            <span x-show="detailSection === 'experience'" x-cloak class="block">PRO_<br><span class="text-accent">EXPERIENCE</span></span>
+                            <span x-show="detailSection === 'research'" x-cloak class="block">RESEARCH_<br><span class="text-accent">SAFE_SCAN</span></span>
+                            <span x-show="detailSection === 'certs'" x-cloak class="block">CERTIFICATIONS_<br><span class="text-accent">ACHIEVEMENTS</span></span>
+                            <span x-show="detailSection === 'contact'" x-cloak class="block">CONTACT_<br><span class="text-accent">CONNECT</span></span>
                         </div>
                     </div>
-                    <!-- Floating data tags: profile content per section (reference: technical_tool_detail STATUS / NODE) -->
-                    <div class="absolute -top-12 -left-12 border border-white/10 p-2 bg-black/50 backdrop-blur-md text-[10px] uppercase tracking-widest max-w-[140px]">
-                        <span x-show="detailSection === 'skills'" x-cloak><span class="text-neutral-500">Focus:</span> <span class="text-[var(--accent)]">Web, API, Mobile</span></span>
-                        <span x-show="detailSection === 'experience'" x-cloak><span class="text-neutral-500">Role:</span> <span class="text-[var(--accent)]">Security Consultant</span></span>
-                        <span x-show="detailSection === 'research'" x-cloak><span class="text-neutral-500">Project:</span> <span class="text-[var(--accent)]">SAFE-SCAN</span></span>
-                        <span x-show="detailSection === 'certs'" x-cloak><span class="text-neutral-500">Top:</span> <span class="text-[var(--accent)]">CAP, Red Teaming</span></span>
-                        <span x-show="detailSection === 'contact'" x-cloak><span class="text-neutral-500">Status:</span> <span class="text-[var(--accent)]">Available</span></span>
+                    <div class="absolute pos-tag-tl border p-2 bg-dark-50 backdrop-blur-md text-10 uppercase tracking-widest max-w-140">
+                        <span x-show="detailSection === 'skills'" x-cloak><span class="text-dim">Focus:</span> <span class="text-accent">Web, API, Mobile</span></span>
+                        <span x-show="detailSection === 'experience'" x-cloak><span class="text-dim">Role:</span> <span class="text-accent">Security Consultant</span></span>
+                        <span x-show="detailSection === 'research'" x-cloak><span class="text-dim">Project:</span> <span class="text-accent">SAFE-SCAN</span></span>
+                        <span x-show="detailSection === 'certs'" x-cloak><span class="text-dim">Top:</span> <span class="text-accent">CAP, Red Teaming</span></span>
+                        <span x-show="detailSection === 'contact'" x-cloak><span class="text-dim">Status:</span> <span class="text-accent">Available</span></span>
                     </div>
-                    <div class="absolute -bottom-8 -right-16 border border-white/10 p-2 bg-black/50 backdrop-blur-md text-[10px] uppercase tracking-widest max-w-[160px]">
-                        <span x-show="detailSection === 'skills'" x-cloak><span class="text-neutral-500">Specialization:</span> <span class="text-[var(--accent)]">Red Teaming / VAPT</span></span>
-                        <span x-show="detailSection === 'experience'" x-cloak><span class="text-neutral-500">Location:</span> <span class="text-[var(--accent)]">Bengaluru</span></span>
-                        <span x-show="detailSection === 'research'" x-cloak><span class="text-neutral-500">Domain:</span> <span class="text-[var(--accent)]">AI & Return-Fraud</span></span>
-                        <span x-show="detailSection === 'certs'" x-cloak><span class="text-neutral-500">Recognition:</span> <span class="text-[var(--accent)]">Spot Awards</span></span>
-                        <span x-show="detailSection === 'contact'" x-cloak><span class="text-neutral-500">Open to:</span> <span class="text-[var(--accent)]">Pentesting, AppSec</span></span>
+                    <div class="absolute pos-tag-br border p-2 bg-dark-50 backdrop-blur-md text-10 uppercase tracking-widest max-w-160">
+                        <span x-show="detailSection === 'skills'" x-cloak><span class="text-dim">Specialization:</span> <span class="text-accent">Red Teaming / VAPT</span></span>
+                        <span x-show="detailSection === 'experience'" x-cloak><span class="text-dim">Location:</span> <span class="text-accent">Bengaluru</span></span>
+                        <span x-show="detailSection === 'research'" x-cloak><span class="text-dim">Domain:</span> <span class="text-accent">AI & Return-Fraud</span></span>
+                        <span x-show="detailSection === 'certs'" x-cloak><span class="text-dim">Recognition:</span> <span class="text-accent">Spot Awards</span></span>
+                        <span x-show="detailSection === 'contact'" x-cloak><span class="text-dim">Open to:</span> <span class="text-accent">Pentesting, AppSec</span></span>
                     </div>
                 </div>
                 <div class="detail-identity">
-                    <h2 class="text-neutral-600 text-xs font-bold mb-2 tracking-[0.3em]" x-text="detailSection ? detailSection.toUpperCase() : ''"></h2>
-                    <h1 class="font-['Syne'] font-black uppercase tracking-tighter leading-none">
-                        <span x-show="detailSection === 'skills'" x-cloak>EXPERTISE_<br><span class="text-[var(--accent)]">SKILLS</span></span>
-                        <span x-show="detailSection === 'experience'" x-cloak>PRO_<br><span class="text-[var(--accent)]">EXPERIENCE</span></span>
-                        <span x-show="detailSection === 'research'" x-cloak>RESEARCH_<br><span class="text-[var(--accent)]">SAFE_SCAN</span></span>
-                        <span x-show="detailSection === 'certs'" x-cloak>CERTIFICATIONS_<br><span class="text-[var(--accent)]">ACHIEVEMENTS</span></span>
-                        <span x-show="detailSection === 'contact'" x-cloak>CONTACT_<br><span class="text-[var(--accent)]">CONNECT</span></span>
+                    <h2 class="text-muted text-xs font-bold mb-2 tracking-section" x-text="detailSection ? detailSection.toUpperCase() : ''"></h2>
+                    <h1 class="font-black uppercase tracking-tighter leading-none" style="font-family: 'Syne', sans-serif;">
+                        <span x-show="detailSection === 'skills'" x-cloak>EXPERTISE_<br><span class="text-accent">SKILLS</span></span>
+                        <span x-show="detailSection === 'experience'" x-cloak>PRO_<br><span class="text-accent">EXPERIENCE</span></span>
+                        <span x-show="detailSection === 'research'" x-cloak>RESEARCH_<br><span class="text-accent">SAFE_SCAN</span></span>
+                        <span x-show="detailSection === 'certs'" x-cloak>CERTIFICATIONS_<br><span class="text-accent">ACHIEVEMENTS</span></span>
+                        <span x-show="detailSection === 'contact'" x-cloak>CONTACT_<br><span class="text-accent">CONNECT</span></span>
                     </h1>
                 </div>
             </div>
-            <aside class="detail-aside hyper-border hyper-border-detail flex flex-col z-20 overflow-hidden flex-shrink-0">
-                <!-- HEADER INFO (technical_tool_detail) -->
-                <div class="p-4 sm:p-6 md:p-8 border-b border-white/5 bg-white/[0.02] flex-shrink-0">
-                    <div class="flex justify-between items-start mb-4 md:mb-6 gap-2">
+            <aside class="detail-aside card hyper-border hyper-border-detail flex flex-col z-20 overflow-hidden flex-shrink-0 z-depth-3" style="margin: 0; border-radius: 0;">
+                <div class="p-4 sm-p-6 md-p-8 border-b bg-head flex-shrink-0">
+                    <div class="flex justify-between items-start mb-4 md-mb-6 gap-2">
                         <div class="flex flex-col min-w-0">
-                            <span class="text-[var(--accent)] text-[9px] sm:text-[10px] font-black tracking-widest uppercase">Section Specs</span>
-                            <span class="text-lg sm:text-xl md:text-2xl font-['Syne'] font-bold mt-1 truncate" x-text="detailSection === 'skills' ? 'EXPERTISE_SKILLS' : detailSection === 'experience' ? 'PRO_EXPERIENCE' : detailSection === 'research' ? 'RESEARCH_SAFE_SCAN' : detailSection === 'certs' ? 'CERTIFICATIONS' : detailSection === 'contact' ? 'CONTACT' : 'SECTION'"></span>
+                            <span class="text-accent text-9 sm-text-10 font-black tracking-widest uppercase">Section Specs</span>
+                            <span class="text-lg sm-text-xl md-text-2xl font-bold mt-1 truncate" style="font-family: 'Syne', sans-serif;" x-text="detailSection === 'skills' ? 'EXPERTISE_SKILLS' : detailSection === 'experience' ? 'PRO_EXPERIENCE' : detailSection === 'research' ? 'RESEARCH_SAFE_SCAN' : detailSection === 'certs' ? 'CERTIFICATIONS' : detailSection === 'contact' ? 'CONTACT' : 'SECTION'"></span>
                         </div>
-                        <div class="px-2 py-1 bg-[var(--accent)] text-black text-[8px] sm:text-[9px] font-black uppercase flex-shrink-0">Ready</div>
+                        <div class="px-2 py-1 ready-chip text-8 sm-text-9 font-black uppercase flex-shrink-0 z-depth-1">Ready</div>
                     </div>
-
-                    <!-- Key-value rows per section -->
                     <div class="space-y-4 text-xs">
                         <template x-if="detailSection === 'skills'">
                             <div class="space-y-4">
-                                <div class="flex justify-between"><span class="text-neutral-500">Focus</span><span class="text-neutral-200">VAPT, OWASP Top 10, Mobile</span></div>
-                                <div class="flex justify-between"><span class="text-neutral-500">Web / API</span><span class="text-neutral-200">SQLi, XSS, IDOR, LFI, SSRF</span></div>
-                                <div class="flex justify-between"><span class="text-neutral-500">Tools</span><span class="text-[var(--accent)] font-bold">Burp, Nmap, FFUF, Wireshark, Kali</span></div>
-                                <div class="flex justify-between"><span class="text-neutral-500">Automation</span><span class="text-neutral-200">Python, scripting</span></div>
+                                <div class="flex justify-between"><span class="text-dim">Focus</span><span class="text-bright">VAPT, OWASP Top 10, Mobile</span></div>
+                                <div class="flex justify-between"><span class="text-dim">Web / API</span><span class="text-bright">SQLi, XSS, IDOR, LFI, SSRF</span></div>
+                                <div class="flex justify-between"><span class="text-dim">Tools</span><span class="text-accent font-bold">Burp, Nmap, FFUF, Wireshark, Kali</span></div>
+                                <div class="flex justify-between"><span class="text-dim">Automation</span><span class="text-bright">Python, scripting</span></div>
                             </div>
                         </template>
                         <template x-if="detailSection === 'experience'">
                             <div class="space-y-4">
-                                <div class="flex justify-between"><span class="text-neutral-500">Current</span><span class="text-[var(--accent)] font-bold">BlackDuck (Synopsys SIG)</span></div>
-                                <div class="flex justify-between"><span class="text-neutral-500">Role</span><span class="text-neutral-200">Professional Security Consultant</span></div>
-                                <div class="flex justify-between"><span class="text-neutral-500">Previous</span><span class="text-neutral-200">Eviden (Paladion), Bengaluru</span></div>
-                                <div class="flex justify-between"><span class="text-neutral-500">Impact</span><span class="text-neutral-200">25+ critical vulns identified</span></div>
+                                <div class="flex justify-between"><span class="text-dim">Current</span><span class="text-accent font-bold">BlackDuck (Synopsys SIG)</span></div>
+                                <div class="flex justify-between"><span class="text-dim">Role</span><span class="text-bright">Professional Security Consultant</span></div>
+                                <div class="flex justify-between"><span class="text-dim">Previous</span><span class="text-bright">Eviden (Paladion), Bengaluru</span></div>
+                                <div class="flex justify-between"><span class="text-dim">Impact</span><span class="text-bright">25+ critical vulns identified</span></div>
                             </div>
                         </template>
                         <template x-if="detailSection === 'research'">
                             <div class="space-y-4">
-                                <div class="flex justify-between"><span class="text-neutral-500">Project</span><span class="text-[var(--accent)] font-bold">SAFE-SCAN</span></div>
-                                <div class="flex justify-between"><span class="text-neutral-500">Domain</span><span class="text-neutral-200">AI & Return-Fraud Prevention</span></div>
-                                <div class="flex justify-between"><span class="text-neutral-500">Output</span><span class="text-neutral-200">Panel View, Golden Value</span></div>
+                                <div class="flex justify-between"><span class="text-dim">Project</span><span class="text-accent font-bold">SAFE-SCAN</span></div>
+                                <div class="flex justify-between"><span class="text-dim">Domain</span><span class="text-bright">AI & Return-Fraud Prevention</span></div>
+                                <div class="flex justify-between"><span class="text-dim">Output</span><span class="text-bright">Panel View, Golden Value</span></div>
                             </div>
                         </template>
                         <template x-if="detailSection === 'certs'">
                             <div class="space-y-4">
-                                <div class="flex justify-between"><span class="text-neutral-500">CAP</span><span class="text-neutral-200">Certified AppSec Practitioner</span></div>
-                                <div class="flex justify-between"><span class="text-neutral-500">Multi-Cloud</span><span class="text-neutral-200">Red Teaming Analyst</span></div>
-                                <div class="flex justify-between"><span class="text-[var(--accent)]">Spot Awards</span><span class="text-neutral-200">Creativity & Exceptional Skills</span></div>
+                                <div class="flex justify-between"><span class="text-dim">CAP</span><span class="text-bright">Certified AppSec Practitioner</span></div>
+                                <div class="flex justify-between"><span class="text-dim">Multi-Cloud</span><span class="text-bright">Red Teaming Analyst</span></div>
+                                <div class="flex justify-between"><span class="text-accent">Spot Awards</span><span class="text-bright">Creativity & Exceptional Skills</span></div>
                             </div>
                         </template>
                         <template x-if="detailSection === 'contact'">
                             <div class="space-y-4">
-                                <div class="flex justify-between"><span class="text-neutral-500">Email</span><a href="mailto:srirammanansri@gmail.com" class="text-[var(--accent)] hover:underline">srirammanansri@gmail.com</a></div>
-                                <div class="flex justify-between"><span class="text-neutral-500">LinkedIn</span><a href="https://linkedin.com/in/srirammanan" target="_blank" rel="noopener" class="text-[var(--accent)] hover:underline">linkedin.com/in/srirammanan</a></div>
-                                <div class="flex justify-between"><span class="text-neutral-500">Location</span><span class="text-neutral-200">Bengaluru, India</span></div>
-                                <div class="flex justify-between"><span class="text-neutral-500">Open to</span><span class="text-[var(--accent)] font-bold">Pentesting, AppSec</span></div>
+                                <div class="flex justify-between"><span class="text-dim">Email</span><a href="mailto:srirammanansri@gmail.com" class="text-accent">srirammanansri@gmail.com</a></div>
+                                <div class="flex justify-between"><span class="text-dim">LinkedIn</span><a href="https://linkedin.com/in/srirammanan" target="_blank" rel="noopener" class="text-accent">linkedin.com/in/srirammanan</a></div>
+                                <div class="flex justify-between"><span class="text-dim">Location</span><span class="text-bright">Bengaluru, India</span></div>
+                                <div class="flex justify-between"><span class="text-dim">Open to</span><span class="text-accent font-bold">Pentesting, AppSec</span></div>
                             </div>
                         </template>
                     </div>
-
-                    <!-- Action buttons (technical_tool_detail) -->
                     <div class="mt-8 flex gap-4">
                         <template x-if="detailSection === 'research'">
                             <div class="flex gap-4 w-full">
-                                <a href="https://SrirammananS.github.io/Research/safe-scan-ai-panel.pdf" target="_blank" rel="noopener" class="flex-1 py-3 border border-[var(--accent)] text-[var(--accent)] text-[10px] font-bold uppercase tracking-widest text-center hover:bg-[var(--accent)] hover:text-black transition-all glitch-hover">View PDF</a>
-                                <a href="https://SrirammananS.github.io/Research/" target="_blank" rel="noopener" class="w-12 h-12 flex items-center justify-center border border-white/10 hover:border-white/40 transition-colors flex-shrink-0">
-                                    <span class="text-[10px] font-bold">R</span>
+                                <a href="https://SrirammananS.github.io/Research/safe-scan-ai-panel.pdf" target="_blank" rel="noopener" class="btn waves-accent flex-1 py-3 text-10 font-bold uppercase tracking-widest text-center glitch-hover">View PDF</a>
+                                <a href="https://SrirammananS.github.io/Research/" target="_blank" rel="noopener" class="w-12 h-12 flex items-center justify-center border waves-effect flex-shrink-0" style="border-color: rgba(255,255,255,0.1);">
+                                    <span class="text-10 font-bold">R</span>
                                 </a>
                             </div>
                         </template>
                         <template x-if="detailSection !== 'research'">
-                            <a href="https://github.com/SrirammananS" target="_blank" rel="noopener" class="w-12 h-12 flex items-center justify-center border border-white/10 hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors">
-                                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                            <a href="https://github.com/SrirammananS" target="_blank" rel="noopener" class="w-12 h-12 flex items-center justify-center border waves-effect waves-green flex-shrink-0" style="border-color: rgba(255,255,255,0.1);">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
                             </a>
                         </template>
                     </div>
                 </div>
-
-                <!-- INTERACTIVE TERMINAL SNIPPET (technical_tool_detail) -->
                 <div class="flex-1 flex flex-col overflow-hidden min-h-0 flex-shrink">
-                    <div class="p-2 sm:p-4 bg-black/40 text-[9px] sm:text-[10px] text-neutral-500 font-bold tracking-widest flex justify-between flex-shrink-0">
+                    <div class="p-2 sm-p-4 bg-bar text-9 sm-text-10 text-dim font-bold tracking-widest flex justify-between flex-shrink-0">
                         <span x-text="(detailSection || 'section') + '_LOG.sh'"></span>
-                        <span class="animate-pulse text-[var(--accent)]">● ACTIVE</span>
+                        <span class="pulse-dot text-accent">● ACTIVE</span>
                     </div>
-                    <div class="flex-1 p-3 sm:p-6 overflow-y-auto font-mono text-[10px] sm:text-xs space-y-2 sm:space-y-3 min-h-0" id="detail-terminal">
-                        <div class="text-neutral-500 italic" x-text="'# ' + (detailSection ? detailSection.charAt(0).toUpperCase() + detailSection.slice(1) + ' section loaded.' : 'Section') + '..'"></div>
+                    <div class="flex-1 p-3 sm-p-6 overflow-y-auto font-mono text-10 sm-text-xs space-y-2 sm-space-y-3 min-h-0" id="detail-terminal">
+                        <div class="text-dim italic" x-text="'# ' + (detailSection ? detailSection.charAt(0).toUpperCase() + detailSection.slice(1) + ' section loaded.' : 'Section') + '..'"></div>
                         <template x-for="line in detailLogs" :key="line.id">
                             <div>
-                                <span class="text-[var(--accent)]" x-text="line.prompt"></span>
+                                <span class="text-accent" x-text="line.prompt"></span>
                                 <span class="text-white ml-2" x-text="line.text"></span>
                             </div>
                         </template>
                         <div class="cmd-line p-3 mt-4">
                             <div class="flex items-center gap-2">
-                                <span class="text-[var(--accent)] font-bold">$</span>
-                                <input type="text" class="terminal-input" x-model="detailCommandInput" @keydown.enter="executeDetailCommand()" placeholder="run --info" autocomplete="off">
+                                <span class="text-accent font-bold">$</span>
+                                <input type="text" class="browser-default terminal-input" x-model="detailCommandInput" @keydown.enter="executeDetailCommand()" placeholder="run --info" autocomplete="off">
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- FOOTER METRICS (technical_tool_detail) -->
-                <div class="p-3 sm:p-6 bg-black text-[8px] sm:text-[9px] flex justify-between border-t border-white/5 flex-shrink-0">
+                <div class="p-3 sm-p-6 bg-black text-8 sm-text-9 flex justify-between border-t flex-shrink-0">
                     <div class="flex gap-4">
-                        <span class="text-neutral-600">CPU: <span class="text-neutral-300">12%</span></span>
-                        <span class="text-neutral-600">MEM: <span class="text-neutral-300">64MB</span></span>
+                        <span class="text-muted">CPU: <span class="text-bright">12%</span></span>
+                        <span class="text-muted">MEM: <span class="text-bright">64MB</span></span>
                     </div>
-                    <div class="text-neutral-600 uppercase tracking-widest">Build: 03.2025</div>
+                    <div class="text-muted uppercase tracking-widest">Build: 03.2026</div>
                 </div>
             </aside>
         </div>
@@ -949,6 +1259,13 @@
         window.runIntroScrollEffects = function() {
             /* Intro is single screen; no scroll-driven effects. Kept for x-effect compatibility. */
         };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" crossorigin></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof M !== 'undefined') M.AutoInit();
+        });
     </script>
 </body>
 </html>
