@@ -4,8 +4,12 @@ This project uses JavaScript obfuscation to protect the source code when deployi
 
 ## Files
 
-- `script.js` - Original source code (NOT committed to git)
-- `script.min.js` - Obfuscated production code (committed to git)
+- `script.js` - Main site source code (Development)
+- `script.min.js` - Main site obfuscated code (Production)
+- `admin_console.js` - Admin portal source code (Development)
+- `admin_console.min.js` - Admin portal obfuscated code (Production)
+- `secure-console-dev.html` - Admin portal UI (Development)
+- `secure-console-min.html` - Admin portal UI (Production/Minified)
 - `build-obfuscate.js` - Build script for obfuscation
 - `package.json` - NPM configuration with build scripts
 
