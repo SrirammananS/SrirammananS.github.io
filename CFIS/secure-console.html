@@ -20,10 +20,6 @@
         rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=2.1.1">
 
-    <!-- OTP Library (UMD) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/otpauth/9.1.4/otpauth.umd.min.js"></script>
-    <!-- QR Code Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <!-- Crypto JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
@@ -203,39 +199,17 @@
         <!-- AUTH SECTION -->
         <div id="authSection" class="glass-panel auth-screen">
             <h2>🔐 Security Check</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Multifactor Authentication Required</p>
-
-            <div id="setupMFA"
-                style="display:none; margin-bottom: 2rem; padding: 1rem; border: 1px dashed var(--accent-color); border-radius: 8px;">
-                <h3 style="margin-top:0;">⚠️ First Time Setup</h3>
-                <p>Welcome, Admin. To secure your console, please set up Multi-Factor Authentication (MFA).</p>
-
-                <div style="margin-top:1rem;">
-                    <button onclick="generateMFA()" class="btn-primary">Generate QR Code</button>
-                </div>
-                <div id="qrcode"></div>
-                <p style="font-family: monospace; font-size: 0.8rem; opacity: 0.7; margin-top: 10px;"
-                    id="secretDisplay"></p>
-
-                <button onclick="finalizeSetup()" class="btn-primary" style="margin-top:1rem;">Save & Encrypt</button>
-            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Admin Authentication Required</p>
 
             <div id="loginForm">
                 <h3 style="margin-top:0;">🔐 Login</h3>
-                <p>Enter Master Key & MFA Code</p>
+                <p>Enter Master Key</p>
                 <div class="auth-input-group">
                     <input type="password" id="masterKeyInput" class="input-field" placeholder="Master Key"
                         style="text-align:center; margin-bottom: 1rem;">
-                    <input type="text" id="totpInput" class="auth-code-input" placeholder="000 000" maxlength="7">
                 </div>
                 <button onclick="login()" class="btn-primary">Unlock Console</button>
                 <p id="authMsg" class="status-msg"></p>
-
-                <div style="margin-top: 2rem; border-top: 1px solid var(--glass-border); padding-top: 1rem;">
-                    <button onclick="resetMFA()"
-                        style="background:transparent; border:none; color: #ef4444; font-size:0.8rem; cursor:pointer;">Reset
-                        MFA</button>
-                </div>
             </div>
         </div>
 
@@ -634,128 +608,29 @@
     <script>
         // --- SECURITY LOGIC ---
         const MASTER_HASH = "facdec937c735c96be6d77b03ebbe9e4a7a740b7f3beea790257f35c2bf31d0f";
-        const ENC_STORAGE_KEY = 'cfis_enc_secret';
-        let currentTOTP = null;
         let sessionTimer;
-        let tempSecret = null; // Used during setup only
-        const MFA_SECRET_STORAGE_KEY = 'cfis_mfa_enc'; // New key for encrypted MFA secret
 
         document.addEventListener('DOMContentLoaded', () => {
-            const setupComplete = localStorage.getItem('cfis_setup_complete');
-
-            if (!setupComplete) {
-                // New User / Reset
-                document.getElementById('loginForm').style.display = 'none';
-                document.getElementById('setupMFA').style.display = 'block'; // SHOW THE UI
-            } else {
-                // Existing User
-                document.getElementById('setupMFA').style.display = 'none';
-                document.getElementById('loginForm').style.display = 'block';
-            }
+            document.getElementById('loginForm').style.display = 'block';
 
             // Interaction listeners for auto-logout
             document.addEventListener('mousemove', resetSessionTimer);
             document.addEventListener('keydown', resetSessionTimer);
         });
 
-        // --- SETUP FLOW ---
-        function generateMFA() {
-            // 1. Generate Secret
-            tempSecret = new OTPAuth.Secret({ size: 20 });
-
-            // 2. Show UI elements for QR and secret
-            document.getElementById('qrcode').style.display = 'flex'; // Ensure QR code div is visible
-            document.getElementById('secretDisplay').textContent = tempSecret.base32;
-
-            // 3. Render QR
-            document.getElementById("qrcode").innerHTML = "";
-            // Tmp TOTP for QR generation
-            const tmpTotp = new OTPAuth.TOTP({
-                issuer: 'CFIS Admin',
-                label: 'AdminConsole',
-                algorithm: 'SHA1',
-                digits: 6,
-                period: 30,
-                secret: tempSecret
-            });
-
-            new QRCode(document.getElementById("qrcode"), {
-                text: tmpTotp.toString(),
-                width: 128,
-                height: 128
-            });
-        }
-
-        function finalizeSetup() {
-            if (!tempSecret) {
-                alert('Please generate the QR code first.');
-                return;
-            }
-
-            const secret = tempSecret.base32;
-            // We use a fixed string or the master key hash itself as encryption key, 
-            // since user wants to rely solely on Master Key + MFA.
-            const encryptionKey = "MASTER_KEY_FIXED_SALT";
-
-            const encryptedSecret = CryptoJS.AES.encrypt(secret, encryptionKey).toString();
-
-            localStorage.setItem(MFA_SECRET_STORAGE_KEY, encryptedSecret);
-            localStorage.setItem('cfis_setup_complete', 'true');
-
-            alert('Setup Complete! Please log in now.');
-            location.reload();
-        }
-
         // --- LOGIN FLOW ---
         function login() {
             const keyInput = document.getElementById('masterKeyInput').value;
-            const code = document.getElementById('totpInput').value.replace(/\s/g, '');
-            const encryptedSecret = localStorage.getItem(MFA_SECRET_STORAGE_KEY);
 
-            if (!encryptedSecret) return showStatus('Setup not found. Please Reset.', 'error');
-            if (!keyInput || !code) return showStatus('Master Key and Code required', 'error');
+            if (!keyInput) return showStatus('Master Key required', 'error');
 
             // 1. Verify Master Key Hash
-            // hash() = "75f5533dc390341bf3f4787008a88ba404dff36fb4e04b21b55ccfc3e00b6d1a"
             const inputHash = CryptoJS.SHA256(keyInput).toString(CryptoJS.enc.Hex);
             if (inputHash !== MASTER_HASH) {
                 return showStatus('Invalid Master Key', 'error');
             }
 
-            // 2. Decrypt MFA Secret (using Fixed Salt)
-            // We use fixed salt because we validated the user via the Hash Check above.
-            const encryptionKey = "MASTER_KEY_FIXED_SALT";
-
-            try {
-                // 1. Decrypt Secret
-                const bytes = CryptoJS.AES.decrypt(encryptedSecret, encryptionKey);
-                const originalSecret = bytes.toString(CryptoJS.enc.Utf8);
-
-                if (!originalSecret) throw new Error('Decryption Failed');
-
-                // 2. Init TOTP
-                currentTOTP = new OTPAuth.TOTP({
-                    issuer: 'CFIS Admin',
-                    label: 'AdminConsole',
-                    algorithm: 'SHA1',
-                    digits: 6,
-                    period: 30,
-                    secret: OTPAuth.Secret.fromBase32(originalSecret)
-                });
-
-                // 3. Verify Code
-                const delta = currentTOTP.validate({ token: code, window: 2 });
-
-                if (delta !== null) {
-                    unlockSession();
-                } else {
-                    showStatus('Invalid 2FA Code', 'error');
-                }
-
-            } catch (e) {
-                console.error(e);
-                showStatus('Decryption Failed. Wrong Password?', 'error');
-            }
+            unlockSession();
         }
 
         function unlockSession() {
@@ -765,7 +640,6 @@
 
             // Clear sensitive inputs
             document.getElementById('masterKeyInput').value = '';
-            document.getElementById('totpInput').value = '';
 
             // Load saved settings
             const savedVtKey = localStorage.getItem('cfis_vt_key');
@@ -775,20 +649,10 @@
             renderLists();
         }
 
-
-
         function showStatus(msg, type) {
             const el = document.getElementById('authMsg');
             el.innerText = msg;
             el.className = 'status-msg ' + type;
-        }
-
-        function resetMFA() {
-            if (confirm('HARD RESET: This will delete your MFA Secret. You lock yourself out if you do not have the files. Proceed?')) {
-                localStorage.removeItem(MFA_SECRET_STORAGE_KEY);
-                localStorage.removeItem('cfis_setup_complete');
-                location.reload();
-            }
         }
 
         // --- SESSION LOGIC ---
@@ -867,7 +731,7 @@
                 try {
                     // Fetch existing
                     const listData = await githubGet(pat, owner, repo, listPath);
-                    listJson = JSON.parse(atob(listData.content));
+                    listJson = JSON.parse(safeAtob(listData.content));
                     listSha = listData.sha;
                 } catch (e) {
                     if (e.message === 'Not Found') {
@@ -898,7 +762,7 @@
                 }
 
                 // Push
-                await githubPut(pat, owner, repo, listPath, btoa(JSON.stringify(listJson, null, 2)), "Update list.json", listSha);
+                await githubPut(pat, owner, repo, listPath, safeBtoa(JSON.stringify(listJson, null, 2)), "Update list.json", listSha);
 
                 status.innerText = 'Success!';
                 status.className = 'status-msg success';
@@ -930,7 +794,7 @@
 
             try {
                 const data = await githubGet(pat, owner, repo, path);
-                const json = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+                const json = JSON.parse(safeAtob(data.content));
                 localSiteConfig = json;
                 if (!localSiteConfig.labelPresets) localSiteConfig.labelPresets = [];
                 renderLists();
@@ -1272,7 +1136,7 @@
                     sha = existing.sha;
                 } catch (e) { /* File might not exist */ }
 
-                await githubPut(pat, owner, repo, path, btoa(unescape(encodeURIComponent(JSON.stringify(localSiteConfig, null, 2)))), "Update site_config.json", sha);
+                await githubPut(pat, owner, repo, path, safeBtoa(JSON.stringify(localSiteConfig, null, 2)), "Update site_config.json", sha);
                 alert('Saved!');
             } catch (e) {
                 alert('Save failed: ' + e.message);
@@ -1293,7 +1157,7 @@
 
             try {
                 const data = await githubGet(pat, owner, repo, path);
-                const json = JSON.parse(atob(data.content));
+                const json = JSON.parse(safeAtob(data.content));
 
                 // 1. Total (Update Stat element if exists)
                 const statEl = document.getElementById('statTotal');
@@ -1358,6 +1222,15 @@
                 reader.onload = () => resolve(reader.result.split(',')[1]);
                 reader.onerror = reject;
             });
+        }
+
+        function safeBtoa(str) {
+            return btoa(unescape(encodeURIComponent(str)));
+        }
+
+        function safeAtob(str) {
+            if (!str) return '';
+            return decodeURIComponent(escape(atob(str.replace(/\s/g, ''))));
         }
 
         // Auto-fill title
@@ -1507,7 +1380,7 @@
                     try {
                         const d = await githubGet(pat, owner, repo, listPath);
                         listSha = d.sha;
-                        listData = JSON.parse(atob(d.content));
+                        listData = JSON.parse(safeAtob(d.content));
                     } catch (e) {
                         // Fallback raw
                         const r = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/${listPath}?t=${Date.now()}`);
@@ -1521,7 +1394,7 @@
                     if (listData && listSha) {
                         const newList = listData.filter(i => i.filename !== filename);
                         if (newList.length !== listData.length) {
-                            await githubPut(pat, owner, repo, listPath, btoa(unescape(encodeURIComponent(JSON.stringify(newList, null, 2)))), `Remove ${filename} from list`, listSha);
+                            await githubPut(pat, owner, repo, listPath, safeBtoa(JSON.stringify(newList, null, 2)), `Remove ${filename} from list`, listSha);
                         }
                     }
                 } catch (e) {
@@ -1596,7 +1469,7 @@
                 let sha = null;
                 try {
                     const res = await githubGet(pat, owner, repo, IMAGES_JSON_PATH);
-                    assetsList = JSON.parse(atob(res.content));
+                    assetsList = JSON.parse(safeAtob(res.content));
                     sha = res.sha;
                 } catch (e) { /* New file */ }
 
@@ -1607,7 +1480,7 @@
                     date: new Date().toISOString()
                 });
 
-                await githubPut(pat, owner, repo, IMAGES_JSON_PATH, btoa(JSON.stringify(assetsList, null, 2)), "Update images.json", sha);
+                await githubPut(pat, owner, repo, IMAGES_JSON_PATH, safeBtoa(JSON.stringify(assetsList, null, 2)), "Update images.json", sha);
 
                 status.innerText = 'Asset Uploaded!';
                 status.className = 'status-msg success';
@@ -1685,7 +1558,7 @@
 
             try {
                 const res = await githubGet(pat, owner, repo, IMAGES_JSON_PATH);
-                const assets = JSON.parse(atob(res.content));
+                const assets = JSON.parse(safeAtob(res.content));
 
                 // Reverse to show newest first
                 gallery.innerHTML = assets.reverse().map((asset, index) => {
@@ -1727,10 +1600,10 @@
 
                 // 2. Update JSON
                 const res = await githubGet(pat, owner, repo, IMAGES_JSON_PATH);
-                const assets = JSON.parse(atob(res.content));
+                const assets = JSON.parse(safeAtob(res.content));
                 const newAssets = assets.filter(a => a.name !== name);
 
-                await githubPut(pat, owner, repo, IMAGES_JSON_PATH, btoa(JSON.stringify(newAssets, null, 2)), `Removed ${name}`, res.sha);
+                await githubPut(pat, owner, repo, IMAGES_JSON_PATH, safeBtoa(JSON.stringify(newAssets, null, 2)), `Removed ${name}`, res.sha);
 
                 loadAssetList();
                 alert('Deleted!');
@@ -1824,7 +1697,7 @@
                 const sha = existing.sha;
 
                 // Push update
-                const content = btoa(unescape(encodeURIComponent(JSON.stringify(localResourceList, null, 2))));
+                const content = safeBtoa(JSON.stringify(localResourceList, null, 2));
                 await githubPut(pat, owner, repo, path, content, `Update metadata for ${item.filename}`, sha);
 
                 alert('Resource updated successfully!');
