@@ -16,9 +16,7 @@
         --color-text: #1D1C1D;
     }
     
-    * {
-        box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     
     body {
         font-family: 'Nunito', sans-serif;
@@ -42,10 +40,7 @@
         margin-top: 1.2em;
     }
     
-    p {
-        margin-bottom: 1em;
-        text-align: justify;
-    }
+    p { margin-bottom: 1em; text-align: justify; }
     
     /* Cover Page */
     .cover-page {
@@ -93,25 +88,17 @@
         text-align: center;
     }
     
-    .author-note strong {
-        color: var(--color-blue);
-    }
+    .author-note strong { color: var(--color-blue); }
 
     /* Index Page */
-    .index-page {
-        padding: 60px;
-        background-color: #fff;
-    }
+    .index-page { padding: 60px; background-color: #fff; }
     .index-title {
         font-size: 32pt;
         border-bottom: 4px solid var(--color-accent);
         padding-bottom: 10px;
         margin-bottom: 30px;
     }
-    .index-list {
-        list-style: none;
-        padding: 0;
-    }
+    .index-list { list-style: none; padding: 0; }
     .index-list li {
         font-size: 16pt;
         margin-bottom: 15px;
@@ -119,10 +106,7 @@
         display: flex;
         align-items: center;
     }
-    .index-list li::before {
-        content: "📚";
-        margin-right: 10px;
-    }
+    .index-list li::before { content: "📚"; margin-right: 10px; }
     .index-sublist {
         list-style: none;
         padding-left: 40px;
@@ -134,10 +118,7 @@
         color: #555;
         margin-bottom: 8px;
     }
-    .index-sublist li::before {
-        content: "🔹";
-        font-size: 10pt;
-    }
+    .index-sublist li::before { content: "🔹"; font-size: 10pt; }
     
     /* Chapter Layout */
     .chapter-wrapper {
@@ -199,10 +180,6 @@
         box-shadow: 0 10px 30px rgba(0,0,0,0.06);
         page-break-inside: avoid;
     }
-    .diagram-container img {
-        max-width: 100%;
-        height: auto;
-    }
     .diagram-title {
         font-family: 'Poppins', sans-serif;
         font-weight: 700;
@@ -211,6 +188,10 @@
         font-size: 14pt;
         text-transform: uppercase;
         letter-spacing: 1px;
+    }
+    .mermaid {
+        display: flex;
+        justify-content: center;
     }
     
     /* Tables */
@@ -236,9 +217,7 @@
         color: #ffffff;
         font-weight: 700;
     }
-    tr:nth-child(even) {
-        background-color: #F8F9FA;
-    }
+    tr:nth-child(even) { background-color: #F8F9FA; }
     
     /* Lists */
     ul, ol {
@@ -246,9 +225,7 @@
         margin-bottom: 20px;
         padding-left: 25px;
     }
-    li {
-        margin-bottom: 8px;
-    }
+    li { margin-bottom: 8px; }
     
     /* QA Section */
     .qa-container {
@@ -301,11 +278,8 @@
         border-radius: 20px;
         font-weight: 700;
     }
-    .qa-answer {
-        font-size: 13pt;
-    }
+    .qa-answer { font-size: 13pt; }
     
-    /* Print Rules */
     @media print {
         body { background-color: #fff; }
         .page-break { page-break-before: always; }
@@ -313,6 +287,13 @@
         .qa-card, .diagram-container, .content-box, .story-box { page-break-inside: avoid; }
     }
 </style>
+    <!-- We include Mermaid.js natively! This guarantees diagrams render on ANY website perfectly -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            mermaid.initialize({ startOnLoad: true, theme: 'base' });
+        });
+    </script>
 </head>
 <body>
 <div class="book-container">
@@ -407,7 +388,17 @@
         
         <div class="diagram-container">
             <div class="diagram-title">The BCM Lifecycle Wheel</div>
-            <img src="https://kroki.io/mermaid/svg/eJx9zr0KwlAMBeC9TxE6OKujoz-DYLEoPkBsj9dAb1pyU7A-vcW5bSBD4DuHZDQxnYBcvAHtDwVd5IVqqMarfHNCyqYi-UNrWHLWWjTQ1QKrfNml1Zx2tF1Pp45wWBQF3d3YEYYlfY5dgwh1uiF1rSYs6dMHVkkCrahgUR93kccnajr0jff2793MwNLaYBwjxlrl8H9oxv8ALaZRQQ==" alt="The BCM Lifecycle Wheel">
+            <div class="mermaid">
+
+pie title BCM Lifecycle Phases
+"Understanding Organization" : 20
+"Determine Strategy" : 20
+"Implement Response" : 20
+"Exercise & Maintain" : 20
+"Embed Culture" : 10
+"Programme Management" : 10
+                
+            </div>
         </div>
         <div class="qa-container">
   <h2>Exam Corner: Master Q&A</h2>
@@ -533,7 +524,16 @@
         
         <div class="diagram-container">
             <div class="diagram-title">Risk Management vs BIA</div>
-            <img src="https://kroki.io/mermaid/svg/eJyFj7EKwjAQhvc-xYGrQkV0cBBqjVJQkahdSocQLhpME-2lg9CHt62baP3Hu_t-vgvgSy6luF9hy4NvyzZ8l3FNN9gJKy5YoPU5jEaLeu1kRUjgLBw4S9n-lOw3NcSimWanK8JKkyCPZf6zurtty2CZRNmyIm2RCJLiLqSHyArzJE2_-Yb6VDmeeZqknQlTCqXvVGJnCR8VWok9deSfBpt_QWlj5oPJLJ6uw6F0xpXzgVLqD9javEkWjtk06iNfHehiYA==" alt="Risk Management vs BIA">
+            <div class="mermaid">
+
+graph LR
+    RM[Risk Management] -->|Focuses on PREVENTING| Cause[The Disaster]
+    Cause --> BIA[Business Impact Analysis]
+    BIA -->|Focuses on SURVIVING| Effect[The Consequences]
+    style RM fill:#36C5F0,color:#fff
+    style BIA fill:#E01E5A,color:#fff
+                
+            </div>
         </div>
         <div class="qa-container">
   <h2>Exam Corner: Master Q&A</h2>
@@ -630,7 +630,17 @@ A hazard is a condition or situation that increases the probability or severity 
 <li><strong>Examples:</strong> Building a datacenter in a known flood zone (Physical Hazard), operating with outdated legacy hardware (Operational Hazard).</li>
 </ul>
 <p><strong>The Relationship Diagram:</strong></p>
-<div class="diagram-container"><div class="diagram-title">Relationship Diagram</div><img src="https://kroki.io/mermaid/svg/eJyFzE8LgjAYBvB7n-IFLwVKB7voIVglTLKItYSSDjFdjkYTN8jAD98fRBoIPaf3hd_zjKDLtb5UJSRkBD-hGcUkQvQMnjdvo6aSShjdQpqlh2QbEbSIk5gez1Yp7bDQRsNDmFLcW8AZRidEVjalg9Qi-EuS4pJrMKoFMh6TeL-GKcSbHVrSycTi2jxl8d7lQsrQ4Tx4x9WmVrcidHzfH8Bpjxn7i3GHg4Axzv9g0i_P8lnuMiVV_fmsXnd7D5GbMvSrph96AXIYbS0=" alt="Relationship Diagram"></div>
+<div class="diagram-container"><div class="diagram-title">Relationship Diagram</div><div class="mermaid">
+graph LR
+    T[THREAT] -->|Exploits| V[VULNERABILITY]
+    V -->|Exists within| H[HAZARD]
+    T -->|Exists within| H
+    H -->|Leads to| R((RISK / IMPACT))
+    style T fill:#ff9999,stroke:#333
+    style V fill:#ffcc99,stroke:#333
+    style H fill:#99ccff,stroke:#333
+    style R fill:#ff4d4d,color:#fff,stroke:#333,stroke-width:3px
+        </div></div>
 <p>Risk only occurs when a Threat exploits a Vulnerability. If you have a vulnerability (unpatched server) but no threat (air-gapped, no users), the risk is low. If you have a threat (hackers) but no vulnerability (perfectly secured system), the risk is also low.</p></div>
   </div>
   <div class="qa-card">
@@ -684,7 +694,20 @@ They intersect at the Strategy phase: Risk Management attempts to lower the like
         
         <div class="diagram-container">
             <div class="diagram-title">Comparing Recovery Sites</div>
-            <img src="https://kroki.io/mermaid/svg/eJyNzkFLwzAUB_D7PsWDXSo4aAdTN2SQJi942aUKHsoO0T5dMG1Kkg3z7d1amYIr9R3z_r-8_wQuzLtT7Q6exOTS8jSsZCaQa1QgKOjVHshFeNSB_BZmszXkyYMN3cPV8B9dkifPytX_ioqEW1ONRPP-flYWpKoIuoGNbvbHYvcvbo2fLTVeH2g76Hnf6pcXKnZ4Q5Xe18CtD8Nc9E2zEus2RCisrU-W70i1w8qHaOhY_U0bs5pKiQvk1z44-0GrKaYZLtiI5Wcr7zD7sTyfz3HEim-LqbyV7GzTlN0sl3_sFxVLfgw=" alt="Comparing Recovery Sites">
+            <div class="mermaid">
+
+graph TD
+    A[Alternate Recovery Sites] --> B(Hot Site)
+    A --> C(Warm Site)
+    A --> D(Cold Site)
+    B --> B1["Ready in Minutes<br/>Expensive"]
+    C --> C1["Ready in Days<br/>Medium Cost"]
+    D --> D1["Empty Room<br/>Cheap"]
+    style B fill:#FFE5EC,stroke:#E01E5A
+    style C fill:#FFF8E1,stroke:#ECB22E
+    style D fill:#E0F7FA,stroke:#00A699
+                
+            </div>
         </div>
         <div class="qa-container">
   <h2>Exam Corner: Master Q&A</h2>
@@ -794,7 +817,18 @@ Secure, cloud-based repositories (like SharePoint or Google Drive) that ensure B
         
         <div class="diagram-container">
             <div class="diagram-title">The BCP Testing Hierarchy</div>
-            <img src="https://kroki.io/mermaid/svg/eJyNzcuKwkAQBdC9X1Hg1kfroKCLgXQnMoKCOIKLMIsmU0k3KdPSD1Tw40WNszI6d1t17m3BkxRW7hXwTevZ8Zo4nQUimFcerQ17r00FG3ReV8UPdHvdz_OXLhSstSvPINKVtJII6e-nsVjc9RJ_ddjVnqffehdI3laSI9pMO2yu4PeKhTnUPkpjdCUIhVkJfdhKKr2yJhSqucT5EyHEkGuiaTthg2QUdTJDxk7beZ6_ceLhBB8Ok4djjL1xvHYfYzGasf_vRbVjLBpPJq_cBR-yeFI=" alt="The BCP Testing Hierarchy">
+            <div class="mermaid">
+
+graph BT
+    D[Full Interruption Testing] -.->|High Risk| C[Parallel Testing]
+    C -.->|Medium Risk| B[Simulation Exercise]
+    B -.->|Low Risk| A[Desk Check / Walkthrough]
+    style D fill:#E01E5A,color:#fff
+    style C fill:#ECB22E,color:#000
+    style B fill:#36C5F0,color:#fff
+    style A fill:#00A699,color:#fff
+                
+            </div>
         </div>
         <div class="qa-container">
   <h2>Exam Corner: Master Q&A</h2>
@@ -912,7 +946,17 @@ Secure, cloud-based repositories (like SharePoint or Google Drive) that ensure B
         
         <div class="diagram-container">
             <div class="diagram-title">BCP vs DRP Focus Areas</div>
-            <img src="https://kroki.io/mermaid/svg/eJyNjkELgkAQhe_9igGvCkXawUOQirdCLOggHRYda2lxZWetBH98a0EQqPWOM3zfezMYyFmx-gKHaDb07BNxYqRRgeOsIQiTLGiIV0gEoaw0rxqu29N_dJQm2eeQYi5vqCZYU9ZjXSzzhvwOEpS1QBu2WHBmw1GqK1OyqQoar0-_FXtUppNsiJg2ih3qu7FAzB84LiHdCnytKbkQvuVuFp4b2LkUUvlWWZY_yH7Em1yuQi-eT5FPs1hllQ==" alt="BCP vs DRP Focus Areas">
+            <div class="mermaid">
+
+graph TD
+    Disaster --> BCP[Business Continuity]
+    Disaster --> DRP[Disaster Recovery]
+    BCP -->|Focus:| P[People, Media, Workarounds]
+    DRP -->|Focus:| S[Servers, Data, Network Fixes]
+    style BCP fill:#4A154B,color:#fff
+    style DRP fill:#36C5F0,color:#fff
+                
+            </div>
         </div>
         <div class="qa-container">
   <h2>Exam Corner: Master Q&A</h2>
@@ -988,7 +1032,18 @@ Secure, cloud-based repositories (like SharePoint or Google Drive) that ensure B
     <div class="qa-years">📌 Asked In: JUN 2023, JUNE 2023, JUN 2022</div>
     <div class="qa-answer"><p>A Business Recovery Roadmap is a chronological sequence of actions an organization takes from the moment a disaster strikes until normal operations are fully restored.</p>
 <p><strong>Illustration of the Roadmap:</strong></p>
-<div class="diagram-container"><div class="diagram-title">Disaster Recovery Roadmap</div><img src="https://kroki.io/mermaid/svg/eJx9jtFLg1AUh9_3VxwYREFSOms5YqDXQ0mp414XDNmD3o41sDnu1UH_fct8sCGetwPf7-ObQHcfKjt8QuJPoHfuZeoHwhUJchAJD15QbK_AMJbgpRgif8KIbYCjWMWRwMdc3SxvDQueq0bp9sNjJpusJrgAV2vSevvP77UulgbJScLiN-SbdmYZZt_CSdeVIhCkjqTOHKx1-Km3FkGEQvzmrMNVEsRROzYtw7J7svhAKqt31V7Dydt80ZAOUxaHIQhkax4kf1GCZHOKeN3t6SxB198lgQvFriwXU5rbciavZVVWajEtimKA9Tq2mDnStMZZ1rEz23l4z8dZv2MtknJujrPYsU5-5-T3Q-wPY9WQLA==" alt="Roadmap Diagram"></div>
+<div class="diagram-container"><div class="diagram-title">Disaster Recovery Roadmap</div><div class="mermaid">
+graph TD
+    A([DISASTER STRIKES]) --> B["EMERGENCY RESPONSE<br/>0-2 Hours<br/>Evacuate & Assess"]
+    B --> C["IT RECOVERY<br/>2-12 Hours<br/>Restore Servers"]
+    C --> D["BUSINESS RESUMPTION<br/>12-24 Hours<br/>Operations Resume"]
+    C --> E["COMM SECURITY<br/>Secure Lines"]
+    style A fill:#e74c3c,color:#fff
+    style B fill:#f39c12,color:#fff
+    style C fill:#3498db,color:#fff
+    style D fill:#2ecc71,color:#fff
+    style E fill:#9b59b6,color:#fff
+        </div></div>
 <p><strong>Explanation:</strong> The roadmap proves that recovery is not instantaneous. It requires a phased approach, prioritizing human safety first, followed by critical IT restoration, temporary continuity of operations, and finally a long-term return to normalcy.</p></div>
   </div>
 </div>
